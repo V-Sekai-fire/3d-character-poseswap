@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSET_DIRS = ("library", "garments", "portraits")
+ASSET_DIRS = ("garments", "portraits")
 SKIP_DIRS = {".git", "__pycache__", "dist", "release", ".pytest_cache"}
 SKIP_SUFFIXES = {
     ".pyc", ".pyo", ".log", ".zip", ".safetensors", ".ckpt", ".pt", ".pth",
@@ -52,7 +52,7 @@ def main() -> None:
     parser.add_argument(
         "--with-local-assets",
         action="store_true",
-        help="Include library/, garments/, and portraits/ from the local checkout.",
+        help="Include garments/, and portraits/ from the local checkout.",
     )
     parser.add_argument(
         "--acknowledge-license-risk",

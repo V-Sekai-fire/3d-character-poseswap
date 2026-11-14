@@ -6,8 +6,8 @@
 
 > [!IMPORTANT]
 > 本仓库不是一份已完成权利清理的素材包。第三方素材被包含在仓库中，不等于项目作者拥有、授权、认可或保证其可再分发、可商用。
-> MIT 只覆盖项目源代码。`library/`、`garments/`、`portraits/` 中的图片和索引属于第三方素材，不在 MIT 范围内；模型权重也不随仓库提供。
-> 当前姿势图库明确限制商业使用，服装图库未找到覆盖再分发的许可证，人像图库虽标注 CC0 但同时请求避免再分发。公开发布完整素材包前必须阅读 [LEGAL_AND_SAFETY.md](LEGAL_AND_SAFETY.md)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)。免责声明不能替代授权。
+> MIT 只覆盖项目源代码。`garments/`、`portraits/` 中的图片和索引属于第三方素材，不在 MIT 范围内；模型权重也不随仓库提供。
+> 姿势图库已从本仓库移除；服装图库未找到覆盖再分发的许可证，人像图库虽标注 CC0 但同时请求避免再分发。公开发布完整素材包前必须阅读 [LEGAL_AND_SAFETY.md](LEGAL_AND_SAFETY.md)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)。免责声明不能替代授权。
 >
 > 使用前请完整阅读 [DISCLAIMER.md](DISCLAIMER.md)、[NOTICE](NOTICE) 和 [AUTHORS.md](AUTHORS.md)。如你是权利人并认为相关内容不应分发，请通过 GitHub Issue 联系下架。
 >
@@ -28,10 +28,10 @@
 
 | 依赖来源 | 说明 |
 | --- | --- |
-| **姿势图库** | **GitHub 主仓库自带**（`library/`，1439 张原图 + 1439 张缩略图 + 中文索引）；code-only 包默认排除 |
+| **姿势图库** | **已从本仓库移除**；请自行提供姿势参考图（如通过 LoadImage 节点接入 `pose_image`） |
 | **服装图库** | **GitHub 主仓库自带**（`garments/`，1407 张服装参考图 + 索引）；code-only 包默认排除 |
 | **人像图库** | **GitHub 主仓库自带压缩版**（`portraits/`，1499 张 WebP + 缩略图 + 索引）；code-only 包默认排除 |
-| **图库浏览页面与路由** | 由本插件自带（`web/gallery.html`、`web/garment_gallery.html` + `/aicg3d_pose/*` 全部路由），不调用任何外部插件 |
+| **图库浏览页面与路由** | 由本插件自带（`web/garment_gallery.html` + `/aicg3d_pose/*` 路由），不调用任何外部插件 |
 | **ComfyUI** | 0.43+（含原生 Qwen Image 2.1 与 Qwen-Image-Edit-2511 节点：`nodes_qwen.py` / `nodes_flux.py` / `nodes_cfg.py` / `nodes_model_advanced.py`） |
 | **模型权重** | 标准 `models/` 目录（见下表），ComfyUI 通用存放位置，不属于任何插件 |
 
@@ -66,9 +66,9 @@ python scripts/configure_portrait_library.py --source "C:\path\to\comfyui-portra
 
 ```
                         pose_image（一条线）
-[姿势姿态控制] ────────────────────────────►  [姿态换姿生成]
- PoseQwen21PoseSelect                         PoseQwen21
- · pose_id + 浏览姿势图库按钮 + 姿势预览      · person_image（人物参考图）
+[LoadImage 等] ────────────────────────────►  [姿态换姿生成]
+ 任意姿势参考 IMAGE                         PoseQwen21
+ · 姿势图库已移除，自行提供姿势图          · person_image（人物参考图）
  · 输出 pose_image / pose_id / description   · pose_image（来自左侧节点）
                                               · 模型/采样参数
                                               · 输出换姿成图 image
@@ -134,7 +134,7 @@ Qwen Edit 对泛称“鞋”很容易继续沿用原鞋；明确告诉它 `socks
 
 1. 把 [example_workflows/aicg3d_qwen21_three_stage.json](example_workflows/aicg3d_qwen21_three_stage.json) 拖进 ComfyUI。
 2. `1. 人物底图` 选要保留身体和姿势的底图；`2. 换头参考` 选脸；`3. 换发型参考` 选头发。
-3. `4. 换姿势参考` 从姿势图库选动作，`5. 换全套服装参考` 从服装图库选套装。
+3. `4. 换姿势参考` 自行提供姿势图作为动作参考，`5. 换全套服装参考` 从服装图库选套装。
 4. 点击运行。工作流会依次输出并保存 `1_head_hair`、`2_pose`、`3_outfit` 三张图。
 5. 不需要换头或换发型时，把对应参考图替换成同一张底图，或直接把该段输出接到下一段；不需要换装时，把 `3. 换全套服装后` 保存节点停用。
 
@@ -160,10 +160,10 @@ Qwen Edit 对泛称“鞋”很容易继续沿用原鞋；明确告诉它 `socks
   人物参考图(image_2) ─┐
   姿势原图(image_1) ───┤→ TextEncodeQwenImage21 → LoRA(姿态适配器) → Cache → KSampler → VAEDecode → IMAGE
                        │
-          (姿势原图来自插件自带的 library/ 图库)
+          (姿势原图由用户自行提供，例如 LoadImage)
   ```
 
-  - `image_1` = 姿势姿态控制节点输出的图库姿势原图（决定动作/姿态/视角）
+  - `image_1` = 用户提供的姿势参考图（决定动作/姿态/视角）
   - `image_2` = 你生成/加载的人物参考图（保留身份、发型、服装、画风、背景、光照）
   - 默认提示词：精确复制姿势 + 锁死服装不变 + 保持原图赤脚/袜装状态。
     提示词会明确说明“原图赤脚则保持赤脚”“只有袜/裤袜则不要加鞋”，防止换姿时凭空生成鞋子。
@@ -189,8 +189,7 @@ Qwen Edit 对泛称“鞋”很容易继续沿用原鞋；明确告诉它 `socks
 
 1. 拖入节点（菜单 **image → Pose Gallery/Qwen2.1**，或已集成 AICG3D 工作台时在 **AICG3D/图像与姿势**）。
 2. **换姿**：「姿态换姿生成」的 `person_image` 接人物参考图（成人参考图），
-   「姿势姿态控制」的 `pose_image` 连到其 `pose_image` 输入（一条线）。
-3. 在姿势姿态控制节点点击「**浏览姿势图库**」，搜索/分类/多视角筛选，点「使用此姿势」。
+   把姿势参考图（如 LoadImage）连到其 `pose_image` 输入。
 4. **换装（可选）**：「换装生成」的 `person_image` 接上一步换姿成图，
    「服装选择」的 `garment_image` 连到其 `garment_image` 输入（一条线）。
    再把「服装选择」的 `description` 连到「换装生成」的 `garment_description`。
@@ -250,7 +249,6 @@ Qwen Edit 对泛称“鞋”很容易继续沿用原鞋；明确告诉它 `socks
 
 ## 环境变量（可选）
 
-- `AICG3D_POSE_LIBRARY`：自定义姿势图库根目录（默认使用插件自带 `library/`）。
 - `AICG3D_GARMENT_LIBRARY`：自定义服装图库根目录（默认使用插件自带 `garments/`）。
 - `AICG3D_PORTRAIT_LIBRARY`：覆盖默认插件内 `portraits/`，可指向兼容的人像图库目录。
 - `AICG3D_PORTRAIT_CACHE`：自定义人像压缩预览缓存目录（默认 `ComfyUI/user/aicg3d_portrait_cache/`）。
@@ -258,7 +256,7 @@ Qwen Edit 对泛称“鞋”很容易继续沿用原鞋；明确告诉它 `socks
 ## 可选：集成进 AICG3D 短剧工作台
 
 插件已适配 `comfyui-AICG3D`：其 registry 惰性导入本插件，重启后 AICG3D 菜单出现
-**AICG3D/图像与姿势 → AICG3D PoseSwap → 姿势姿态控制 / 服装选择 / 换头换脸参考选择 / 一键替换 / 姿态换姿生成 / 换装生成**。
+**AICG3D/图像与姿势 → AICG3D PoseSwap → 服装选择 / 换头换脸参考选择 / 一键替换 / 姿态换姿生成 / 换装生成**。
 独立插件缺失时 AICG3D 照常加载，不影响工作台。
 
 ## 验证
@@ -266,10 +264,10 @@ Qwen Edit 对泛称“鞋”很容易继续沿用原鞋；明确告诉它 `socks
 - `py_compile` 通过；`node --check web/pose_qwen21.js`、`node --check web/garment_qwen21.js` 通过。
 - `node --check web/portrait_qwen21.js` 通过；人像图库与节点输出已完成本地接口验证。
 - `node --check web/pipeline_qwen21.js` 通过；素材输入四合一子图、一键替换子图和三个标准输出预览均已在 ComfyUI 前端实际加载验证。
-- 路由自服务：`/aicg3d_pose/catalog`、`/aicg3d_pose/assets/`、`/aicg3d_pose/gallery`、
+- 路由自服务：
   `/aicg3d_pose/garments/catalog`、`/aicg3d_pose/garments/assets/`、`/aicg3d_pose/garments/gallery`。
 - 人像路由：`/aicg3d_pose/portraits/catalog`、`/aicg3d_pose/portraits/thumb/`、`/aicg3d_pose/portraits/gallery`。
-- 图库从插件 `library/` 加载姿势、`garments/` 加载服装均为本插件自带。
+- 服装从插件 `garments/` 加载，为本插件自带。
 - 人像从插件 `portraits/` 加载，不依赖外部图库或 `E:` 盘。
 - Qwen 2.1 多参考图、单换装、单换脸和三段完整链路均已在 ComfyUI API 中运行成功。
 - 顺序预览事件已验证按 `换头像 → 换姿势 → 换服饰` 到达。

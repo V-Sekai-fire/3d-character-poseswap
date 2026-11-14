@@ -1,10 +1,9 @@
 """comfyui-aicg3d-PoseSwap: 完全独立的「选姿势/选服装 → Qwen 换姿/换装」插件。
 
 零外部插件依赖：
-- 姿势图库（library/）与服装图库（garments/）均随插件目录分发
+- 服装图库（garments/）随插件目录分发；姿势图库已移除，姿势图请自行提供
 - 人像图库（portraits/）随插件分发 768×960 WebP 压缩版与浏览缩略图
-- 姿势图库 / 服装图库浏览页面（web/gallery.html / web/garment_gallery.html）
-  与 /aicg3d_pose/* 路由由本插件自带
+- 服装图库浏览页面（web/garment_gallery.html）与 /aicg3d_pose/* 路由由本插件自带
  - 人像图库页面（web/portrait_gallery.html）与选择节点同样由本插件自带
 - PoseQwen21SequentialEdit 在一个节点内顺序执行换头像、换姿势、换服饰，并按阶段推送节点内预览
 - 换姿节点只需 ComfyUI 原生 Qwen Image 2.1 节点（ComfyUI 0.43+）与 models/ 权重
@@ -12,7 +11,7 @@
   FluxKontext* / ModelSamplingAuraFlow / CFGNorm）与 models/ 权重
 
 一条线连接：
-  [PoseQwen21PoseSelect 姿势姿态控制] --pose_image--> [PoseQwen21 姿态换姿生成]
+  [任意 IMAGE 姿势图（如 LoadImage）] --pose_image--> [PoseQwen21 姿态换姿生成]
   [PoseQwen21GarmentSelect 服装选择]   --garment_image--> [PoseQwen21PoseSwap 换装生成（enable 开关）]
   [PoseQwen21PortraitSelect 换头换脸参考] --portrait_image--> 换脸/换头身份参考
 """
@@ -37,7 +36,6 @@ from comfy_extras.nodes_custom_sampler import (
 
 QWEN21_TURBO_SIGMAS = "1.0, 0.978453, 0.95418, 0.926626, 0.89508, 0.845148, 0.704534, 0.414568, 0"
 
-from . import pose_data
 from . import garment_data
 from . import portrait_data
 
@@ -260,57 +258,12 @@ def _run_qwen21_pose_stage(person_image, pose_image, prompt, unet_name,
         positive, negative, latent, 1.0,
     )[0]
     return nodes.VAEDecode().decode(vae, latent)[0]
-def _validate_pose_library():
-    try:
-        pose_data.records()
-        return True
-    except FileNotFoundError as exc:
-        return str(exc)
-
-
 def _validate_garment_library():
     try:
         garment_data.records()
         return True
     except FileNotFoundError as exc:
         return str(exc)
-
-
-# ---------------------------------------------------------------------------
-# 节点 B：姿势姿态控制（输出 pose_image 一条线连到生成节点）
-# ---------------------------------------------------------------------------
-class PoseQwen21PoseSelect:
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "pose_id": ("STRING", {
-                    "default": "full_sexy_P002_front",
-                    "multiline": False,
-                    "tooltip": "点击「浏览姿势图库」选择姿势；也可直接输入图库 ID（如 full_sexy_P031_front）。",
-                }),
-            },
-        }
-
-    RETURN_TYPES = ("IMAGE", "STRING", "STRING")
-    RETURN_NAMES = ("pose_image", "pose_id", "description")
-    FUNCTION = "load_pose"
-    CATEGORY = "image/Pose Gallery/Qwen2.1"
-    DESCRIPTION = "姿势姿态控制：浏览图库选姿势，输出姿势原图（pose_image）供生成节点使用。"
-
-    @classmethod
-    def IS_CHANGED(cls, pose_id):
-        return hashlib.sha256(pose_id.encode()).hexdigest()
-
-    @classmethod
-    def VALIDATE_INPUTS(cls, **kwargs):
-        return _validate_pose_library()
-
-    def load_pose(self, pose_id):
-        library = pose_data.LIBRARY
-        pose_image = pose_data.load_pose_image(library, pose_id)
-        description = pose_data.pose_description(library, pose_id)
-        return (pose_image, pose_id, description)
 
 
 # ---------------------------------------------------------------------------
@@ -404,7 +357,7 @@ class PoseQwen21:
         return {
             "required": {
                 "person_image": ("IMAGE", {"tooltip": "你生成/加载的人物参考图，将保持身份、服装与画风。请用成人参考图。"}),
-                "pose_image": ("IMAGE", {"tooltip": "来自「PoseQwen21PoseSelect 姿势姿态控制」节点的姿势原图（image_1）。"}),
+                "pose_image": ("IMAGE", {"tooltip": "姿势参考图（image_1），可由 LoadImage 等节点提供。"}),
                 "prompt": ("STRING", {"default": DEFAULT_PROMPT, "multiline": True,
                                       "tooltip": "姿态迁移提示词。默认无需修改；切换复杂姿势时可补充动作描述。"}),
                 "negative_prompt": ("STRING", {"default": "", "multiline": True}),
@@ -945,34 +898,6 @@ def _register_route(path, handler, *, static=False):
         _route_paths.add(path)
 
 
-if "/aicg3d_pose/catalog" not in _route_paths:
-    async def aicg3d_pose_catalog(request):
-        try:
-            return web.json_response(pose_data.records())
-        except (ValueError, FileNotFoundError) as exc:
-            return web.json_response({"error": str(exc)}, status=503)
-    _register_route("/aicg3d_pose/catalog", aicg3d_pose_catalog)
-
-
-if "/aicg3d_pose/assets/{kind}/{filename}" not in _route_paths:
-    async def aicg3d_pose_assets(request):
-        try:
-            path = pose_data.asset(request.match_info["kind"], request.match_info["filename"])
-            return web.FileResponse(path, headers={"Cache-Control": "private, max-age=3600"})
-        except (ValueError, FileNotFoundError):
-            raise web.HTTPNotFound()
-    _register_route("/aicg3d_pose/assets/{kind}/{filename}", aicg3d_pose_assets)
-
-
-if "/aicg3d_pose/gallery" not in _route_paths:
-    async def aicg3d_pose_gallery(request):
-        return web.FileResponse(
-            pose_data.ROOT / "web" / "gallery.html",
-            headers={"Cache-Control": "no-cache"},
-        )
-    _register_route("/aicg3d_pose/gallery", aicg3d_pose_gallery)
-
-
 if "/aicg3d_pose/garments/catalog" not in _route_paths:
     async def aicg3d_pose_garments_catalog(request):
         try:
@@ -1039,14 +964,13 @@ if "/aicg3d_pose/portraits/thumb/{filename}" not in _route_paths:
 if "/aicg3d_pose/portraits/gallery" not in _route_paths:
     async def aicg3d_pose_portraits_gallery(request):
         return web.FileResponse(
-            pose_data.ROOT / "web" / "portrait_gallery.html",
+            garment_data.ROOT / "web" / "portrait_gallery.html",
             headers={"Cache-Control": "no-cache"},
         )
     _register_route("/aicg3d_pose/portraits/gallery", aicg3d_pose_portraits_gallery)
 
 
 NODE_CLASS_MAPPINGS = {
-    "PoseQwen21PoseSelect": PoseQwen21PoseSelect,
     "PoseQwen21GarmentSelect": PoseQwen21GarmentSelect,
     "PoseQwen21PortraitSelect": PoseQwen21PortraitSelect,
     "PoseQwen21": PoseQwen21,
@@ -1056,7 +980,6 @@ NODE_CLASS_MAPPINGS = {
     "PoseQwen21PoseSwap": PoseQwen21PoseSwap,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "PoseQwen21PoseSelect": "AICG3D PoseSwap → 姿势姿态控制",
     "PoseQwen21GarmentSelect": "AICG3D PoseSwap → 服装选择",
     "PoseQwen21PortraitSelect": "AICG3D PoseSwap → 换头换脸参考选择",
     "PoseQwen21": "AICG3D PoseSwap → Qwen2.1 姿态换姿生成",

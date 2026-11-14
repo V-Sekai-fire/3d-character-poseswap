@@ -10,7 +10,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DIRS = ("library/img", "library/thumbs", "garments/img", "portraits/img")
+DEFAULT_DIRS = ("garments/img", "portraits/img")
 IMAGE_SUFFIXES = {".webp", ".jpg", ".jpeg", ".png"}
 SENSITIVE_INFO_KEYS = {"exif", "xmp", "xml", "comment", "comments", "author", "copyright"}
 
