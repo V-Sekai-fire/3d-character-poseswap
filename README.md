@@ -2,275 +2,264 @@
 
 # comfyui-aicg3d-PoseSwap
 
-项目作者/维护者：JGRFW。项目源代码采用 MIT License，版权声明见 [LICENSE](LICENSE)，上游作者与素材来源见 [AUTHORS.md](AUTHORS.md)。
+Project author/maintainer: JGRFW. The source code is under the MIT License. See [LICENSE](LICENSE) for the copyright notice and [AUTHORS.md](AUTHORS.md) for upstream authors and asset sources.
 
 > [!IMPORTANT]
-> 本仓库不是一份已完成权利清理的素材包。第三方素材被包含在仓库中，不等于项目作者拥有、授权、认可或保证其可再分发、可商用。
-> MIT 只覆盖项目源代码。`garments/`、`portraits/` 中的图片和索引属于第三方素材，不在 MIT 范围内；模型权重也不随仓库提供。
-> 姿势图库已从本仓库移除；服装图库未找到覆盖再分发的许可证，人像图库虽标注 CC0 但同时请求避免再分发。公开发布完整素材包前必须阅读 [LEGAL_AND_SAFETY.md](LEGAL_AND_SAFETY.md)、[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md)。免责声明不能替代授权。
+> This repository is not an asset pack with cleared rights. Third-party assets are in the repository, but that doesn't mean the project author owns, licenses, endorses or guarantees them for redistribution or commercial use.
+> MIT covers only the project source code. The images and indexes in `garments/` and `portraits/` are third-party assets outside MIT. Model weights are not shipped with the repository.
+> The pose library has been removed from this repository. No license was found for the garment library that covers redistribution. The portrait library is labeled CC0, but it also asks that it not be redistributed. Before you publish the full asset pack, read [LEGAL_AND_SAFETY.md](LEGAL_AND_SAFETY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md). A disclaimer is not a substitute for permission.
 >
-> 使用前请完整阅读 [DISCLAIMER.md](DISCLAIMER.md)、[NOTICE](NOTICE) 和 [AUTHORS.md](AUTHORS.md)。如你是权利人并认为相关内容不应分发，请通过 GitHub Issue 联系下架。
+> Before use, read [DISCLAIMER.md](DISCLAIMER.md), [NOTICE](NOTICE) and [AUTHORS.md](AUTHORS.md) in full. If you are a rights holder and think some content shouldn't be distributed, contact the author through a GitHub Issue to have it taken down.
 >
-> 内容提示：姿势与服装索引包含成人向分类。项目仅面向成年人；不得用于未成年人性化、非自愿性化、冒充真实人物或其他违法用途。
+> Content notice: the garment index includes adult-oriented categories. The project is for adults only. Do not use it to sexualize minors, to sexualize anyone without consent, to impersonate real people, or for any other illegal purpose.
 
+A fully standalone ComfyUI plugin. Its pipeline is **swap head and hair → swap pose with Qwen Image 2.1 → swap the full outfit**. You can also use Qwen-Image-Edit-2511 for a single high-fidelity outfit swap.
 
-完全独立的 ComfyUI 插件：**换头换发 → Qwen Image 2.1 换姿势 → 换全套服装**，也可以使用 Qwen-Image-Edit-2511 做单次高保真换装。
+The recommended setup is the "dual-wrapper" workflow. One subgraph takes the four asset inputs, and one "one-click replace" subgraph does the swaps. Each of the three results goes from its own output to a standard PreviewImage node.
 
-推荐使用“双封装”工作流：素材输入四合一子图 + 一键替换子图，三个替换结果分别从三个输出端连接标准 PreviewImage。
+"I generate a character and pick a pose, and the character comes out in that pose. I pick an outfit, and they change clothes on the spot."
 
-「我生成一个人物，选一个姿势，出来就是我的这个人物摆出所选姿势；再选一套服装，还能让他/她当场换装。」
+## Library sources and distribution status
 
-## 图库来源与分发状态
+The current GitHub `main` repo and the full development directory keep two local libraries (garments and portraits). You can also build a code-only package for cases where the libraries are kept outside the plugin. Both modes support environment variables that point to external library directories.
 
-当前 GitHub `main` 仓库和完整开发目录保留三套本地图库；另可生成只含代码的 code-only 包供需要外挂图库的场景使用。两种模式都支持环境变量指向外部图库目录：
+For asset sources, licenses and responsibility notes, see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and [PORTRAIT_LIBRARY_NOTICE.md](PORTRAIT_LIBRARY_NOTICE.md).
 
-素材来源、许可与责任说明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 [PORTRAIT_LIBRARY_NOTICE.md](PORTRAIT_LIBRARY_NOTICE.md)。
-
-| 依赖来源 | 说明 |
+| Dependency | Description |
 | --- | --- |
-| **姿势图库** | **已从本仓库移除**；请自行提供姿势参考图（如通过 LoadImage 节点接入 `pose_image`） |
-| **服装图库** | **GitHub 主仓库自带**（`garments/`，1407 张服装参考图 + 索引）；code-only 包默认排除 |
-| **人像图库** | **GitHub 主仓库自带压缩版**（`portraits/`，1499 张 WebP + 缩略图 + 索引）；code-only 包默认排除 |
-| **图库浏览页面与路由** | 由本插件自带（`web/garment_gallery.html` + `/aicg3d_pose/*` 路由），不调用任何外部插件 |
-| **ComfyUI** | 0.43+（含原生 Qwen Image 2.1 与 Qwen-Image-Edit-2511 节点：`nodes_qwen.py` / `nodes_flux.py` / `nodes_cfg.py` / `nodes_model_advanced.py`） |
-| **模型权重** | 标准 `models/` 目录（见下表），ComfyUI 通用存放位置，不属于任何插件 |
+| **Pose library** | **Removed from this repository.** Supply your own pose reference images (for example, connect a LoadImage node to `pose_image`). |
+| **Garment library** | **Included in the main GitHub repo** (`garments/`: 1407 garment reference images and an index). The code-only package excludes it by default. |
+| **Portrait library** | **Included in the main GitHub repo as a compressed version** (`portraits/`: 1499 WebP images, thumbnails and an index). The code-only package excludes it by default. |
+| **Gallery pages and routes** | Provided by this plugin (`web/garment_gallery.html` and the `/aicg3d_pose/*` routes). It calls no external plugins. |
+| **ComfyUI** | 0.43+ (with the native Qwen Image 2.1 and Qwen-Image-Edit-2511 nodes: `nodes_qwen.py` / `nodes_flux.py` / `nodes_cfg.py` / `nodes_model_advanced.py`) |
+| **Model weights** | The standard `models/` directory (see the tables below). This is ComfyUI's general location and doesn't belong to any plugin. |
 
-> 别人使用时只需：① 拷贝本插件整个目录到其 ComfyUI 的 `custom_nodes/`；
-> ② 按下方「依赖模型」准备好权重文件；③ 重启 ComfyUI。GitHub 主仓库包含三套本地图库；如使用 code-only 包，则需通过三个 `AICG3D_*_LIBRARY` 环境变量指向外部素材目录。
+> To use it, others only need to: ① copy the whole plugin directory into their ComfyUI `custom_nodes/`; ② prepare the weight files listed under "Required models" below; ③ restart ComfyUI. The GitHub main repo includes the local garment and portrait libraries. With the code-only package, point the `AICG3D_*_LIBRARY` environment variables at external asset directories.
 
-## 安装
+## Installation
 
-本项目自身不需要额外执行 `pip install`；图像读取使用 ComfyUI 已带的 Pillow、NumPy 和 PyTorch。
+The project needs no extra `pip install`. Image loading uses the Pillow, NumPy and PyTorch that ship with ComfyUI.
 
 ```bash
 cd ComfyUI/custom_nodes
 git clone https://github.com/JGRFW/comfyui-aicg3d-PoseSwap.git
 ```
 
-然后按 [MODEL_REQUIREMENTS.md](MODEL_REQUIREMENTS.md) 下载不随仓库提供的模型权重，重启 ComfyUI。
-代码-only 发布包可使用 `python scripts/package_open_source.py` 生成；它默认排除第三方图库。
+Then download the model weights, which the repo doesn't include, as described in [MODEL_REQUIREMENTS.md](MODEL_REQUIREMENTS.md), and restart ComfyUI.
+Build a code-only release package with `python scripts/package_open_source.py`. It excludes the third-party libraries by default.
 
-### 人像图库首次安装
+### First-time portrait library setup
 
-GitHub `main` 仓库包含 `portraits/img/` 和 `portraits/data/`。如果你下载的是 code-only 包，或安装器只复制了源码，页面会显示“还没有安装人像图库”；此时按下面的命令配置外部图库，或者从 GitHub 下载完整仓库。
+The GitHub `main` repo includes `portraits/img/` and `portraits/data/`. If you downloaded the code-only package, or an installer copied only the source, the page shows "Portrait library not installed yet". In that case, configure an external library with the command below, or download the full repo from GitHub.
 
-先从合法来源取得兼容的 `comfyui-portrait-gallery/library`，然后运行：
+First obtain a compatible `comfyui-portrait-gallery/library` from a legitimate source, then run:
 
 ```bash
 python scripts/configure_portrait_library.py --source "C:\path\to\comfyui-portrait-gallery\library"
 ```
 
-重启 ComfyUI 后，点击节点里的“浏览人像图库”即可搜索。也可以把图库放在插件 `portraits/` 目录，或设置 `AICG3D_PORTRAIT_LIBRARY` 环境变量。安装状态接口为 `/aicg3d_pose/portraits/status`。
+After restarting ComfyUI, click "Browse portrait library" in the node to search. You can also put the library in the plugin's `portraits/` directory or set the `AICG3D_PORTRAIT_LIBRARY` environment variable. The install status endpoint is `/aicg3d_pose/portraits/status`.
 
-## 六个节点（含双子图封装工作流）
+## Nodes
 
 ```
-                        pose_image（一条线）
-[LoadImage 等] ────────────────────────────►  [姿态换姿生成]
- 任意姿势参考 IMAGE                         PoseQwen21
- · 姿势图库已移除，自行提供姿势图          · person_image（人物参考图）
- · 输出 pose_image / pose_id / description   · pose_image（来自左侧节点）
-                                              · 模型/采样参数
-                                              · 输出换姿成图 image
+                        pose_image (one wire)
+[LoadImage etc.] ───────────────────────────►  [Pose-swap generation]
+ any pose reference IMAGE                       PoseQwen21
+ · the pose library was removed;                · person_image (character reference)
+   supply your own pose image                   · pose_image (from the node at left)
+                                                · model/sampling parameters
+                                                · outputs the pose-swapped image
                                                    │
-                                                   │ image（换姿后人物）
+                                                   │ image (character after pose swap)
                                                    ▼
-                         garment_image（一条线）
-[服装选择] ────────────────────────────────►  [换装生成]
- PoseQwen21GarmentSelect                      PoseQwen21PoseSwap
- · garment_id + 浏览服装图库按钮 + 预览      · person_image（换姿后人物）
- · 输出 garment_image / id / description     · garment_image（来自左侧节点）
- · description ─────────────────────────►   · garment_description（鞋袜/款式描述）
-                                              · enable 开关：关闭时节点不起作用，直接透传
-                                              · 模型/采样参数
-                                              · 输出换装成图 image
+                         garment_image (one wire)
+[Garment select] ───────────────────────►  [Outfit-swap generation]
+ PoseQwen21GarmentSelect                     PoseQwen21PoseSwap
+ · garment_id + "Browse garment library"     · person_image (after pose swap)
+   button + preview                          · garment_image (from the node at left)
+ · outputs garment_image / id / description  · garment_description (shoe/sock/style text)
+ · description ───────────────────────────►  · enable switch: when off, the node does nothing and passes through
+                                             · model/sampling parameters
+                                             · outputs the outfit-swapped image
 ```
 
-换装节点 `enable` 为 **False** 时节点不起作用：直接原样透传 `person_image`，不加载换装模型、不做任何生成。需要换衣时置 **True** 即可。
+When `enable` on the outfit-swap node is **False**, the node does nothing. It passes `person_image` through unchanged, loads no outfit model and generates nothing. Set it to **True** when you want to change clothes.
 
-`description` 那条线不要省略：图库描述里的具体鞋型、袜型会追加到换装提示词。
-Qwen Edit 对泛称“鞋”很容易继续沿用原鞋；明确告诉它 `socks sandals` 等词后才能稳定替换。
+Don't leave out the `description` wire. The specific shoe and sock types in the library description are appended to the outfit-swap prompt. Qwen Edit tends to keep the original shoes if you just say "shoes". It replaces them reliably only when you spell out terms like `socks sandals`.
 
-## 三种使用方式
+## Three ways to use it
 
-| 路线 | 适用场景 | 模型体积 | 工作流 |
+| Route | Best for | Model size | Workflow |
 | --- | --- | --- | --- |
-| **双封装顺序替换（推荐）** | 素材输入四合一 + 一键替换子图；三个替换结果分别从三个输出端顺序预览 | 头像/姿势共享一套模型，换服饰另用一套 | `example_workflows/aicg3d_qwen21_simple_replace.json` |
-| **Qwen Image 2.1 三段预览** | 16GB 显存，换头换发、换姿势、换全套服装一次跑完；每一步都能预览 | int8 主模型约 6.76 GiB | `example_workflows/aicg3d_qwen21_three_stage.json` |
-| **Qwen-Image-Edit-2511 节点** | 单次换装，追求更直接的服装图保真；适合已准备量化 2511 权重 | int8 量化体积明显低于 bf16；bf16 约 38 GiB | 插件内 `PoseQwen21PoseSwap` 节点或 `aicg3d_poseswap_pose_swap_edit.json` |
+| **Dual-wrapper sequential swap (recommended)** | Four-in-one asset input plus a one-click replace subgraph. The three results preview in order from three outputs. | Head/pose share one model set. Outfit swap uses another. | `example_workflows/aicg3d_qwen21_simple_replace.json` |
+| **Qwen Image 2.1 three-stage preview** | 16GB VRAM. Swap head and hair, pose, and full outfit in one run, with a preview at each step. | int8 main model is about 6.76 GiB | `example_workflows/aicg3d_qwen21_three_stage.json` |
+| **Qwen-Image-Edit-2511 node** | A single outfit swap that follows the garment image more faithfully. Suits those who already have quantized 2511 weights. | int8 is much smaller than bf16, which is about 38 GiB | The plugin's `PoseQwen21PoseSwap` node or `aicg3d_poseswap_pose_swap_edit.json` |
 
-## 双封装顺序替换工作流
+## Dual-wrapper sequential-swap workflow
 
-把 [example_workflows/aicg3d_qwen21_simple_replace.json](example_workflows/aicg3d_qwen21_simple_replace.json) 拖进 ComfyUI。工作流按以下顺序串联：
+Drag [example_workflows/aicg3d_qwen21_simple_replace.json](example_workflows/aicg3d_qwen21_simple_replace.json) into ComfyUI. The workflow chains these steps in order.
 
-画布上有两个封装节点和三个标准预览节点：
+The canvas has two wrapper nodes and three standard preview nodes:
 
 ```text
-素材输入 · 四合一 → 一键替换 · 头像 → 姿势 → 服饰
-一键替换输出 1 → 预览 1 · 换头像
-一键替换输出 2 → 预览 2 · 换姿势
-一键替换输出 3 → 预览 3 · 换服饰
+Asset input (four-in-one) → One-click replace: head → pose → outfit
+One-click replace output 1 → Preview 1 · head swap
+One-click replace output 2 → Preview 2 · pose swap
+One-click replace output 3 → Preview 3 · outfit swap
 ```
 
-一键替换子图内有三个开关：
+The one-click replace subgraph has three switches:
 
-- `换头像开关`：关闭时直接把底图传给换姿势阶段。
-- `换姿势开关`：关闭时直接把换头像结果传给换服饰阶段。
-- `换服饰开关`：关闭时直接输出换姿势结果。
+- `Head-swap switch`: when off, the base image goes straight to the pose stage.
+- `Pose-swap switch`: when off, the head-swap result goes straight to the outfit stage.
+- `Outfit-swap switch`: when off, the pose-swap result is output directly.
 
-三个预览全部连接子图输出端口。子图内部仍然按顺序执行三个阶段，因此预览 1、2、3 会依次刷新，不会等全部完成后才一起出现。
+All three previews connect to subgraph output ports. The subgraph still runs the three stages in order. Previews 1, 2 and 3 therefore refresh one after another, rather than all appearing at the end.
 
-模型配置已合并：换头像和换姿势共享同一套主模型、编码器、LoRA 与 VAE；换服饰单独使用一套主模型和编码器，不再重复加载同一个模型。
+The model configuration is merged. Head swap and pose swap share the same main model, encoder, LoRA and VAE. Outfit swap uses its own main model and encoder, so the same model isn't loaded twice.
 
-一键替换子图常用参数：
+Common parameters of the one-click replace subgraph:
 
-- `自定义宽度 / 高度`：默认都是 `0`，表示保持输入图原始比例；长边自动限制为 1344，避免无意义放大。填写具体宽度或高度后可覆盖。
-- `换服饰步数`：默认 `20`；服装细节仍不稳定时可提高到 `25–30`。
-- `采样器 / 调度器`：只作用于换服饰阶段；默认 `euler / simple`。
+- `Custom width / height`: both default to `0`, which keeps the input image's aspect ratio. The long side is capped at 1344 to avoid pointless upscaling. Enter a specific width or height to override.
+- `Outfit-swap steps`: default `20`. Raise it to `25–30` if garment detail is still unstable.
+- `Sampler / scheduler`: affect only the outfit-swap stage. Default `euler / simple`.
 
-三段工作流把“换脸/换发型”和“换装”拆开，避免一次改太多属性导致脸部、发型和服装互相干扰。多参考图合并成一次 Qwen 2.1 编辑也能运行，但稳定性和可回退性不如分段。
+The three-stage workflow separates "swap face/hairstyle" from "swap outfit". This avoids changing too much at once, which makes the face, hairstyle and clothing interfere with each other. Merging multiple reference images into one Qwen 2.1 edit also works, but it is less stable and harder to roll back than the staged approach.
 
-## 三段工作流怎么用
+## How to use the three-stage workflow
 
-1. 把 [example_workflows/aicg3d_qwen21_three_stage.json](example_workflows/aicg3d_qwen21_three_stage.json) 拖进 ComfyUI。
-2. `1. 人物底图` 选要保留身体和姿势的底图；`2. 换头参考` 选脸；`3. 换发型参考` 选头发。
-3. `4. 换姿势参考` 自行提供姿势图作为动作参考，`5. 换全套服装参考` 从服装图库选套装。
-4. 点击运行。工作流会依次输出并保存 `1_head_hair`、`2_pose`、`3_outfit` 三张图。
-5. 不需要换头或换发型时，把对应参考图替换成同一张底图，或直接把该段输出接到下一段；不需要换装时，把 `3. 换全套服装后` 保存节点停用。
+1. Drag [example_workflows/aicg3d_qwen21_three_stage.json](example_workflows/aicg3d_qwen21_three_stage.json) into ComfyUI.
+2. `1. Base character` is the base image whose body and pose you want to keep. `2. Head-swap reference` is the face. `3. Hairstyle reference` is the hair.
+3. For `4. Pose reference`, supply your own pose image as the motion reference. Choose the outfit for `5. Full-outfit reference` from the garment library.
+4. Click run. The workflow outputs and saves three images in order: `1_head_hair`, `2_pose`, `3_outfit`.
+5. If you don't need a head or hairstyle swap, replace that reference with the same base image, or connect that stage's output straight to the next stage. If you don't need an outfit swap, disable the `3. After full-outfit swap` save node.
 
-三段里的 Qwen 2.1 编辑节点默认 `refine_prompt = false`，直接使用写好的中文提示词。打开后才会调用提示词增强器，速度会额外增加。
+The Qwen 2.1 edit nodes in the three stages default to `refine_prompt = false` and use the written Chinese prompts directly. The prompt enhancer runs only when you turn it on, and that adds time.
 
-## 人像参考节点：换头换脸参考选择
+## Portrait reference node: face/head-swap reference selection
 
-`PoseQwen21PortraitSelect` 用于从人像图库选择正脸或造型参考，输出 `portrait_image`、`portrait_id`、`description` 和 `attribution`。将 `portrait_image` 接到换脸/换头链路的身份参考输入即可；节点本身不自动运行。
+`PoseQwen21PortraitSelect` picks a front-facing or styled reference from the portrait library. It outputs `portrait_image`, `portrait_id`, `description` and `attribution`. Connect `portrait_image` to the identity reference input of the face/head-swap chain. The node doesn't run anything by itself.
 
-- 图库来源：[AI モデル顔データベース](https://ai-portrait-gallery.pages.dev/)，原作者 [あぎ（@agi_aibusi）](https://x.com/agi_aibusi)。
-- 原站标注 CC0 1.0，同时请求避免直接再分发图片数据本身；本插件按开源分发需求包含压缩副本，并在 `PORTRAIT_LIBRARY_NOTICE.md` 中保留该请求和自行合规提示。
-- 素材随插件存放在 `portraits/`：1499 张最大 768×960 WebP 参考图与 360×450 WebP 缩略图，约 148 MiB。
-- 人像节点读取插件内 `portraits/`，不依赖 `E:` 盘、外部图库插件或 ComfyUI `user` 缓存。
-- 每个卡片和详情页都保留原站、原作者、CC0 许可链接；完整声明见 `PORTRAIT_LIBRARY_NOTICE.md`。
-- 该节点是独立的非官方本地索引工具，不代表原作者官方版本或背书。不得用于冒充真实人物或违法违规用途。
+- Library source: [AI モデル顔データベース (AI Model Face Database)](https://ai-portrait-gallery.pages.dev/), original author [あぎ (@agi_aibusi)](https://x.com/agi_aibusi).
+- The original site is labeled CC0 1.0, but it also asks people to avoid directly redistributing the image data itself. To meet open-source distribution needs, this plugin includes a compressed copy. `PORTRAIT_LIBRARY_NOTICE.md` keeps that request and a reminder to check compliance yourself.
+- The assets are stored in the plugin's `portraits/`: 1499 reference WebP images of up to 768×960, plus 360×450 WebP thumbnails, about 148 MiB in total.
+- The portrait node reads the plugin's own `portraits/`. It doesn't depend on the `E:` drive, an external library plugin or the ComfyUI `user` cache.
+- Every card and detail page keeps the original site, original author and CC0 license link. The full notice is in `PORTRAIT_LIBRARY_NOTICE.md`.
+- This node is an independent, unofficial local indexing tool. It isn't an official version of the original author's work and has no endorsement from them. Don't use it to impersonate real people or for illegal purposes.
 
-## 原理
+## How it works
 
-- **换姿引擎**：千问 image 2.1（Qwen Image 2.1）。生成节点内部复现 ComfyUI 原生 Qwen 2.1
-  姿态编辑链路：
-
-  ```
-  人物参考图(image_2) ─┐
-  姿势原图(image_1) ───┤→ TextEncodeQwenImage21 → LoRA(姿态适配器) → Cache → KSampler → VAEDecode → IMAGE
-                       │
-          (姿势原图由用户自行提供，例如 LoadImage)
-  ```
-
-  - `image_1` = 用户提供的姿势参考图（决定动作/姿态/视角）
-  - `image_2` = 你生成/加载的人物参考图（保留身份、发型、服装、画风、背景、光照）
-  - 默认提示词：精确复制姿势 + 锁死服装不变 + 保持原图赤脚/袜装状态。
-    提示词会明确说明“原图赤脚则保持赤脚”“只有袜/裤袜则不要加鞋”，防止换姿时凭空生成鞋子。
-
-- **换装引擎**：Qwen-Image-Edit-2511（4 步 Lightning 极速换装，复刻 nvzhuang 换装链路的官方参数）：
+- **Pose-swap engine**: Qwen Image 2.1. The generation node reproduces ComfyUI's native Qwen 2.1 pose-editing chain internally:
 
   ```
-  人物图(换姿后) ──FluxKontextImageScale──► VAEEncode（初始 latent）
-  服装图 ───────────────┐
-  → TextEncodeQwenImageEditPlus(image1=人物图, image2=服装图, prompt=换装提示词)
+  character reference (image_2) ─┐
+  pose reference image (image_1) ┤→ TextEncodeQwenImage21 → LoRA (pose adapter) → Cache → KSampler → VAEDecode → IMAGE
+                                 │
+          (the pose image is supplied by you, for example via LoadImage)
+  ```
+
+  - `image_1` = the pose reference image you supply. It decides action, posture and viewpoint.
+  - `image_2` = the character reference image you generated or loaded. It preserves identity, hairstyle, clothing, art style, background and lighting.
+  - The default prompt says to copy the pose exactly, lock the clothing unchanged, and keep the original's barefoot or socks-only state. It explicitly states "if the original is barefoot, stay barefoot" and "if only socks or tights, don't add shoes", so the model doesn't invent shoes when changing pose.
+
+- **Outfit-swap engine**: Qwen-Image-Edit-2511 (4-step Lightning fast outfit swap, reproducing the official parameters of the nvzhuang outfit-swap chain):
+
+  ```
+  person image (after pose swap) ──FluxKontextImageScale──► VAEEncode (initial latent)
+  garment image ───────────────┐
+  → TextEncodeQwenImageEditPlus(image1=person, image2=garment, prompt=outfit prompt)
   → FluxKontextMultiReferenceLatentMethod(index_timestep_zero)
   → ModelSamplingAuraFlow(shift=3.1) + CFGNorm(1.0) + Lightning LoRA
-  → KSampler(4 步, cfg=1.0, euler/simple) → VAEDecode → IMAGE
+  → KSampler(4 steps, cfg=1.0, euler/simple) → VAEDecode → IMAGE
   ```
 
-   - 换装提示词：保持人物身份完全一致（脸/肤色/发型/体型）、尽量保持原姿势、
-     忠实穿上服装图（颜色/面料/图案/领口/袖长/下摆不重设计）、自然垂坠、保留背景光照。
-  - 新版换装提示词会完整替换上衣、下装、袜/裤袜与鞋；如果参考图有不同鞋型，
-    旧鞋必须移除后替换，不能保留或混合。
-  - `garment_description` 接入服装图库描述（例如 `socks sandals`），弥补小尺寸鞋部在视觉编码中不醒目的问题。
+  - The outfit prompt asks to keep the person's identity fully identical (face, skin tone, hairstyle, build) and the original pose as far as possible. It also asks to wear the garment faithfully (no redesign of color, fabric, pattern, neckline, sleeve length or hem), to drape naturally, and to keep the background lighting.
+  - The new outfit prompt fully replaces the top, bottoms, socks/tights and shoes. If the reference image has a different shoe type, the old shoes must be removed and replaced, never kept or blended.
+  - `garment_description` takes the garment library description (for example `socks sandals`). It makes up for small shoe areas being inconspicuous to the visual encoder.
 
-## 使用
+## Usage
 
-1. 拖入节点（菜单 **image → Pose Gallery/Qwen2.1**，或已集成 AICG3D 工作台时在 **AICG3D/图像与姿势**）。
-2. **换姿**：「姿态换姿生成」的 `person_image` 接人物参考图（成人参考图），
-   把姿势参考图（如 LoadImage）连到其 `pose_image` 输入。
-4. **换装（可选）**：「换装生成」的 `person_image` 接上一步换姿成图，
-   「服装选择」的 `garment_image` 连到其 `garment_image` 输入（一条线）。
-   再把「服装选择」的 `description` 连到「换装生成」的 `garment_description`。
-5. 在服装选择节点点击「**浏览服装图库**」，按分类/关键词筛选，点「使用此服装」。
-6. 需要换衣时把「换装生成」的 `enable` 置 **True**；不需要则置 **False**（节点直通，不生效）。
-7. 保持模型默认路径，点击运行。
+1. Drag in the nodes (menu **image → Pose Gallery/Qwen2.1**, or **AICG3D/Image & Pose** if the AICG3D workbench is integrated).
+2. **Pose swap**: connect `person_image` of "Pose-swap generation" to the character reference (an adult reference image). Connect your pose reference image (for example from LoadImage) to its `pose_image` input.
+3. **Outfit swap (optional)**: connect `person_image` of "Outfit-swap generation" to the previous step's pose-swapped image. Connect `garment_image` of "Garment select" to its `garment_image` input (one wire). Then connect `description` of "Garment select" to `garment_description` of "Outfit-swap generation".
+4. On the garment select node, click "**Browse garment library**", filter by category or keyword, and click "Use this garment".
+5. Set `enable` on "Outfit-swap generation" to **True** when you want to change clothes. Set it to **False** otherwise, and the node passes through and has no effect.
+6. Keep the default model paths and click run.
 
-## 依赖模型（models/ 目录下）
+## Required models (under the models/ directory)
 
-### 换姿（Qwen Image 2.1）
+### Pose swap (Qwen Image 2.1)
 
-| 类型 | 默认文件 | 说明/来源 |
+| Type | Default file | Notes / source |
 | --- | --- | --- |
-| 基础模型 | `diffusion_models/qwen/qwen_image_2.1_bf16.safetensors` | Qwen-Image-2.1（通义千问官方） |
-| 文本/图像编码器 | `text_encoders/qwen3vl_8b_int8_convrot.safetensors` | 推荐工作流默认；如节点下拉使用 bf16 版也可切换 |
-| VAE | `vae/qwen_image_2.1_vae_bf16.safetensors` | Qwen Image 2.1 配套 VAE |
-| 姿态适配器 LoRA | `loras/qwen-image2.1/VNCCS_QI2_PoseStudioV1.1.safetensors` | HuggingFace `MIUProject/VNCCS_PoseStudio_QI2.1` |
+| Base model | `diffusion_models/qwen/qwen_image_2.1_bf16.safetensors` | Qwen-Image-2.1 (official Tongyi Qianwen) |
+| Text/image encoder | `text_encoders/qwen3vl_8b_int8_convrot.safetensors` | Default in the recommended workflow. You can switch to the bf16 version in the node dropdown. |
+| VAE | `vae/qwen_image_2.1_vae_bf16.safetensors` | The matching VAE for Qwen Image 2.1 |
+| Pose adapter LoRA | `loras/qwen-image2.1/VNCCS_QI2_PoseStudioV1.1.safetensors` | HuggingFace `MIUProject/VNCCS_PoseStudio_QI2.1` |
 
-默认采样：25 步、CFG 1、Euler/simple、denoise 1、LoRA 强度 1、resolution 1024。
+Default sampling: 25 steps, CFG 1, Euler/simple, denoise 1, LoRA strength 1, resolution 1024.
 
-### 换头换发 + 换装（Qwen Image 2.1 三段工作流）
+### Head/hair swap + outfit swap (Qwen Image 2.1 three-stage workflow)
 
-| 类型 | 默认文件 | 说明 |
+| Type | Default file | Notes |
 | --- | --- | --- |
-| 基础模型 | `diffusion_models/qwen/qwen_image_2.1_int8_convrot.safetensors` | **16GB 显存推荐**；可切换 bf16 |
-| 文本/图像编码器 | `text_encoders/qwen3vl_8b_int8_convrot.safetensors` | Qwen3-VL 8B int8（type=qwen_image） |
-| VAE | `vae/qwen_image_2.1_vae_bf16.safetensors` | 与换姿共用 |
-| 换头像模型 | `diffusion_models/qwen/qwen_image_2.1_int8_convrot.safetensors` | 8 步快速换头像 |
-| 换服饰模型 | `diffusion_models/qwen/qwen_image_2.1_int8_convrot.safetensors` | 默认 20 步，可调整采样器、调度器和步数 |
+| Base model | `diffusion_models/qwen/qwen_image_2.1_int8_convrot.safetensors` | **Recommended for 16GB VRAM.** You can switch to bf16. |
+| Text/image encoder | `text_encoders/qwen3vl_8b_int8_convrot.safetensors` | Qwen3-VL 8B int8 (type=qwen_image) |
+| VAE | `vae/qwen_image_2.1_vae_bf16.safetensors` | Shared with pose swap |
+| Head-swap model | `diffusion_models/qwen/qwen_image_2.1_int8_convrot.safetensors` | 8-step fast head swap |
+| Outfit-swap model | `diffusion_models/qwen/qwen_image_2.1_int8_convrot.safetensors` | 20 steps by default. Sampler, scheduler and steps are adjustable. |
 
-推荐的双封装工作流实际配置为：换头像与换姿势共享 `qwen_image_2.1_bf16`、`qwen3vl_8b_int8_convrot` 和同一 VAE；姿势阶段再应用姿势 LoRA；换服饰使用独立的 `qwen_image_2.1_int8_convrot` 和同一套 CLIP/VAE。换头像采用 8 步 sigma 计划，换姿势默认 25 步，换服饰默认 20 步。
+The recommended dual-wrapper workflow is actually configured as follows:
+- Head swap and pose swap share `qwen_image_2.1_bf16`, `qwen3vl_8b_int8_convrot` and the same VAE.
+- The pose stage then applies the pose LoRA.
+- Outfit swap uses its own `qwen_image_2.1_int8_convrot` with the same CLIP/VAE.
+- Head swap uses an 8-step sigma schedule, pose swap defaults to 25 steps, and outfit swap defaults to 20.
 
-### 换装（Qwen-Image-Edit-2511）
+### Outfit swap (Qwen-Image-Edit-2511)
 
-| 类型 | 默认文件 | 说明/来源 |
+| Type | Default file | Notes / source |
 | --- | --- | --- |
-| 基础模型 | `diffusion_models/qwen_image_edit_2511_int8_convrot.safetensors` | **int8 版，16GB 显存可跑；需自行下载**（Comfy-Org / Qwen 官方 2511 仓库的 ComfyUI 单文件版） |
-| 文本/图像编码器 | `text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors` | Qwen2.5-VL 7B fp8（type=qwen_image） |
-| VAE | `vae/qwen_image_vae.safetensors` | Qwen Image Edit 配套 VAE |
-| Lightning LoRA | `loras/Qwen-Edit-2511/Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors` | 4 步极速（也可用 fp32 版） |
+| Base model | `diffusion_models/qwen_image_edit_2511_int8_convrot.safetensors` | **int8 version, runs on 16GB VRAM. You must download it yourself** (the ComfyUI single-file version from the Comfy-Org / Qwen official 2511 repo). |
+| Text/image encoder | `text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors` | Qwen2.5-VL 7B fp8 (type=qwen_image) |
+| VAE | `vae/qwen_image_vae.safetensors` | The matching VAE for Qwen Image Edit |
+| Lightning LoRA | `loras/Qwen-Edit-2511/Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors` | 4-step fast (the fp32 version also works) |
 
-默认采样：4 步、CFG 1、Euler/simple、denoise 1、LoRA 强度 1、shift 3.1。
-所有模型名均为下拉可选；若你的模型文件名不同，在下拉中选择即可。
+Default sampling: 4 steps, CFG 1, Euler/simple, denoise 1, LoRA strength 1, shift 3.1.
+All model names are dropdowns. If your model files have different names, pick them from the dropdown.
 
-> **16GB 显存务必使用量化版 2511**：bf16 基础模型约 38GB，会大量从磁盘换入显存，
-> 单次换装常见 110 秒以上；int8/fp8 量化版权重大幅下降，通常能显著缩短耗时。
-> 不要为了“更精细”把 Lightning 4 步改成 25 步；4 步 LoRA 配 25 步只会慢约 6 倍，
-> 不会带来成比例的质量提升。
+> **On 16GB VRAM, always use the quantized 2511.** The bf16 base model is about 38GB and gets swapped in from disk constantly. A single outfit swap often takes more than 110 seconds. The int8/fp8 quantized weights are much smaller and usually cut the time a lot.
+> Don't change Lightning from 4 steps to 25 steps for "more detail". Running the 4-step LoRA at 25 steps only makes it about 6 times slower, with no proportional quality gain.
 >
-> 在 RTX 5070 Ti 16GB 上实测，Qwen 2.1 三段完整链路（换头换发 → 25 步换姿势 → 8 步换全套服装）约 80 秒；
-> 同一套 2511 bf16 链路仅换装常需 110 秒以上。Qwen 2.1 的优势主要是显存占用低、可多参考图；
-> 如果服装细节仍不够准确，再用已量化的 2511 单独补一次换装。
+> Measured on an RTX 5070 Ti 16GB, the full Qwen 2.1 three-stage chain (head/hair swap → 25-step pose swap → 8-step full-outfit swap) takes about 80 seconds. An outfit-only swap on the same 2511 bf16 chain often takes over 110 seconds. Qwen 2.1's strengths are mainly low VRAM use and multi-reference support. If garment detail is still inaccurate, run a separate outfit pass with the quantized 2511.
 
-> **换姿 LoRA 版本**：V1.1 保服装、姿势跟随适中（默认）；V2 姿势跟随更强但会改服装。
-> 需要 V2 时下载 `VNCCS_QI2_PoseStudioV2.safetensors`（注意 HF 该文件名末尾带空格，
-> 用 `%20` 编码直链下载，保存时去掉空格）到 `loras/qwen-image2.1/` 后在下拉选择。
+> **Pose LoRA versions**: V1.1 preserves clothing and follows the pose moderately (default). V2 follows the pose more strongly but changes the clothing. To use V2, download `VNCCS_QI2_PoseStudioV2.safetensors` into `loras/qwen-image2.1/` and pick it in the dropdown. Note that this filename has a trailing space on HF, so download it with the direct link using `%20` encoding, and remove the space when saving.
 
-## 环境变量（可选）
+## Environment variables (optional)
 
-- `AICG3D_GARMENT_LIBRARY`：自定义服装图库根目录（默认使用插件自带 `garments/`）。
-- `AICG3D_PORTRAIT_LIBRARY`：覆盖默认插件内 `portraits/`，可指向兼容的人像图库目录。
-- `AICG3D_PORTRAIT_CACHE`：自定义人像压缩预览缓存目录（默认 `ComfyUI/user/aicg3d_portrait_cache/`）。
+- `AICG3D_GARMENT_LIBRARY`: custom garment library root (default is the bundled `garments/`).
+- `AICG3D_PORTRAIT_LIBRARY`: overrides the default in-plugin `portraits/`. It can point to a compatible portrait library directory.
+- `AICG3D_PORTRAIT_CACHE`: custom directory for the compressed portrait preview cache (default `ComfyUI/user/aicg3d_portrait_cache/`).
 
-## 可选：集成进 AICG3D 短剧工作台
+## Optional: integrate into the AICG3D short-drama workbench
 
-插件已适配 `comfyui-AICG3D`：其 registry 惰性导入本插件，重启后 AICG3D 菜单出现
-**AICG3D/图像与姿势 → AICG3D PoseSwap → 服装选择 / 换头换脸参考选择 / 一键替换 / 姿态换姿生成 / 换装生成**。
-独立插件缺失时 AICG3D 照常加载，不影响工作台。
+The plugin is adapted to `comfyui-AICG3D`. Its registry lazily imports this plugin. After a restart, the AICG3D menu shows
+**AICG3D/Image & Pose → AICG3D PoseSwap → Garment select / Face-swap reference select / One-click replace / Pose-swap generation / Outfit-swap generation**.
+If the standalone plugin is missing, AICG3D loads as usual and the workbench is unaffected.
 
-## 验证
+## Verification
 
-- `py_compile` 通过；`node --check web/pose_qwen21.js`、`node --check web/garment_qwen21.js` 通过。
-- `node --check web/portrait_qwen21.js` 通过；人像图库与节点输出已完成本地接口验证。
-- `node --check web/pipeline_qwen21.js` 通过；素材输入四合一子图、一键替换子图和三个标准输出预览均已在 ComfyUI 前端实际加载验证。
-- 路由自服务：
-  `/aicg3d_pose/garments/catalog`、`/aicg3d_pose/garments/assets/`、`/aicg3d_pose/garments/gallery`。
-- 人像路由：`/aicg3d_pose/portraits/catalog`、`/aicg3d_pose/portraits/thumb/`、`/aicg3d_pose/portraits/gallery`。
-- 服装从插件 `garments/` 加载，为本插件自带。
-- 人像从插件 `portraits/` 加载，不依赖外部图库或 `E:` 盘。
-- Qwen 2.1 多参考图、单换装、单换脸和三段完整链路均已在 ComfyUI API 中运行成功。
-- 顺序预览事件已验证按 `换头像 → 换姿势 → 换服饰` 到达。
-- 双子图完整链路运行成功，约 `90.5 秒`；三个输出端依次产生 `768 × 1344` 预览，自定义 `640 × 960` 测试输出也精确匹配。
-- 模型下拉已收回子图内部真实加载节点，主封装节点不再出现误报的“未知模型/缺失模型”。
-- 完整生成需 ComfyUI 运行时 + GPU + 上述模型，安装后重启验证。
+These notes come from the upstream project and predate the pose library removal. They haven't been re-run here.
+
+- `py_compile` passes. `node --check web/garment_qwen21.js` passes.
+- `node --check web/portrait_qwen21.js` passes. The portrait library and node outputs have been verified through the local interface.
+- `node --check web/pipeline_qwen21.js` passes. The four-in-one asset input subgraph, the one-click replace subgraph and the three standard output previews have all been loaded and checked in the ComfyUI frontend.
+- Self-served routes: `/aicg3d_pose/garments/catalog`, `/aicg3d_pose/garments/assets/`, `/aicg3d_pose/garments/gallery`.
+- Portrait routes: `/aicg3d_pose/portraits/catalog`, `/aicg3d_pose/portraits/thumb/`, `/aicg3d_pose/portraits/gallery`.
+- Garments load from the plugin's `garments/`, bundled with this plugin.
+- Portraits load from the plugin's `portraits/`, with no dependency on an external library or the `E:` drive.
+- Qwen 2.1 multi-reference, single outfit swap, single face swap and the full three-stage chain have all run successfully through the ComfyUI API.
+- Sequential preview events were verified to arrive in the order `head swap → pose swap → outfit swap`.
+- The full dual-subgraph chain ran successfully in about `90.5 seconds`. The three outputs produced `768 × 1344` previews in turn, and a custom `640 × 960` test output matched exactly.
+- Model dropdowns were moved back to the real loader nodes inside the subgraph, so the main wrapper node no longer falsely reports "unknown model / missing model".
+- Full generation needs a running ComfyUI, a GPU and the models above. Verify after installing and restarting.
