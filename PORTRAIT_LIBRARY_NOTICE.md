@@ -67,7 +67,6 @@ GitHub `main` 仓库当前包含以下压缩文件；可选的 code-only 发布�
 ## 技术说明
 
 - GitHub `main` 仓库包含 `portraits/img/` 与 `portraits/data/`；code-only 发布包不包含它们。
-- 首次安装后图库搜索为空时，先取得兼容的 `comfyui-portrait-gallery/library`，再运行 `python scripts/configure_portrait_library.py --source <library目录>` 并重启 ComfyUI。
 - 可通过 `/aicg3d_pose/portraits/status` 检查图库是否安装以及当前读取路径。
 - 压缩预览与节点输出读取已配置的外部图库；也可直接把完整图库放在插件 `portraits/` 下。
 - 可用 `AICG3D_PORTRAIT_LIBRARY` 覆盖为外部图库目录。

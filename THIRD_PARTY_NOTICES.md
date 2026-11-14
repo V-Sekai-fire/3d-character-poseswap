@@ -58,7 +58,6 @@
 
 ## 4. 网页界面与上游代码
 
-- `web/gallery.html` 的交互与样式参考了 AI Pose Gallery 中文整理项目。
 - 上游整理代码的 MIT 版权和许可文本保存在 `licenses/ai-pose-gallery-zh-MIT.txt`（同一文本也随图库保存在 `library/LICENSE`）；不得删除该文件或把它曲解为图片许可。
 - 本项目对页面的 ComfyUI 适配、来源弹窗和本地选择逻辑进行了修改。
 - 如后续复制其他项目的 HTML、CSS、JavaScript 或字体，应补充对应版权和许可证文本。

@@ -5,7 +5,7 @@ See [LICENSE](LICENSE) for the copyright notice and [AUTHORS.md](AUTHORS.md) for
 > [!IMPORTANT]
 > This repository is not an asset pack with cleared rights. Third-party assets are in the repository, but that doesn't mean the project author owns, licenses, endorses or guarantees them for redistribution or commercial use.
 > The images and indexes in `garments/` and `portraits/` are third-party assets. They are not covered by the MIT license in `LICENSE`.
-> No license was found for the garment library that covers redistribution. The portrait library is labeled CC0, but it also asks that it not be redistributed. Before you publish the full asset pack, read [LEGAL_AND_SAFETY.md](LEGAL_AND_SAFETY.md), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md). A disclaimer is not a substitute for permission.
+> No license was found for the garment library that covers redistribution. The portrait library is labeled CC0, but it also asks that it not be redistributed. Before you publish the full asset pack, read [LEGAL_AND_SAFETY.md](LEGAL_AND_SAFETY.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). A disclaimer is not a substitute for permission.
 >
 > Before use, read [DISCLAIMER.md](DISCLAIMER.md), [NOTICE](NOTICE) and [AUTHORS.md](AUTHORS.md) in full. If you are a rights holder and think some content shouldn't be distributed, contact the author through a GitHub Issue to have it taken down.
 >
