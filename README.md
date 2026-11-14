@@ -18,11 +18,26 @@ A dataset of character reference images for 3D character and outfit work. It has
 
 The images were originally collected for a pipeline that swaps a character's head and hair, pose and outfit with Qwen Image 2.1 and Qwen-Image-Edit-2511. This repository no longer contains that code. A pose library that used to be part of it has also been removed.
 
+## Planning domain, problems and plans
+
+How the dataset's images are produced is written as a planning task, in the same three-document shape as `interactor-taskweft-persona`. Each document is a RECTGTN JSON-LD file under the `VSEKAI` prefix.
+
+- `domains/presence-edit.jsonld` is the domain (`domain:Definition`). A body is encoded to packets (`interactor-packets-guest`), routed (`interactor-zone-router-guest`, or the C relay `transport-zone-relay`), sealed and judged (`interactor-observer-guest`), optionally agreed by four replicas (`interactor-replica-guest`), played on a curve (`interactor-curve-guest`) and followed by the ANNY avatar (`interactor-anny-follow-guest`). The presence gates (`interactor-presence-gates`) take a snapshot of the playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit (`contract-editscore-mojo`).
+- `problems/*.jsonld` are the problems (`domain:Problem`): which parts are checked out, which inputs are supplied, whether the replica stage is on, and the goal.
+- `plans/*.jsonld` are the plans (`domain:Plan`): the steps in order, or a refusal by name.
+
+| Problem | Goal | Plan |
+| --- | --- | --- |
+| `snapshot-edit-score` | `/image/scored` | 15 steps, with `agree` |
+| `replica-off` | `/image/scored` | 15 steps, with `skip-agree` |
+| `relay-for-router` | `/body/routed` | `encode-packets`, `route-relay` (the router model is not checked out) |
+| `snapshot-only` | `/image/snapshot` | 8 steps |
+| `missing-anny-glb` | `/image/scored` | refused: `unreachable` |
+
+The plans were produced by the `persona_plan` planner of `interactor-taskweft-persona`, not written by hand. Planning a problem again must give the file back, and the `missing-anny-glb` plan is the negative control.
+
 ## Documentation
 
-- [Libraries and distribution](docs/libraries.md): Garment and portrait libraries, sources, licenses, setup
-- [Nodes and usage](docs/nodes.md): Node reference, wiring, usage steps, environment variables
-- [Workflows](docs/workflows.md): Example workflows and how to run them
-- [How it works](docs/how-it-works.md): The pose-swap and outfit-swap pipelines
+- [Libraries and distribution](docs/libraries.md): Garment and portrait libraries, sources, licenses
 - [Required models](docs/models.md): Model weights and default sampling
 - [Verification](docs/verification.md): Upstream verification notes

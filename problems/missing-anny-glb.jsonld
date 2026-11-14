@@ -1,0 +1,109 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Problem",
+ "name": "missing_anny_glb_problem",
+ "domain": "presence_edit",
+ "source": "3d-character-poseswap",
+ "version": "0.1.0",
+ "description": "No ANNY mesh is supplied, so the avatar cannot be posed. The goal cannot be reached and is refused by name.",
+ "variables": [
+  {
+   "name": "part",
+   "type": "int",
+   "init": {
+    "packets": 1,
+    "zone_router": 1,
+    "zone_relay": 1,
+    "observer": 1,
+    "curve": 1,
+    "replica": 1,
+    "anny_follow": 1,
+    "presence_gates": 1,
+    "omnigen2": 1,
+    "editscore": 1
+   }
+  },
+  {
+   "name": "input",
+   "type": "int",
+   "init": {
+    "body": 1,
+    "anny_glb": 0,
+    "clips": 1,
+    "edit_prompt": 1
+   }
+  },
+  {
+   "name": "switch",
+   "type": "int",
+   "init": {
+    "replica": 1
+   }
+  },
+  {
+   "name": "bypass",
+   "type": "int",
+   "init": {
+    "replica": 0
+   }
+  },
+  {
+   "name": "model",
+   "type": "int",
+   "init": {
+    "qwen25vl_conditioner": 0,
+    "omnigen2_transformer": 0,
+    "omnigen2_vae": 0,
+    "editscore_lora": 0,
+    "editscore_merged": 0
+   }
+  },
+  {
+   "name": "body",
+   "type": "int",
+   "init": {
+    "packet": 0,
+    "routed": 0,
+    "sealed": 0,
+    "judged": 0,
+    "agreed": 0,
+    "played": 0
+   }
+  },
+  {
+   "name": "avatar",
+   "type": "int",
+   "init": {
+    "posed": 0
+   }
+  },
+  {
+   "name": "image",
+   "type": "int",
+   "init": {
+    "snapshot": 0,
+    "edited": 0,
+    "scored": 0
+   }
+  }
+ ],
+ "capabilities": {
+  "entities": {},
+  "graph": {
+   "edges": []
+  }
+ },
+ "todo_list": [
+  {
+   "goal": [
+    {
+     "pointer": "/image/scored",
+     "eq": 1
+    }
+   ]
+  }
+ ]
+}

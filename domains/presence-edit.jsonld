@@ -1,0 +1,744 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Definition",
+ "name": "presence_edit",
+ "source": "3d-character-poseswap",
+ "version": "0.1.0",
+ "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, and followed by the ANNY avatar. The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem.",
+ "variables": [
+  {
+   "name": "part",
+   "type": "int",
+   "description": "1 when a repository of the presence slice, or a model repository, is checked out beside the others.",
+   "init": {}
+  },
+  {
+   "name": "input",
+   "type": "int",
+   "description": "1 when an input is supplied.",
+   "init": {}
+  },
+  {
+   "name": "switch",
+   "type": "int",
+   "description": "1 when the optional replica stage is on.",
+   "init": {}
+  },
+  {
+   "name": "bypass",
+   "type": "int",
+   "description": "1 when the replica stage is off and passes the judged body through.",
+   "init": {}
+  },
+  {
+   "name": "model",
+   "type": "int",
+   "description": "1 when a model file is loaded.",
+   "init": {}
+  },
+  {
+   "name": "body",
+   "type": "int",
+   "description": "1 when the body has passed a stage of the presence slice.",
+   "init": {}
+  },
+  {
+   "name": "avatar",
+   "type": "int",
+   "description": "1 when the avatar is posed.",
+   "init": {}
+  },
+  {
+   "name": "image",
+   "type": "int",
+   "description": "1 when the image of a stage is produced.",
+   "init": {}
+  }
+ ],
+ "actions": {
+  "load-qwen25vl-conditioner": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/qwen25vl_conditioner",
+     "value": 1
+    }
+   ]
+  },
+  "load-omnigen2-transformer": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/omnigen2_transformer",
+     "value": 1
+    }
+   ]
+  },
+  "load-omnigen2-vae": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/omnigen2_vae",
+     "value": 1
+    }
+   ]
+  },
+  "load-editscore-lora": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/editscore",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/editscore_lora",
+     "value": 1
+    }
+   ]
+  },
+  "merge-editscore-lora": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/omnigen2_transformer",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/editscore_lora",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/editscore_merged",
+     "value": 1
+    }
+   ]
+  },
+  "encode-packets": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/packets",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/body",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/packet",
+     "value": 1
+    }
+   ]
+  },
+  "route-model": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/zone_router",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/packet",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/routed",
+     "value": 1
+    }
+   ]
+  },
+  "route-relay": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/zone_relay",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/packet",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/routed",
+     "value": 1
+    }
+   ]
+  },
+  "seal-and-take": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/observer",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/routed",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/sealed",
+     "value": 1
+    }
+   ]
+  },
+  "judge": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/observer",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/sealed",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/judged",
+     "value": 1
+    }
+   ]
+  },
+  "agree": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/replica",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/switch/replica",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/judged",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/agreed",
+     "value": 1
+    }
+   ]
+  },
+  "skip-agree": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/bypass/replica",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/judged",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/agreed",
+     "value": 1
+    }
+   ]
+  },
+  "play-curve": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/curve",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/agreed",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/played",
+     "value": 1
+    }
+   ]
+  },
+  "follow": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/anny_follow",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/anny_glb",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/clips",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/played",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/avatar/posed",
+     "value": 1
+    }
+   ]
+  },
+  "snapshot": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/presence_gates",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/avatar/posed",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/image/snapshot",
+     "value": 1
+    }
+   ]
+  },
+  "edit": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/image/snapshot",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/edit_prompt",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/qwen25vl_conditioner",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/omnigen2_transformer",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/omnigen2_vae",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/editscore_merged",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/image/edited",
+     "value": 1
+    }
+   ]
+  },
+  "score": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/editscore",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/image/edited",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/image/scored",
+     "value": 1
+    }
+   ]
+  }
+ },
+ "methods": {
+  "/model/qwen25vl_conditioner": {
+   "alternatives": [
+    {
+     "name": "load",
+     "subtasks": [
+      [
+       "load-qwen25vl-conditioner"
+      ]
+     ]
+    }
+   ]
+  },
+  "/model/omnigen2_transformer": {
+   "alternatives": [
+    {
+     "name": "load",
+     "subtasks": [
+      [
+       "load-omnigen2-transformer"
+      ]
+     ]
+    }
+   ]
+  },
+  "/model/omnigen2_vae": {
+   "alternatives": [
+    {
+     "name": "load",
+     "subtasks": [
+      [
+       "load-omnigen2-vae"
+      ]
+     ]
+    }
+   ]
+  },
+  "/model/editscore_lora": {
+   "alternatives": [
+    {
+     "name": "load",
+     "subtasks": [
+      [
+       "load-editscore-lora"
+      ]
+     ]
+    }
+   ]
+  },
+  "/model/editscore_merged": {
+   "alternatives": [
+    {
+     "name": "merge",
+     "subtasks": [
+      [
+       "goal",
+       "/model/omnigen2_transformer"
+      ],
+      [
+       "goal",
+       "/model/editscore_lora"
+      ],
+      [
+       "merge-editscore-lora"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/packet": {
+   "alternatives": [
+    {
+     "name": "encode",
+     "subtasks": [
+      [
+       "encode-packets"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/routed": {
+   "alternatives": [
+    {
+     "name": "model",
+     "subtasks": [
+      [
+       "goal",
+       "/body/packet"
+      ],
+      [
+       "route-model"
+      ]
+     ]
+    },
+    {
+     "name": "relay",
+     "subtasks": [
+      [
+       "goal",
+       "/body/packet"
+      ],
+      [
+       "route-relay"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/sealed": {
+   "alternatives": [
+    {
+     "name": "seal",
+     "subtasks": [
+      [
+       "goal",
+       "/body/routed"
+      ],
+      [
+       "seal-and-take"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/judged": {
+   "alternatives": [
+    {
+     "name": "judge",
+     "subtasks": [
+      [
+       "goal",
+       "/body/sealed"
+      ],
+      [
+       "judge"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/agreed": {
+   "alternatives": [
+    {
+     "name": "agree",
+     "subtasks": [
+      [
+       "goal",
+       "/body/judged"
+      ],
+      [
+       "agree"
+      ]
+     ]
+    },
+    {
+     "name": "passthrough",
+     "subtasks": [
+      [
+       "goal",
+       "/body/judged"
+      ],
+      [
+       "skip-agree"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/played": {
+   "alternatives": [
+    {
+     "name": "play",
+     "subtasks": [
+      [
+       "goal",
+       "/body/agreed"
+      ],
+      [
+       "play-curve"
+      ]
+     ]
+    }
+   ]
+  },
+  "/avatar/posed": {
+   "alternatives": [
+    {
+     "name": "follow",
+     "subtasks": [
+      [
+       "goal",
+       "/body/played"
+      ],
+      [
+       "follow"
+      ]
+     ]
+    }
+   ]
+  },
+  "/image/snapshot": {
+   "alternatives": [
+    {
+     "name": "snapshot",
+     "subtasks": [
+      [
+       "goal",
+       "/avatar/posed"
+      ],
+      [
+       "snapshot"
+      ]
+     ]
+    }
+   ]
+  },
+  "/image/edited": {
+   "alternatives": [
+    {
+     "name": "edit",
+     "subtasks": [
+      [
+       "goal",
+       "/image/snapshot"
+      ],
+      [
+       "goal",
+       "/model/qwen25vl_conditioner"
+      ],
+      [
+       "goal",
+       "/model/omnigen2_vae"
+      ],
+      [
+       "goal",
+       "/model/editscore_merged"
+      ],
+      [
+       "edit"
+      ]
+     ]
+    }
+   ]
+  },
+  "/image/scored": {
+   "alternatives": [
+    {
+     "name": "score",
+     "subtasks": [
+      [
+       "goal",
+       "/image/edited"
+      ],
+      [
+       "score"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}
