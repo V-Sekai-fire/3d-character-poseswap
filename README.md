@@ -11,7 +11,7 @@ The source code is under the MIT License. See [LICENSE](LICENSE) for the copyrig
 >
 > Content notice: the garment index includes adult-oriented categories. The project is for adults only. Do not use it to sexualize minors, to sexualize anyone without consent, to impersonate real people, or for any other illegal purpose.
 
-A fully standalone ComfyUI plugin. Its pipeline is **swap head and hair → swap pose with Qwen Image 2.1 → swap the full outfit**. You can also use Qwen-Image-Edit-2511 for a single high-fidelity outfit swap.
+A standalone plugin. Its pipeline is **swap head and hair → swap pose with Qwen Image 2.1 → swap the full outfit**. You can also use Qwen-Image-Edit-2511 for a single high-fidelity outfit swap.
 
 The recommended setup is the "dual-wrapper" workflow. One subgraph takes the four asset inputs, and one "one-click replace" subgraph does the swaps. Each of the three results goes from its own output to a standard PreviewImage node.
 
@@ -29,21 +29,20 @@ For asset sources, licenses and responsibility notes, see [THIRD_PARTY_NOTICES.m
 | **Garment library** | **Included in the main GitHub repo** (`garments/`: 1407 garment reference images and an index). The code-only package excludes it by default. |
 | **Portrait library** | **Included in the main GitHub repo as a compressed version** (`portraits/`: 1499 WebP images, thumbnails and an index). The code-only package excludes it by default. |
 | **Gallery pages and routes** | Provided by this plugin (`web/garment_gallery.html` and the `/aicg3d_pose/*` routes). It calls no external plugins. |
-| **ComfyUI** | 0.43+ (with the native Qwen Image 2.1 and Qwen-Image-Edit-2511 nodes: `nodes_qwen.py` / `nodes_flux.py` / `nodes_cfg.py` / `nodes_model_advanced.py`) |
-| **Model weights** | The standard `models/` directory (see the tables below). This is ComfyUI's general location and doesn't belong to any plugin. |
+| **Model weights** | The standard `models/` directory (see the tables below). |
 
-> To use it, others only need to: ① copy the whole plugin directory into their ComfyUI `custom_nodes/`; ② prepare the weight files listed under "Required models" below; ③ restart ComfyUI. The GitHub main repo includes the local garment and portrait libraries. With the code-only package, point the `AICG3D_*_LIBRARY` environment variables at external asset directories.
+> To use it, others only need to: ① copy the whole plugin directory into their `custom_nodes/`; ② prepare the weight files listed under "Required models" below; ③ restart. The GitHub main repo includes the local garment and portrait libraries. With the code-only package, point the `AICG3D_*_LIBRARY` environment variables at external asset directories.
 
 ## Installation
 
-The project needs no extra `pip install`. Image loading uses the Pillow, NumPy and PyTorch that ship with ComfyUI.
+The project needs no extra `pip install`. Image loading uses Pillow, NumPy and PyTorch.
 
 ```bash
-cd ComfyUI/custom_nodes
-git clone https://github.com/JGRFW/comfyui-aicg3d-PoseSwap.git
+cd custom_nodes
+git clone https://github.com/V-Sekai-fire/3d-character-poseswap.git
 ```
 
-Then download the model weights, which the repo doesn't include, as described in [MODEL_REQUIREMENTS.md](MODEL_REQUIREMENTS.md), and restart ComfyUI.
+Then download the model weights, which the repo doesn't include, as described in [MODEL_REQUIREMENTS.md](MODEL_REQUIREMENTS.md), and restart.
 Build a code-only release package with `python scripts/package_open_source.py`. It excludes the third-party libraries by default.
 
 ### First-time portrait library setup
@@ -56,7 +55,7 @@ First obtain a compatible `comfyui-portrait-gallery/library` from a legitimate s
 python scripts/configure_portrait_library.py --source "C:\path\to\comfyui-portrait-gallery\library"
 ```
 
-After restarting ComfyUI, click "Browse portrait library" in the node to search. You can also put the library in the plugin's `portraits/` directory or set the `AICG3D_PORTRAIT_LIBRARY` environment variable. The install status endpoint is `/aicg3d_pose/portraits/status`.
+After restarting, click "Browse portrait library" in the node to search. You can also put the library in the plugin's `portraits/` directory or set the `AICG3D_PORTRAIT_LIBRARY` environment variable. The install status endpoint is `/aicg3d_pose/portraits/status`.
 
 ## Nodes
 
@@ -96,7 +95,7 @@ Don't leave out the `description` wire. The specific shoe and sock types in the 
 
 ## Dual-wrapper sequential-swap workflow
 
-Drag [example_workflows/aicg3d_qwen21_simple_replace.json](example_workflows/aicg3d_qwen21_simple_replace.json) into ComfyUI. The workflow chains these steps in order.
+Drag [example_workflows/aicg3d_qwen21_simple_replace.json](example_workflows/aicg3d_qwen21_simple_replace.json) into the editor. The workflow chains these steps in order.
 
 The canvas has two wrapper nodes and three standard preview nodes:
 
@@ -127,7 +126,7 @@ The three-stage workflow separates "swap face/hairstyle" from "swap outfit". Thi
 
 ## How to use the three-stage workflow
 
-1. Drag [example_workflows/aicg3d_qwen21_three_stage.json](example_workflows/aicg3d_qwen21_three_stage.json) into ComfyUI.
+1. Drag [example_workflows/aicg3d_qwen21_three_stage.json](example_workflows/aicg3d_qwen21_three_stage.json) into the editor.
 2. `1. Base character` is the base image whose body and pose you want to keep. `2. Head-swap reference` is the face. `3. Hairstyle reference` is the hair.
 3. For `4. Pose reference`, supply your own pose image as the motion reference. Choose the outfit for `5. Full-outfit reference` from the garment library.
 4. Click run. The workflow outputs and saves three images in order: `1_head_hair`, `2_pose`, `3_outfit`.
@@ -142,13 +141,13 @@ The Qwen 2.1 edit nodes in the three stages default to `refine_prompt = false` a
 - Library source: [AI モデル顔データベース (AI Model Face Database)](https://ai-portrait-gallery.pages.dev/), original author [あぎ (@agi_aibusi)](https://x.com/agi_aibusi).
 - The original site is labeled CC0 1.0, but it also asks people to avoid directly redistributing the image data itself. To meet open-source distribution needs, this plugin includes a compressed copy. `PORTRAIT_LIBRARY_NOTICE.md` keeps that request and a reminder to check compliance yourself.
 - The assets are stored in the plugin's `portraits/`: 1499 reference WebP images of up to 768×960, plus 360×450 WebP thumbnails, about 148 MiB in total.
-- The portrait node reads the plugin's own `portraits/`. It doesn't depend on the `E:` drive, an external library plugin or the ComfyUI `user` cache.
+- The portrait node reads the plugin's own `portraits/`. It doesn't depend on the `E:` drive, an external library plugin or a user cache.
 - Every card and detail page keeps the original site, original author and CC0 license link. The full notice is in `PORTRAIT_LIBRARY_NOTICE.md`.
 - This node is an independent, unofficial local indexing tool. It isn't an official version of the original author's work and has no endorsement from them. Don't use it to impersonate real people or for illegal purposes.
 
 ## How it works
 
-- **Pose-swap engine**: Qwen Image 2.1. The generation node reproduces ComfyUI's native Qwen 2.1 pose-editing chain internally:
+- **Pose-swap engine**: Qwen Image 2.1. The generation node reproduces the native Qwen 2.1 pose-editing chain internally:
 
   ```
   character reference (image_2) ─┐
@@ -237,13 +236,7 @@ All model names are dropdowns. If your model files have different names, pick th
 
 - `AICG3D_GARMENT_LIBRARY`: custom garment library root (default is the bundled `garments/`).
 - `AICG3D_PORTRAIT_LIBRARY`: overrides the default in-plugin `portraits/`. It can point to a compatible portrait library directory.
-- `AICG3D_PORTRAIT_CACHE`: custom directory for the compressed portrait preview cache (default `ComfyUI/user/aicg3d_portrait_cache/`).
-
-## Optional: integrate into the AICG3D short-drama workbench
-
-The plugin is adapted to `comfyui-AICG3D`. Its registry lazily imports this plugin. After a restart, the AICG3D menu shows
-**AICG3D/Image & Pose → AICG3D PoseSwap → Garment select / Face-swap reference select / One-click replace / Pose-swap generation / Outfit-swap generation**.
-If the standalone plugin is missing, AICG3D loads as usual and the workbench is unaffected.
+- `AICG3D_PORTRAIT_CACHE`: custom directory for the compressed portrait preview cache (default `user/aicg3d_portrait_cache/`).
 
 ## Verification
 
@@ -251,13 +244,13 @@ These notes come from the upstream project and predate the pose library removal.
 
 - `py_compile` passes. `node --check web/garment_qwen21.js` passes.
 - `node --check web/portrait_qwen21.js` passes. The portrait library and node outputs have been verified through the local interface.
-- `node --check web/pipeline_qwen21.js` passes. The four-in-one asset input subgraph, the one-click replace subgraph and the three standard output previews have all been loaded and checked in the ComfyUI frontend.
+- `node --check web/pipeline_qwen21.js` passes. The four-in-one asset input subgraph, the one-click replace subgraph and the three standard output previews have all been loaded and checked in the frontend.
 - Self-served routes: `/aicg3d_pose/garments/catalog`, `/aicg3d_pose/garments/assets/`, `/aicg3d_pose/garments/gallery`.
 - Portrait routes: `/aicg3d_pose/portraits/catalog`, `/aicg3d_pose/portraits/thumb/`, `/aicg3d_pose/portraits/gallery`.
 - Garments load from the plugin's `garments/`, bundled with this plugin.
 - Portraits load from the plugin's `portraits/`, with no dependency on an external library or the `E:` drive.
-- Qwen 2.1 multi-reference, single outfit swap, single face swap and the full three-stage chain have all run successfully through the ComfyUI API.
+- Qwen 2.1 multi-reference, single outfit swap, single face swap and the full three-stage chain have all run successfully through the API.
 - Sequential preview events were verified to arrive in the order `head swap → pose swap → outfit swap`.
 - The full dual-subgraph chain ran successfully in about `90.5 seconds`. The three outputs produced `768 × 1344` previews in turn, and a custom `640 × 960` test output matched exactly.
 - Model dropdowns were moved back to the real loader nodes inside the subgraph, so the main wrapper node no longer falsely reports "unknown model / missing model".
-- Full generation needs a running ComfyUI, a GPU and the models above. Verify after installing and restarting.
+- Full generation needs a GPU and the models above. Verify after installing and restarting.
