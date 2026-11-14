@@ -1,0 +1,1 @@
+{"@context":{"VSEKAI":"https://v-sekai.org/","domain":"VSEKAI:planning/domain/"},"@type":"domain:Plan","name":"run_2026_11_14_mul_mat_problem_plan","domain":"presence_edit","problem":"run_2026_11_14_mul_mat_problem","reached":true,"temporal":{"consistent":true,"total":"PT0S"},"steps":[{"action":"check-mul-mat","params":[],"duration":"PT0S"}]}

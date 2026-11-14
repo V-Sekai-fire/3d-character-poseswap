@@ -1,0 +1,126 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Problem",
+ "name": "run_2026_11_14_mul_mat_problem",
+ "domain": "presence_edit",
+ "source": "3d-character-poseswap",
+ "version": "0.1.0",
+ "description": "The Mac of 2026-11-14 with the Lean OmniGen2 guest built with only its mul_mat op. The goal is that op checked against its fixture in the engine.",
+ "variables": [
+  {
+   "name": "part",
+   "type": "int",
+   "init": {
+    "packets": 1,
+    "zone_router": 1,
+    "zone_relay": 1,
+    "observer": 1,
+    "curve": 1,
+    "replica": 1,
+    "anny_follow": 1,
+    "presence_gates": 1,
+    "muscle_drive_release": 1,
+    "anny_fit": 1,
+    "omnigen2": 1,
+    "editscore": 1
+   }
+  },
+  {
+   "name": "input",
+   "type": "int",
+   "init": {
+    "godot_double": 1,
+    "packet_golden": 0,
+    "mujoco_elf": 0,
+    "clips": 0,
+    "anny_glb": 0,
+    "soma_pheno": 0,
+    "anny_fit_elf": 0,
+    "omnigen2_mul_mat_elf": 1,
+    "omnigen2_elf": 0,
+    "gpu_host": 0,
+    "edit_prompt": 0
+   }
+  },
+  {
+   "name": "switch",
+   "type": "int",
+   "init": {
+    "replica": 0
+   }
+  },
+  {
+   "name": "bypass",
+   "type": "int",
+   "init": {
+    "replica": 1
+   }
+  },
+  {
+   "name": "model",
+   "type": "int",
+   "init": {
+    "qwen25vl_conditioner": 0,
+    "omnigen2_transformer": 0,
+    "omnigen2_vae": 0,
+    "editscore_lora": 0,
+    "editscore_merged": 0
+   }
+  },
+  {
+   "name": "body",
+   "type": "int",
+   "init": {
+    "packet": 0,
+    "routed": 0,
+    "sealed": 0,
+    "judged": 0,
+    "agreed": 0,
+    "played": 0
+   }
+  },
+  {
+   "name": "avatar",
+   "type": "int",
+   "init": {
+    "fitted": 0,
+    "posed": 0
+   }
+  },
+  {
+   "name": "op",
+   "type": "int",
+   "init": {
+    "mul_mat": 0
+   }
+  },
+  {
+   "name": "image",
+   "type": "int",
+   "init": {
+    "snapshot": 0,
+    "edited": 0,
+    "scored": 0
+   }
+  }
+ ],
+ "capabilities": {
+  "entities": {},
+  "graph": {
+   "edges": []
+  }
+ },
+ "todo_list": [
+  {
+   "goal": [
+    {
+     "pointer": "/op/mul_mat",
+     "eq": 1
+    }
+   ]
+  }
+ ]
+}

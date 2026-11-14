@@ -39,6 +39,7 @@
     "anny_glb": 0,
     "soma_pheno": 1,
     "anny_fit_elf": 1,
+    "omnigen2_mul_mat_elf": 1,
     "omnigen2_elf": 1,
     "gpu_host": 1,
     "edit_prompt": 1
@@ -85,7 +86,15 @@
    "name": "avatar",
    "type": "int",
    "init": {
+    "fitted": 0,
     "posed": 0
+   }
+  },
+  {
+   "name": "op",
+   "type": "int",
+   "init": {
+    "mul_mat": 0
    }
   },
   {

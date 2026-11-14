@@ -7,7 +7,7 @@
  "name": "presence_edit",
  "source": "3d-character-poseswap",
  "version": "0.1.0",
- "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem.",
+ "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF, written in Lean 4, of which the mul_mat op is built and checked. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem.",
  "variables": [
   {
    "name": "part",
@@ -18,7 +18,7 @@
   {
    "name": "input",
    "type": "int",
-   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the built OmniGen2 guest ELF, a free GPU host, an edit prompt.",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt.",
    "init": {}
   },
   {
@@ -49,6 +49,12 @@
    "name": "avatar",
    "type": "int",
    "description": "1 when the avatar is fitted or posed.",
+   "init": {}
+  },
+  {
+   "name": "op",
+   "type": "int",
+   "description": "1 when an op of the OmniGen2 guest is checked against its fixture.",
    "init": {}
   },
   {
@@ -454,6 +460,36 @@
     },
     {
      "pointer/set": "/body/played",
+     "value": 1
+    }
+   ]
+  },
+  "check-mul-mat": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_mul_mat_elf",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/op/mul_mat",
      "value": 1
     }
    ]
@@ -882,6 +918,18 @@
       ],
       [
        "play-curve"
+      ]
+     ]
+    }
+   ]
+  },
+  "/op/mul_mat": {
+   "alternatives": [
+    {
+     "name": "check",
+     "subtasks": [
+      [
+       "check-mul-mat"
       ]
      ]
     }

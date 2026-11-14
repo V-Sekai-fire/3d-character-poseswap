@@ -8,7 +8,7 @@
  "domain": "presence_edit",
  "source": "3d-character-poseswap",
  "version": "0.1.0",
- "description": "The same desk, with the goal of a scored edit. It is refused: no ANNY base mesh, no built ANNY fit guest, no SOMA phenotype data and no built OmniGen2 guest are on hand. interactor-anny-fit-guest holds a skeleton and interactor-omnigen2-guest holds a README.",
+ "description": "The same desk, with the goal of a scored edit. It is refused: no ANNY base mesh, no built ANNY fit guest, no SOMA phenotype data and no full OmniGen2 guest are on hand. interactor-anny-fit-guest holds a skeleton, and interactor-omnigen2-guest builds the mul_mat op only.",
  "variables": [
   {
    "name": "part",
@@ -39,6 +39,7 @@
     "anny_glb": 0,
     "soma_pheno": 0,
     "anny_fit_elf": 0,
+    "omnigen2_mul_mat_elf": 0,
     "omnigen2_elf": 0,
     "gpu_host": 1,
     "edit_prompt": 1
@@ -85,7 +86,15 @@
    "name": "avatar",
    "type": "int",
    "init": {
+    "fitted": 0,
     "posed": 0
+   }
+  },
+  {
+   "name": "op",
+   "type": "int",
+   "init": {
+    "mul_mat": 0
    }
   },
   {
