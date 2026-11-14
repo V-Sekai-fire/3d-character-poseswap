@@ -217,7 +217,7 @@ The recommended dual-wrapper workflow is actually configured as follows:
 
 | Type | Default file | Notes / source |
 | --- | --- | --- |
-| Base model | `diffusion_models/qwen_image_edit_2511_int8_convrot.safetensors` | **int8 version, runs on 16GB VRAM. You must download it yourself** (the ComfyUI single-file version from the Comfy-Org / Qwen official 2511 repo). |
+| Base model | `diffusion_models/qwen_image_edit_2511_int8_convrot.safetensors` | **int8 version, runs on 16GB VRAM. You must download it yourself** (the single-file version from the Comfy-Org / Qwen official 2511 repo). |
 | Text/image encoder | `text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors` | Qwen2.5-VL 7B fp8 (type=qwen_image) |
 | VAE | `vae/qwen_image_vae.safetensors` | The matching VAE for Qwen Image Edit |
 | Lightning LoRA | `loras/Qwen-Edit-2511/Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors` | 4-step fast (the fp32 version also works) |
