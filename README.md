@@ -22,19 +22,24 @@ The images were originally collected for a pipeline that swaps a character's hea
 
 How the dataset's images are produced is written as a planning task, in the same three-document shape as `interactor-taskweft-persona`. Each document is a RECTGTN JSON-LD file under the `VSEKAI` prefix.
 
-- `domains/presence-edit.jsonld` is the domain (`domain:Definition`). A body is encoded to packets (`interactor-packets-guest`), routed (`interactor-zone-router-guest`, or the C relay `transport-zone-relay`), sealed and judged (`interactor-observer-guest`), optionally agreed by four replicas (`interactor-replica-guest`), played on a curve (`interactor-curve-guest`) and followed by the ANNY avatar (`interactor-anny-follow-guest`). The presence gates (`interactor-presence-gates`) take a snapshot of the playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit (`contract-editscore-mojo`).
-- `problems/*.jsonld` are the problems (`domain:Problem`): which parts are checked out, which inputs are supplied, whether the replica stage is on, and the goal.
+- `domains/presence-edit.jsonld` is the domain (`domain:Definition`). A body is encoded to packets (`interactor-packets-guest`), routed (`interactor-zone-router-guest`, or the C relay `transport-zone-relay`), sealed and judged (`interactor-observer-guest`), optionally agreed by four replicas (`interactor-replica-guest`) and played on a curve (`interactor-curve-guest`). The ANNY avatar is fitted (`interactor-anny-fit-guest`) and posed from the muscle skeleton (`interactor-anny-follow-guest`). The presence gates (`interactor-presence-gates`) take a snapshot of the playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit (`interactor-omnigen2-guest`).
+- `problems/*.jsonld` are the problems (`domain:Problem`): which parts are checked out, which inputs are on hand, whether the replica stage is on, and the goal.
 - `plans/*.jsonld` are the plans (`domain:Plan`): the steps in order, or a refusal by name.
 
 | Problem | Goal | Plan |
 | --- | --- | --- |
-| `snapshot-edit-score` | `/image/scored` | 15 steps, with `agree` |
-| `replica-off` | `/image/scored` | 15 steps, with `skip-agree` |
+| `snapshot-edit-score` | `/image/scored` | 16 steps, with `agree` |
+| `replica-off` | `/image/scored` | 16 steps, with `skip-agree` |
 | `relay-for-router` | `/body/routed` | `encode-packets`, `route-relay` (the router model is not checked out) |
-| `snapshot-only` | `/image/snapshot` | 8 steps |
+| `snapshot-only` | `/image/snapshot` | 9 steps |
 | `missing-anny-glb` | `/image/scored` | refused: `unreachable` |
+| `no-gpu-host` | `/image/scored` | refused: `unreachable` |
+| `run-2026-11-14-gates` | `/body/played` | 7 steps, from `fetch-clips` to `play-curve` |
+| `run-2026-11-14-edit` | `/image/scored` | refused: `unreachable` |
 
-The plans were produced by the `persona_plan` planner of `interactor-taskweft-persona`, not written by hand. Planning a problem again must give the file back, and the `missing-anny-glb` plan is the negative control.
+The last two problems record what was on hand on the Mac on 2026-11-14. The edit goal is refused there because there is no ANNY base mesh, no built ANNY fit guest, no SOMA phenotype data and no built OmniGen2 guest. `interactor-anny-fit-guest` holds a skeleton and `interactor-omnigen2-guest` holds a README. A problem is updated as an input arrives.
+
+The plans were produced by the `persona_plan` planner of `interactor-taskweft-persona`, not written by hand. Planning a problem again must give the file back, and the refused plans are the negative controls.
 
 ## Documentation
 

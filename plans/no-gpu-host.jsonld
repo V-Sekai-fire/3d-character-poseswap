@@ -1,0 +1,1 @@
+{"@context":{"VSEKAI":"https://v-sekai.org/","domain":"VSEKAI:planning/domain/"},"@type":"domain:Plan","domain":"presence_edit","problem":"no_gpu_host_problem","refused":"unreachable"}

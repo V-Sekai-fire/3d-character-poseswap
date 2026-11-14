@@ -8,7 +8,7 @@
  "domain": "presence_edit",
  "source": "3d-character-poseswap",
  "version": "0.1.0",
- "description": "All parts are checked out and the replica stage is on. The goal is a scored edit of a snapshot of the playback.",
+ "description": "All parts and inputs are on hand and the replica stage is on. The goal is a scored edit of a snapshot of the playback.",
  "variables": [
   {
    "name": "part",
@@ -22,6 +22,8 @@
     "replica": 1,
     "anny_follow": 1,
     "presence_gates": 1,
+    "muscle_drive_release": 1,
+    "anny_fit": 1,
     "omnigen2": 1,
     "editscore": 1
    }
@@ -30,9 +32,15 @@
    "name": "input",
    "type": "int",
    "init": {
-    "body": 1,
-    "anny_glb": 1,
+    "godot_double": 1,
+    "packet_golden": 1,
+    "mujoco_elf": 1,
     "clips": 1,
+    "anny_glb": 1,
+    "soma_pheno": 1,
+    "anny_fit_elf": 1,
+    "omnigen2_elf": 1,
+    "gpu_host": 1,
     "edit_prompt": 1
    }
   },

@@ -7,7 +7,7 @@
  "name": "presence_edit",
  "source": "3d-character-poseswap",
  "version": "0.1.0",
- "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, and followed by the ANNY avatar. The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem.",
+ "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem.",
  "variables": [
   {
    "name": "part",
@@ -18,7 +18,7 @@
   {
    "name": "input",
    "type": "int",
-   "description": "1 when an input is supplied.",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the built OmniGen2 guest ELF, a free GPU host, an edit prompt.",
    "init": {}
   },
   {
@@ -48,7 +48,7 @@
   {
    "name": "avatar",
    "type": "int",
-   "description": "1 when the avatar is posed.",
+   "description": "1 when the avatar is fitted or posed.",
    "init": {}
   },
   {
@@ -70,6 +70,20 @@
      }
     },
     {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
      "pointer/set": "/model/qwen25vl_conditioner",
      "value": 1
     }
@@ -82,6 +96,20 @@
      "eval": {
       "type": "pointer/ge",
       "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
       "value": 1
      }
     },
@@ -102,6 +130,20 @@
      }
     },
     {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
      "pointer/set": "/model/omnigen2_vae",
      "value": 1
     }
@@ -114,6 +156,20 @@
      "eval": {
       "type": "pointer/ge",
       "pointer": "/part/editscore",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
       "value": 1
      }
     },
@@ -146,6 +202,22 @@
     }
    ]
   },
+  "fetch-clips": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/muscle_drive_release",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/input/clips",
+     "value": 1
+    }
+   ]
+  },
   "encode-packets": {
    "params": [],
    "body": [
@@ -159,7 +231,21 @@
     {
      "eval": {
       "type": "pointer/ge",
-      "pointer": "/input/body",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/packet_golden",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/clips",
       "value": 1
      }
     },
@@ -176,6 +262,13 @@
      "eval": {
       "type": "pointer/ge",
       "pointer": "/part/zone_router",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
       "value": 1
      }
     },
@@ -205,6 +298,13 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/body/packet",
       "value": 1
      }
@@ -228,6 +328,13 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/body/routed",
       "value": 1
      }
@@ -245,6 +352,13 @@
      "eval": {
       "type": "pointer/ge",
       "pointer": "/part/observer",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
       "value": 1
      }
     },
@@ -327,12 +441,56 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/body/agreed",
       "value": 1
      }
     },
     {
      "pointer/set": "/body/played",
+     "value": 1
+    }
+   ]
+  },
+  "fit-anny": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/anny_fit",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/anny_fit_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/soma_pheno",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/avatar/fitted",
      "value": 1
     }
    ]
@@ -344,6 +502,27 @@
      "eval": {
       "type": "pointer/ge",
       "pointer": "/part/anny_follow",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/avatar/fitted",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/mujoco_elf",
       "value": 1
      }
     },
@@ -387,6 +566,13 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/avatar/posed",
       "value": 1
      }
@@ -411,6 +597,13 @@
      "eval": {
       "type": "pointer/ge",
       "pointer": "/input/edit_prompt",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
       "value": 1
      }
     },
@@ -462,6 +655,20 @@
      "eval": {
       "type": "pointer/ge",
       "pointer": "/part/editscore",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
       "value": 1
      }
     },
@@ -548,11 +755,27 @@
     }
    ]
   },
+  "/input/clips": {
+   "alternatives": [
+    {
+     "name": "fetch",
+     "subtasks": [
+      [
+       "fetch-clips"
+      ]
+     ]
+    }
+   ]
+  },
   "/body/packet": {
    "alternatives": [
     {
      "name": "encode",
      "subtasks": [
+      [
+       "goal",
+       "/input/clips"
+      ],
       [
        "encode-packets"
       ]
@@ -664,6 +887,18 @@
     }
    ]
   },
+  "/avatar/fitted": {
+   "alternatives": [
+    {
+     "name": "fit",
+     "subtasks": [
+      [
+       "fit-anny"
+      ]
+     ]
+    }
+   ]
+  },
   "/avatar/posed": {
    "alternatives": [
     {
@@ -672,6 +907,10 @@
       [
        "goal",
        "/body/played"
+      ],
+      [
+       "goal",
+       "/avatar/fitted"
       ],
       [
        "follow"
