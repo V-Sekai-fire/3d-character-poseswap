@@ -1,8 +1,6 @@
-<img width="1615" height="486" alt="image" src="https://github.com/user-attachments/assets/0f35cd8d-efb8-4540-a2bc-e4022fbdc3c6" />
+# 3d-character-poseswap
 
-# comfyui-aicg3d-PoseSwap
-
-Project author/maintainer: JGRFW. The source code is under the MIT License. See [LICENSE](LICENSE) for the copyright notice and [AUTHORS.md](AUTHORS.md) for upstream authors and asset sources.
+The source code is under the MIT License. See [LICENSE](LICENSE) for the copyright notice and [AUTHORS.md](AUTHORS.md) for upstream authors and asset sources.
 
 > [!IMPORTANT]
 > This repository is not an asset pack with cleared rights. Third-party assets are in the repository, but that doesn't mean the project author owns, licenses, endorses or guarantees them for redistribution or commercial use.
