@@ -1,3 +1,0 @@
-# No extra Python packages are required.
-# The plugin uses dependencies bundled with ComfyUI:
-# torch, numpy, Pillow, aiohttp, and ComfyUI's own comfy_extras modules.

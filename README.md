@@ -17,18 +17,6 @@ The recommended setup is the "dual-wrapper" workflow. One subgraph takes the fou
 
 "I generate a character and pick a pose, and the character comes out in that pose. I pick an outfit, and they change clothes on the spot."
 
-## Installation
-
-The project needs no extra `pip install`. Image loading uses Pillow, NumPy and PyTorch.
-
-```bash
-cd custom_nodes
-git clone https://github.com/V-Sekai-fire/3d-character-poseswap.git
-```
-
-Then download the model weights, which the repo doesn't include, as described in [MODEL_REQUIREMENTS.md](MODEL_REQUIREMENTS.md), and restart.
-Build a code-only release package with `python scripts/package_open_source.py`. It excludes the third-party libraries by default.
-
 ## Documentation
 
 - [Libraries and distribution](docs/libraries.md): Garment and portrait libraries, sources, licenses, setup

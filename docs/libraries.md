@@ -16,18 +16,6 @@ For asset sources, licenses and responsibility notes, see [THIRD_PARTY_NOTICES.m
 
 > To use it, others only need to: ① copy the whole plugin directory into their `custom_nodes/`; ② prepare the weight files listed under "Required models" below; ③ restart. The GitHub main repo includes the local garment and portrait libraries. With the code-only package, point the `AICG3D_*_LIBRARY` environment variables at external asset directories.
 
-## First-time portrait library setup
-
-The GitHub `main` repo includes `portraits/img/` and `portraits/data/`. If you downloaded the code-only package, or an installer copied only the source, the page shows "Portrait library not installed yet". In that case, configure an external library with the command below, or download the full repo from GitHub.
-
-First obtain a compatible `comfyui-portrait-gallery/library` from a legitimate source, then run:
-
-```bash
-python scripts/configure_portrait_library.py --source "C:\path\to\comfyui-portrait-gallery\library"
-```
-
-After restarting, click "Browse portrait library" in the node to search. You can also put the library in the plugin's `portraits/` directory or set the `AICG3D_PORTRAIT_LIBRARY` environment variable. The install status endpoint is `/aicg3d_pose/portraits/status`.
-
 ## Portrait reference node: face/head-swap reference selection
 
 `PoseQwen21PortraitSelect` picks a front-facing or styled reference from the portrait library. It outputs `portrait_image`, `portrait_id`, `description` and `attribution`. Connect `portrait_image` to the identity reference input of the face/head-swap chain. The node doesn't run anything by itself.

@@ -15,4 +15,4 @@ These notes come from the upstream project and predate the pose library removal.
 - Sequential preview events were verified to arrive in the order `head swap → pose swap → outfit swap`.
 - The full dual-subgraph chain ran successfully in about `90.5 seconds`. The three outputs produced `768 × 1344` previews in turn, and a custom `640 × 960` test output matched exactly.
 - Model dropdowns were moved back to the real loader nodes inside the subgraph, so the main wrapper node no longer falsely reports "unknown model / missing model".
-- Full generation needs a GPU and the models above. Verify after installing and restarting.
+- Full generation needs a GPU and the models above.
