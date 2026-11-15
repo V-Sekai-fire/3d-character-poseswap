@@ -1,0 +1,696 @@
+{
+ "agree": {
+  "command": {
+   "out": "unknown action: agree",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/body/agreed"
+  ],
+  "plan": [
+   "agree"
+  ],
+  "preconditions": [
+   "/part/replica",
+   "/switch/replica",
+   "/body/judged"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "build-warp": {
+  "command": {
+   "out": "[dry] ssh fedora cd ~/og2/warp-pixi && ~/.pixi/bin/pixi run build",
+   "rc": 0
+  },
+  "duration": "PT30M",
+  "effects": [
+   "/aux/warp_built"
+  ],
+  "plan": [
+   "build-warp"
+  ],
+  "preconditions": [
+   "/input/host_cxx_ok",
+   "/input/gpu_host"
+  ],
+  "total": "PT30M",
+  "twice_total": "PT30M"
+ },
+ "check-mul-mat": {
+  "command": {
+   "out": "unknown action: check-mul-mat",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/op/mul_mat"
+  ],
+  "plan": [
+   "check-mul-mat"
+  ],
+  "preconditions": [
+   "/part/omnigen2",
+   "/input/godot_double",
+   "/input/omnigen2_mul_mat_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "classify-soft-rigid": {
+  "command": {
+   "out": "action classify-soft-rigid has no command yet: needs the measured lag and a threshold",
+   "rc": 0
+  },
+  "duration": "PT1S",
+  "effects": [
+   "/aux/soft_rigid_known"
+  ],
+  "plan": [
+   "classify-soft-rigid"
+  ],
+  "preconditions": [
+   "/aux/labelled_parts",
+   "/aux/motion_lag"
+  ],
+  "total": "PT1S",
+  "twice_total": "PT1S"
+ },
+ "close-labelling": {
+  "command": {
+   "out": "[dry] test -f $OUT_DIR/out/plan.json && echo 'labelling closed (composite marker)'",
+   "rc": 0
+  },
+  "duration": "PT0S",
+  "effects": [
+   "/aux/labelled_parts"
+  ],
+  "plan": [
+   "close-labelling"
+  ],
+  "preconditions": [
+   "/aux/metric_labels"
+  ],
+  "total": "PT0S",
+  "twice_total": "PT0S"
+ },
+ "edit": {
+  "command": {
+   "out": "unknown action: edit",
+   "rc": 64
+  },
+  "duration": "PT1M7S",
+  "effects": [
+   "/image/edited"
+  ],
+  "plan": [
+   "edit"
+  ],
+  "preconditions": [
+   "/image/snapshot",
+   "/input/edit_prompt",
+   "/input/gpu_host",
+   "/part/omnigen2",
+   "/model/qwen25vl_conditioner",
+   "/model/omnigen2_transformer",
+   "/model/omnigen2_vae",
+   "/model/editscore_merged"
+  ],
+  "total": "PT1M7S",
+  "twice_total": "PT1M7S"
+ },
+ "encode-packets": {
+  "command": {
+   "out": "unknown action: encode-packets",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/body/packet"
+  ],
+  "plan": [
+   "encode-packets"
+  ],
+  "preconditions": [
+   "/part/packets",
+   "/input/godot_double",
+   "/input/packet_golden",
+   "/input/clips"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "fetch-clips": {
+  "command": {
+   "out": "unknown action: fetch-clips",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/input/clips"
+  ],
+  "plan": [
+   "fetch-clips"
+  ],
+  "preconditions": [
+   "/part/muscle_drive_release"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "fit-anny": {
+  "command": {
+   "out": "unknown action: fit-anny",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/avatar/fitted"
+  ],
+  "plan": [
+   "fit-anny"
+  ],
+  "preconditions": [
+   "/part/anny_fit",
+   "/input/godot_double",
+   "/input/anny_fit_elf",
+   "/input/soma_pheno"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "follow": {
+  "command": {
+   "out": "unknown action: follow",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/avatar/posed"
+  ],
+  "plan": [
+   "follow"
+  ],
+  "preconditions": [
+   "/part/anny_follow",
+   "/avatar/fitted",
+   "/input/godot_double",
+   "/input/mujoco_elf",
+   "/input/anny_glb",
+   "/input/clips",
+   "/body/played"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "ingest-usd": {
+  "command": {
+   "out": "[dry] cd $HOME/.hermes/cache/scratch/repro-space && pixi run -q -e mac python repro/usd_io.py ingest ${SOURCE:?set SOURCE=<mesh>} $REPO/$OUT_DIR/out/stage.usda --unit ${UNIT:-cm} ${LABELS:+--labels $LABELS --classmap ${CLASSMAP:?set CLASSMAP}}",
+   "rc": 0
+  },
+  "duration": "PT5S",
+  "effects": [
+   "/aux/usd_stage"
+  ],
+  "plan": [
+   "ingest-usd"
+  ],
+  "preconditions": [
+   "/input/source_mesh"
+  ],
+  "total": "PT5S",
+  "twice_total": "PT5S"
+ },
+ "judge": {
+  "command": {
+   "out": "unknown action: judge",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/body/judged"
+  ],
+  "plan": [
+   "judge"
+  ],
+  "preconditions": [
+   "/part/observer",
+   "/input/godot_double",
+   "/body/sealed"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "load-editscore-lora": {
+  "command": {
+   "out": "unknown action: load-editscore-lora",
+   "rc": 64
+  },
+  "duration": "PT1S",
+  "effects": [
+   "/model/editscore_lora"
+  ],
+  "plan": [
+   "load-editscore-lora"
+  ],
+  "preconditions": [
+   "/part/editscore",
+   "/input/omnigen2_elf",
+   "/input/gpu_host"
+  ],
+  "total": "PT1S",
+  "twice_total": "PT1S"
+ },
+ "load-omnigen2-transformer": {
+  "command": {
+   "out": "unknown action: load-omnigen2-transformer",
+   "rc": 64
+  },
+  "duration": "PT4S",
+  "effects": [
+   "/model/omnigen2_transformer"
+  ],
+  "plan": [
+   "load-omnigen2-transformer"
+  ],
+  "preconditions": [
+   "/part/omnigen2",
+   "/input/omnigen2_elf",
+   "/input/gpu_host"
+  ],
+  "total": "PT4S",
+  "twice_total": "PT4S"
+ },
+ "load-omnigen2-vae": {
+  "command": {
+   "out": "unknown action: load-omnigen2-vae",
+   "rc": 64
+  },
+  "duration": "PT1S",
+  "effects": [
+   "/model/omnigen2_vae"
+  ],
+  "plan": [
+   "load-omnigen2-vae"
+  ],
+  "preconditions": [
+   "/part/omnigen2",
+   "/input/omnigen2_elf",
+   "/input/gpu_host"
+  ],
+  "total": "PT1S",
+  "twice_total": "PT1S"
+ },
+ "load-qwen25vl-conditioner": {
+  "command": {
+   "out": "unknown action: load-qwen25vl-conditioner",
+   "rc": 64
+  },
+  "duration": "PT4S",
+  "effects": [
+   "/model/qwen25vl_conditioner"
+  ],
+  "plan": [
+   "load-qwen25vl-conditioner"
+  ],
+  "preconditions": [
+   "/part/omnigen2",
+   "/input/omnigen2_elf",
+   "/input/gpu_host"
+  ],
+  "total": "PT4S",
+  "twice_total": "PT4S"
+ },
+ "make-hair-cards": {
+  "command": {
+   "out": "[dry] cd $HOME/.hermes/cache/scratch/hairdeck/HairDeck && HAIRDECK_ROOT=$HOME/.hermes/cache/scratch/hairdeck/ws .venv/bin/python scripts/image_to_hair.py ${PORTRAIT:?set PORTRAIT=<image>} --out $REPO/$OUT_DIR/out/hair --n 1",
+   "rc": 0
+  },
+  "duration": "PT1M28S",
+  "effects": [
+   "/aux/hair_cards"
+  ],
+  "plan": [
+   "make-hair-cards"
+  ],
+  "preconditions": [
+   "/input/portrait",
+   "/input/sam3_dinov3_verified"
+  ],
+  "total": "PT1M28S",
+  "twice_total": "PT1M28S"
+ },
+ "make-spring-chains": {
+  "command": {
+   "out": "[dry] ls $REPO/$OUT_DIR/out/hair/*/chains_seed0.json",
+   "rc": 0
+  },
+  "duration": "PT2S",
+  "effects": [
+   "/aux/spring_chains"
+  ],
+  "plan": [
+   "make-spring-chains"
+  ],
+  "preconditions": [
+   "/aux/hair_cards",
+   "/aux/scale_sidecar"
+  ],
+  "total": "PT2S",
+  "twice_total": "PT2S"
+ },
+ "make-synth-set": {
+  "command": {
+   "out": "[dry] ssh fedora cd ~/og2/a3d-env && REPRO_ROOT=~/og2/spike ./run.sh python $HOME/og2/spike/repro/gen_synth.py ~/og2/synth_aux 360",
+   "rc": 0
+  },
+  "duration": "PT8M32S",
+  "effects": [
+   "/aux/synth_set"
+  ],
+  "plan": [
+   "make-synth-set"
+  ],
+  "preconditions": [
+   "/input/gcd_drapes",
+   "/input/gpu_host"
+  ],
+  "total": "PT8M32S",
+  "twice_total": "PT8M32S"
+ },
+ "measure-motion-lag": {
+  "command": {
+   "out": "action measure-motion-lag has no command yet: no motion-lag measurement exists yet; it needs the Warp build and a body motion clip",
+   "rc": 0
+  },
+  "duration": "PT1H",
+  "effects": [
+   "/aux/motion_lag"
+  ],
+  "plan": [
+   "measure-motion-lag"
+  ],
+  "preconditions": [
+   "/aux/part_labels",
+   "/aux/warp_built",
+   "/input/body_motion_clip",
+   "/input/gcd_drapes"
+  ],
+  "total": "PT1H",
+  "twice_total": "PT1H"
+ },
+ "merge-editscore-lora": {
+  "command": {
+   "out": "unknown action: merge-editscore-lora",
+   "rc": 64
+  },
+  "duration": "PT1S",
+  "effects": [
+   "/model/editscore_merged"
+  ],
+  "plan": [
+   "merge-editscore-lora"
+  ],
+  "preconditions": [
+   "/model/omnigen2_transformer",
+   "/model/editscore_lora"
+  ],
+  "total": "PT1S",
+  "twice_total": "PT1S"
+ },
+ "play-curve": {
+  "command": {
+   "out": "unknown action: play-curve",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/body/played"
+  ],
+  "plan": [
+   "play-curve"
+  ],
+  "preconditions": [
+   "/part/curve",
+   "/input/godot_double",
+   "/body/agreed"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "relabel-coco": {
+  "command": {
+   "out": "[dry] ssh fedora python3 $HOME/og2/spike/repro/relabel_coco.py ~/og2/rfdetr-seg/data ~/og2/rfdetr-seg/data_aux",
+   "rc": 0
+  },
+  "duration": "PT10S",
+  "effects": [
+   "/aux/coco_relabelled"
+  ],
+  "plan": [
+   "relabel-coco"
+  ],
+  "preconditions": [
+   "/input/coco_set"
+  ],
+  "total": "PT10S",
+  "twice_total": "PT10S"
+ },
+ "restore-units": {
+  "command": {
+   "out": "[dry] cd $HOME/.hermes/cache/scratch/repro-space && pixi run -q -e mac python repro/usd_io.py restore $REPO/$OUT_DIR/out/stage.usda ${LABELLED:?set LABELLED=<Segment output glb>} $REPO/$OUT_DIR/out/stage_labelled.usda --frame voxel",
+   "rc": 0
+  },
+  "duration": "PT5S",
+  "effects": [
+   "/aux/metric_labels"
+  ],
+  "plan": [
+   "restore-units"
+  ],
+  "preconditions": [
+   "/aux/part_labels",
+   "/aux/scale_sidecar"
+  ],
+  "total": "PT5S",
+  "twice_total": "PT5S"
+ },
+ "rig-aux-parts": {
+  "command": {
+   "out": "action rig-aux-parts has no command yet: no code gives soft parts spring-bone chains and rigid parts a parent bone yet",
+   "rc": 0
+  },
+  "duration": "PT1M",
+  "effects": [
+   "/aux/rigged"
+  ],
+  "plan": [
+   "rig-aux-parts"
+  ],
+  "preconditions": [
+   "/aux/labelled_parts",
+   "/aux/soft_rigid_known",
+   "/aux/spring_chains"
+  ],
+  "total": "PT1M",
+  "twice_total": "PT1M"
+ },
+ "route-model": {
+  "command": {
+   "out": "unknown action: route-model",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/body/routed"
+  ],
+  "plan": [
+   "route-model"
+  ],
+  "preconditions": [
+   "/part/zone_router",
+   "/input/godot_double",
+   "/body/packet"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "route-relay": {
+  "command": {
+   "out": "unknown action: route-relay",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/body/routed"
+  ],
+  "plan": [
+   "route-relay"
+  ],
+  "preconditions": [
+   "/part/zone_relay",
+   "/input/godot_double",
+   "/body/packet"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "score": {
+  "command": {
+   "out": "unknown action: score",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/image/scored"
+  ],
+  "plan": [
+   "score"
+  ],
+  "preconditions": [
+   "/part/editscore",
+   "/input/omnigen2_elf",
+   "/input/gpu_host",
+   "/image/edited"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "seal-and-take": {
+  "command": {
+   "out": "unknown action: seal-and-take",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/body/sealed"
+  ],
+  "plan": [
+   "seal-and-take"
+  ],
+  "preconditions": [
+   "/part/observer",
+   "/input/godot_double",
+   "/body/routed"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "segment-labels": {
+  "command": {
+   "out": "[dry] ssh fedora cd ~/og2/a3d-env && REPRO_ROOT=~/og2/spike ./run.sh python $HOME/og2/spike/repro/garment.py --mode textured && cd ~/og2/a3d-env && REPRO_ROOT=~/og2/spike ./run.sh python $HOME/og2/spike/repro/rfdetr_maps.py ~/og2/spike/out/garment-textured textured",
+   "rc": 0
+  },
+  "duration": "PT1M",
+  "effects": [
+   "/aux/part_labels"
+  ],
+  "plan": [
+   "segment-labels"
+  ],
+  "preconditions": [
+   "/aux/part_detector",
+   "/aux/unit_cube_source",
+   "/input/segment_weights",
+   "/input/gpu_host"
+  ],
+  "total": "PT1M",
+  "twice_total": "PT1M"
+ },
+ "skip-agree": {
+  "command": {
+   "out": "unknown action: skip-agree",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/body/agreed"
+  ],
+  "plan": [
+   "skip-agree"
+  ],
+  "preconditions": [
+   "/bypass/replica",
+   "/body/judged"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "snapshot": {
+  "command": {
+   "out": "unknown action: snapshot",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/image/snapshot"
+  ],
+  "plan": [
+   "snapshot"
+  ],
+  "preconditions": [
+   "/part/presence_gates",
+   "/input/godot_double",
+   "/avatar/posed"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "train-part-detector": {
+  "command": {
+   "out": "[dry] ssh fedora cd ~/og2/a3d-env && REPRO_ROOT=~/og2/spike ./run.sh python $HOME/og2/spike/repro/train_synth.py ~/og2/synth_aux ~/og2/synth_aux-run1 15",
+   "rc": 0
+  },
+  "duration": "PT19M24S",
+  "effects": [
+   "/aux/part_detector"
+  ],
+  "plan": [
+   "train-part-detector"
+  ],
+  "preconditions": [
+   "/aux/coco_relabelled",
+   "/aux/synth_set",
+   "/input/gpu_host"
+  ],
+  "total": "PT19M24S",
+  "twice_total": "PT19M24S"
+ },
+ "unitise-source": {
+  "command": {
+   "out": "[dry] cd $HOME/.hermes/cache/scratch/repro-space && pixi run -q -e mac python repro/usd_io.py deliver $REPO/$OUT_DIR/out/stage.usda $REPO/$OUT_DIR/out/segment_input.glb --unit-cube",
+   "rc": 0
+  },
+  "duration": "PT2S",
+  "effects": [
+   "/aux/unit_cube_source"
+  ],
+  "plan": [
+   "unitise-source"
+  ],
+  "preconditions": [
+   "/aux/usd_stage"
+  ],
+  "total": "PT2S",
+  "twice_total": "PT2S"
+ },
+ "write-scale-sidecar": {
+  "command": {
+   "out": "[dry] cd $HOME/.hermes/cache/scratch/repro-space && pixi run -q -e mac python repro/units.py selftest && test -s $REPO/$OUT_DIR/out/segment_input.glb.units.json",
+   "rc": 0
+  },
+  "duration": "PT2S",
+  "effects": [
+   "/aux/scale_sidecar"
+  ],
+  "plan": [
+   "write-scale-sidecar"
+  ],
+  "preconditions": [
+   "/aux/unit_cube_source"
+  ],
+  "total": "PT2S",
+  "twice_total": "PT2S"
+ }
+}

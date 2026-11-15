@@ -99,7 +99,23 @@
      "pointer/set": "/model/qwen25vl_conditioner",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT4S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:05Z",
+   "duration_basis": "measured: warm median 3.202 s of 4 runs, rounded up to whole seconds; slowest run 4.429 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     4.429,
+     3.346,
+     3.202,
+     3.202,
+     3.142
+    ],
+    "cold_s": 4.429,
+    "warm_median_s": 3.202,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
   },
   "load-omnigen2-transformer": {
    "params": [],
@@ -129,7 +145,23 @@
      "pointer/set": "/model/omnigen2_transformer",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT4S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:12Z",
+   "duration_basis": "measured: warm median 3.26 s of 4 runs, rounded up to whole seconds; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     11.408,
+     3.257,
+     3.327,
+     3.179,
+     3.262
+    ],
+    "cold_s": 11.408,
+    "warm_median_s": 3.26,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
   },
   "load-omnigen2-vae": {
    "params": [],
@@ -159,7 +191,23 @@
      "pointer/set": "/model/omnigen2_vae",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:01Z",
+   "duration_basis": "measured: warm median 0.097 s of 4 runs, rounded up to whole seconds; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     0.275,
+     0.096,
+     0.097,
+     0.097,
+     0.097
+    ],
+    "cold_s": 0.275,
+    "warm_median_s": 0.097,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
   },
   "load-editscore-lora": {
    "params": [],
@@ -189,7 +237,23 @@
      "pointer/set": "/model/editscore_lora",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:01Z",
+   "duration_basis": "measured: warm median 0.006 s of 4 runs, rounded up to whole seconds; slowest run 0.053 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     0.053,
+     0.006,
+     0.006,
+     0.006,
+     0.006
+    ],
+    "cold_s": 0.053,
+    "warm_median_s": 0.006,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
   },
   "merge-editscore-lora": {
    "params": [],
@@ -212,7 +276,23 @@
      "pointer/set": "/model/editscore_merged",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:13Z",
+   "duration_basis": "measured: warm median 0.174 s of 4 runs, rounded up to whole seconds; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     0.328,
+     0.172,
+     0.174,
+     0.174,
+     0.174
+    ],
+    "cold_s": 0.328,
+    "warm_median_s": 0.174,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
   },
   "fetch-clips": {
    "params": [],
@@ -688,7 +768,15 @@
      "pointer/set": "/image/edited",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1M7S",
+   "duration_basis": "measured once: 67.0 s for one 50-step BF16 edit at 672x1024 with the LoRA (baseline.log, fedora RTX 4090), rounded up; a single sample, so no range",
+   "measured": {
+    "runs_s": [
+     67.0
+    ],
+    "host": "fedora, RTX 4090 (baseline.log, one run)"
+   }
   },
   "score": {
    "params": [],

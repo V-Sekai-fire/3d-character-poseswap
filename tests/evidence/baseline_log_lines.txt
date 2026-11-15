@@ -1,0 +1,2 @@
+LOADED device=cuda lora=True seconds=7.0
+EDIT-OK /home/setup/og2/bf16-lora.png 672x1024 seconds=67.0

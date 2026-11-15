@@ -67,3 +67,36 @@ GPU steps run over ssh on `GPU_HOST` (default `fedora`). Steps run one after ano
 - Regenerate the synthetic set with the Fitted class and a measured `motion`.
 - Score the detector on the held-out test garment and on photographs, then rerun Segment with its maps.
 - The soft threshold, and whether lag from one motion clip generalises.
+
+## Durations as spans, and what was measured
+
+An action states `duration` (its length). `start` is the earliest it may begin and `end` the latest it may finish, as the planner reads them: a step's earliest end must not pass its `end`, or the plan is `consistent: false`. Stating all three gives a range, as an OpenTelemetry span does: the typical length inside a window that holds every run seen. When an exact duration is not known, state `duration` as the typical value and `end` from the slowest run. The planner counts whole seconds, so values are rounded up.
+
+Measured on fedora (RTX 4090, 2026-11-15, 5 runs each, the first cold from disk; `tools/measure/time_loads.py`, raw runs in `tests/evidence/load_times.json`, written into the domain by `pixi run set-durations`):
+
+| Action | Typical | Slowest run | Deadline from origin |
+|---|---|---|---|
+| `load-qwen25vl-conditioner` | PT4S (warm median 3.2 s) | 4.4 s cold | 5 s |
+| `load-omnigen2-transformer` | PT4S (3.3 s) | 11.4 s cold | 12 s |
+| `load-omnigen2-vae` | PT1S (0.10 s) | 0.28 s | 1 s |
+| `load-editscore-lora` | PT1S (0.006 s) | 0.05 s | 1 s |
+| `merge-editscore-lora` | PT1S (0.17 s) | 0.33 s | 13 s (after the transformer) |
+| `edit` | PT1M7S | one sample, no range | none |
+
+The warm medians add to 6.74 s against the 7.0 s the whole load took in `baseline.log`, which includes moving the pipeline to the GPU. A run one second slower than the slowest measured run makes the plan inconsistent, and the test checks that it does.
+
+## Unit tests for the actions
+
+`pixi run test-actions` runs `tests/test_actions.py` over every action of `domains/presence-edit.jsonld` (35 today). Each action gets:
+
+- **Golden.** The plan for a state holding exactly its preconditions is `[action]`, starts at the origin, ends at origin plus its duration, and the total equals that duration. The expectation is worked out from the action's text in the domain, not from the planner. `tests/golden/actions.json` keeps it, with the dry-run command, so a change to an action appears in review. After an intended change run `pixi run test-actions-update` and read the diff.
+- **Control.** Dropping each precondition in turn makes the planner refuse, an action name that does not exist is refused, and `tools/aux.sh action <unknown>` exits 64. For the ranged actions, one second past the slowest measured run makes the plan inconsistent.
+- **Invariant.** Two runs give identical bytes; asking for the action twice succeeds (it keeps its own preconditions); the duration is ISO 8601 with a basis of measured, estimate or composite; a dry run writes nothing except `out/`; the typical duration lies inside the measured range; the group total grows with the durations; the warm medians add to no more than the logged whole-load time.
+
+Planted faults the test catches: a tampered golden, a changed duration, a dropped precondition and a deadline one second too tight.
+
+### What the test found
+
+- **14 actions still have no duration.** These are `fetch-clips`, `encode-packets`, `route-model`, `route-relay`, `seal-and-take`, `judge`, `agree`, `skip-agree`, `play-curve`, `check-mul-mat`, `fit-anny`, `follow`, `snapshot` and `score`. No log of a timed run exists for them here, so none was invented; each fails 2 checks until it is measured. They need a timed run, then a span in `tests/evidence/`.
+- **A repeated step is listed twice, not run twice.** Asking for `[ingest-usd, ingest-usd]` returns two rows, both 08:00:00 to 08:00:05. The planner lists a step once with its earliest times and again with its latest times, so the second row is the latest window of the same step, and the total stays PT5S. An earlier note in this session called this an overlap of two copies, which was wrong. The window is the planner's own range output.
+- **The schedule does not know about the single GPU.** Independent steps overlap. The domain has no resource constraint, so the total of the AUX plan is a lower bound while GPU actions share one card.

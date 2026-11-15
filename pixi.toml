@@ -31,6 +31,18 @@ description = "Run one primitive action"
 args = [{ arg = "name" }]
 cmd = "bash tools/aux.sh action {{ name }}"
 
+[tasks.test-actions]
+description = "Planner unit test: every action has a golden, a control and an invariant, and the measured ranges are checked"
+cmd = "python3 tests/test_actions.py"
+
+[tasks.test-actions-update]
+description = "Rewrite tests/golden/actions.json after an intended change to an action (read the diff)"
+cmd = "python3 tests/test_actions.py --update"
+
+[tasks.set-durations]
+description = "Write the measured durations and their spans into the domain from tests/evidence/"
+cmd = "python3 tools/set_durations.py"
+
 [tasks.aux-today]
 description = "Plan the goal on today's desk; the planner refuses it (exit 3)"
 cmd = "bash tools/aux.sh plan /aux/rigged problems/aux-route-2026-11-15.jsonld"
