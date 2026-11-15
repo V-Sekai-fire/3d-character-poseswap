@@ -7,7 +7,7 @@
  "name": "presence_edit",
  "source": "3d-character-poseswap",
  "version": "0.1.0",
- "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF, written in Lean 4, of which the mul_mat op is built and checked. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem. The AUX route then labels garment parts, measures whether each is rigid or soft from motion lag, and rigs them: relabel-coco: Map every source class of the Fashionpedia-class set into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail with a motion prior; drop nothing (repro/relabel_coco.py).; make-synth-set: Render GarmentCodeData drapes on the neutral body into a COCO set with exact part masks, split by garment (repro/gen_synth.py).; train-part-detector: Fine-tune RF-DETR-Seg-Small on the relabelled and the synthetic sets (repro/train_synth.py).; unitise-source: Normalise the source GLB into the unit cube before Segment; a centimetre source made the lookup distance 94 instead of 0.0007 (repro/common.py unitise_glb_inplace).; write-scale-sidecar: Write scale and offset beside every unit-cube mesh, with the metric size from a body-height prior; image-to-mesh models return unit-cube meshes only.; segment-labels: Run Alchemy3D-Segment with maps from the part detector; labels are anonymous clusters that need our own colour-to-class table.; build-warp: Build the NvidiaWarp-GarmentCode fork; fedora's gcc 16 is refused by CUDA 12.4 (gcc 13 is the limit), so a compatible host compiler is needed.; measure-motion-lag: Drape, move the body, and measure which vertices lag; a part that lags is soft, a part that follows is rigid. Clearance from the body is only a first signal.; make-hair-cards: HairDeck: portrait to hair cards on Apple MPS; needs SAM 3 and DINOv3 weights whose SHA-256 matches the pins.; make-spring-chains: HairDeck chain model: path, joints and stiffness per chain, in the normalised frame; apply the scale sidecar before fitting.; rig-aux-parts: Give soft parts spring-bone chains and rigid parts a parent bone, from the labels and the measured lag; SkinTokens rigs the body. Composite methods: /aux/labelled_parts (labels and scale sidecar), /aux/soft_rigid_known (labels and measured lag), /aux/rigged (labelled parts, the soft/rigid decision and the spring chains).",
+ "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF, written in Lean 4, of which the mul_mat op is built and checked. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem. The AUX route then labels garment parts, measures whether each is rigid or soft from motion lag, and rigs them: relabel-coco: Map every source class of the Fashionpedia-class set into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail with a motion prior; drop nothing (repro/relabel_coco.py).; make-synth-set: Render GarmentCodeData drapes on the neutral body into a COCO set with exact part masks, split by garment (repro/gen_synth.py).; train-part-detector: Fine-tune RF-DETR-Seg-Small on the relabelled and the synthetic sets (repro/train_synth.py).; unitise-source: Normalise the source GLB into the unit cube before Segment; a centimetre source made the lookup distance 94 instead of 0.0007 (repro/common.py unitise_glb_inplace).; write-scale-sidecar: Write scale and offset beside every unit-cube mesh, with the metric size from a body-height prior; image-to-mesh models return unit-cube meshes only.; segment-labels: Run Alchemy3D-Segment with maps from the part detector; labels are anonymous clusters that need our own colour-to-class table.; build-warp: Build the NvidiaWarp-GarmentCode fork; fedora's gcc 16 is refused by CUDA 12.4 (gcc 13 is the limit), so a compatible host compiler is needed.; measure-motion-lag: Drape, move the body, and measure which vertices lag; a part that lags is soft, a part that follows is rigid. Clearance from the body is only a first signal.; make-hair-cards: HairDeck: portrait to hair cards on Apple MPS; needs SAM 3 and DINOv3 weights whose SHA-256 matches the pins.; make-spring-chains: HairDeck chain model: path, joints and stiffness per chain, in the normalised frame; apply the scale sidecar before fitting.; rig-aux-parts: Give soft parts spring-bone chains and rigid parts a parent bone, from the labels and the measured lag; SkinTokens rigs the body. Composite methods: /aux/labelled_parts (labels and scale sidecar), /aux/soft_rigid_known (labels and measured lag), /aux/rigged (labelled parts, the soft/rigid decision and the spring chains). Each AUX action states an ISO-8601 duration and a duration_basis (measured or estimate), so a plan's temporal total is a sum of those; the estimates are marked and should be replaced as runs are timed.",
  "variables": [
   {
    "name": "part",
@@ -741,7 +741,9 @@
      "pointer/set": "/aux/coco_relabelled",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT10S",
+   "duration_basis": "estimate: a run of the script on fedora finished in seconds, not timed"
   },
   "make-synth-set": {
    "params": [],
@@ -764,7 +766,9 @@
      "pointer/set": "/aux/synth_set",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT8M32S",
+   "duration_basis": "measured: 360 garments on fedora, 2026-11-15"
   },
   "train-part-detector": {
    "params": [],
@@ -794,7 +798,9 @@
      "pointer/set": "/aux/part_detector",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT19M24S",
+   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090"
   },
   "unitise-source": {
    "params": [],
@@ -810,7 +816,9 @@
      "pointer/set": "/aux/unit_cube_source",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT2S",
+   "duration_basis": "estimate: one mesh"
   },
   "write-scale-sidecar": {
    "params": [],
@@ -833,7 +841,9 @@
      "pointer/set": "/aux/scale_sidecar",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1S",
+   "duration_basis": "estimate"
   },
   "segment-labels": {
    "params": [],
@@ -870,7 +880,9 @@
      "pointer/set": "/aux/part_labels",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1M",
+   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps"
   },
   "build-warp": {
    "params": [],
@@ -893,7 +905,9 @@
      "pointer/set": "/aux/warp_built",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT30M",
+   "duration_basis": "estimate: not built yet; blocked on the host compiler"
   },
   "measure-motion-lag": {
    "params": [],
@@ -930,7 +944,9 @@
      "pointer/set": "/aux/motion_lag",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1H",
+   "duration_basis": "estimate: not built yet"
   },
   "make-hair-cards": {
    "params": [],
@@ -953,7 +969,9 @@
      "pointer/set": "/aux/hair_cards",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1M28S",
+   "duration_basis": "measured: first portrait on the Mac (MPS), 18 to 40 s model load plus 35 s of compute"
   },
   "make-spring-chains": {
    "params": [],
@@ -976,7 +994,9 @@
      "pointer/set": "/aux/spring_chains",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT2S",
+   "duration_basis": "measured: 1.3 s inside the same HairDeck run"
   },
   "rig-aux-parts": {
    "params": [],
@@ -1006,7 +1026,9 @@
      "pointer/set": "/aux/rigged",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1M",
+   "duration_basis": "estimate: not built yet"
   },
   "close-labelling": {
    "params": [],
@@ -1029,7 +1051,9 @@
      "pointer/set": "/aux/labelled_parts",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT0S",
+   "duration_basis": "composite marker"
   },
   "classify-soft-rigid": {
    "params": [],
@@ -1052,7 +1076,9 @@
      "pointer/set": "/aux/soft_rigid_known",
      "value": 1
     }
-   ]
+   ],
+   "duration": "PT1S",
+   "duration_basis": "estimate"
   }
  },
  "methods": {

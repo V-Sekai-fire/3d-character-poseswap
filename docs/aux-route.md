@@ -22,6 +22,26 @@ The goal is to separate the AUX parts (skirt, sleeve, collar, cape, loose trims)
 | 12 | `make-spring-chains` | HairDeck chain model: path, joints and stiffness. | Runs with step 11. Output is in a normalised frame, with the head proxy 0.128 high against a real head near 0.23, so about 1.8 before it fits ANNY. |
 | 13 | `rig-aux-parts` | Soft parts get chains, rigid parts a parent bone. | Not started. |
 
+## Time
+
+Each action states an ISO-8601 `duration` and a `duration_basis` that says measured or estimate. The planner starts a step when every earlier step that sets a fact it needs has ended, so independent steps overlap, and the plan's total is the latest end. With an origin of 2026-11-15T08:00:00Z the full route is `PT1H31M1S` and it ends at 09:31:01Z.
+
+- Critical path: `build-warp` (30 min, estimate), `measure-motion-lag` (1 h, estimate), `classify-soft-rigid`, `rig-aux-parts`. Labelling (`make-synth-set` 8 min 32 s and `train-part-detector` 19 min 24 s, both measured) finishes at 08:28:56 and is not on the critical path. Hair cards run beside everything (1 min 28 s, measured).
+- Measured: synthetic set, detector training and hair cards. Everything else is an estimate and should be replaced as it is timed.
+- A control: giving `make-synth-set` an end of 08:05:00Z, which its 8 min 32 s cannot meet, makes the plan report `consistent: false`.
+
+## Running it
+
+`pixi run build-planner` builds the Lean planner (needs elan). Then:
+
+- `pixi run aux-goals` lists the goals and composite methods.
+- `pixi run aux-plan /aux/soft_rigid_known` prints the schedule for a goal.
+- `pixi run aux-run /aux/rigged` plans, then runs the steps in plan order. `DRY_RUN=1` prints the commands. A step with no command stops the run with exit 2 and says why. A refused plan exits 3.
+- `pixi run goal-<name>` runs one goal, for example `goal-labelled-parts`. `pixi run aux-today` plans today's desk and is refused.
+- `pixi run aux-action <name>` runs one primitive action.
+
+GPU steps run over ssh on `GPU_HOST` (default `fedora`). Steps run one after another in plan order, so the overlaps in the schedule are what is allowed, not what runs. Tested on 2026-11-15: `goal-coco-relabelled` ran the relabel on fedora (28,400 annotations in and out) and `goal-hair-cards` ran HairDeck on one portrait. `unitise-source`, `write-scale-sidecar`, `measure-motion-lag`, `classify-soft-rigid` and `rig-aux-parts` have no command yet.
+
 ## Composite methods
 
 `/aux/labelled_parts` (labels and sidecar), `/aux/soft_rigid_known` (labelled parts and measured lag) and `/aux/rigged` (labelled parts, the soft or rigid decision and the chains). Each is a method over goals, so the planner expands it into the primitive steps above.
