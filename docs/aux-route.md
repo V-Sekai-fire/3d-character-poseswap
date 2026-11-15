@@ -11,10 +11,10 @@ The goal is to separate the AUX parts (skirt, sleeve, collar, cape, loose trims)
 | 1 | `relabel-coco` | Map all 46 Fashionpedia-class source classes into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail. Each annotation keeps `src_class` and gets a `motion` prior. `repro/relabel_coco.py`. | Done. 28,400 annotations in, 28,400 out. Cape has 22 train and 2 test instances, so it cannot be scored. |
 | 2 | `make-synth-set` | Render GarmentCodeData drapes on the neutral body into a COCO set with exact masks, split by garment. `repro/gen_synth.py`. | Done for Skirt, Sleeve and Collar (1,841 train images, 262 valid, 239 test). Fitted is not yet in it, so a regeneration is needed. |
 | 3 | `train-part-detector` | Fine-tune RF-DETR-Seg-Small. `repro/train_synth.py`. | Trained on the 3-class set: validation mask AP 0.382 after 15 epochs. Not scored on the test split or on photographs. |
-| 4 | `unitise-source` | Put the source GLB into the unit cube before Segment. | Done. Without it the lookup distance was 94 and not 0.0007, and labels were random. |
+| 4 | `ingest-usd`, `unitise-source` | Ingest the source into OpenUSD in its own units (`metersPerUnit` and the up axis are stage metadata; parts are keyed by integer ids, never by names), then deliver the unit-cube GLB for Segment with its sidecar made from the stage. `repro/usd_io.py`, `repro/units.py`. | Done and tested on the tested garment: 1.544 m tall in cm, unit cube 0.99999, sidecar scale 0.00647727. |
 | 5 | `segment-labels` | Alchemy3D-Segment with maps from the detector. | Works on one GarmentCode garment: garment vs body ARI 0.58 with exact-label maps. One garment, one body. |
-| 6 | `write-scale-sidecar` | Write scale and offset next to each unit-cube mesh, with the metric size from a body-height prior. | Scale recorded for the tested garment (`unit_frame.json`). Not yet a step in the code. |
-| 7 | `close-labelling` | Composite: labels plus sidecar. | Planner only. |
+| 6 | `write-scale-sidecar` | Check the sidecar and the round trip, with controls that must fail (wrong scale, wrong frame, wrong sidecar). `units.py sidecar-from-height` makes one for a mesh that has no unit. | Done. Self-test passes, controls fail by 3.4, 368 and 118 cm. |
+| 7 | `restore-units`, `close-labelling` | The inverse of unitising: put Segment's labelled output (unit cube, Z-up) back on the real-size stage. It pairs by vertex index and is only accepted when the geometry confirms it. | Accepted for the same vertex order (2.3e-6 cm over 29,784 vertices). Refused, with the reason, for the same surface in a shuffled order (152 cm off). A geometric correspondence through the cage guest is not built: the guest exports no coordinates, and its cage does not bind on garment shells yet. |
 | 8 | `build-warp` | Build the NvidiaWarp-GarmentCode fork on fedora, with its compiler and CUDA from pixi (`tools/warp/pixi.toml`: gcc 12.4, CUDA 12.6, Python 3.11). | **Built** on 2026-11-15. `warp.so` is 108 MB; `pixi run check` lists `cuda:0` (RTX 4090, sm_89) and imports `XPBDIntegrator`. No drape has been run on it yet. Fedora's own gcc 16 is not used. |
 | 9 | `measure-motion-lag` | Drape, move the body, measure which vertices lag. | Not started. Needs step 8 and a body motion clip. |
 | 10 | `classify-soft-rigid` | Composite: label plus lag gives soft or rigid. | Not started. Threshold unset. |
@@ -41,6 +41,12 @@ Each action states an ISO-8601 `duration` and a `duration_basis` that says measu
 - `pixi run aux-action <name>` runs one primitive action.
 
 GPU steps run over ssh on `GPU_HOST` (default `fedora`). Steps run one after another in plan order, so the overlaps in the schedule are what is allowed, not what runs. Tested on 2026-11-15: `goal-coco-relabelled` ran the relabel on fedora (28,400 annotations in and out) and `goal-hair-cards` ran HairDeck on one portrait. `unitise-source`, `write-scale-sidecar`, `measure-motion-lag`, `classify-soft-rigid` and `rig-aux-parts` have no command yet.
+
+## Decisions since the first draft
+
+- No weld step. The weld was a workaround for what turned out to be the unit bug, and the corrected runs show it changes almost nothing.
+- `model_explode` (the add-on that `explode`/`implode` refer to; there is no `explode.elf` file in the tree) welds vertices by position, so it cannot separate the stitched panels of a drape: a split into 18 panels with duplicated seam vertices still came out as one piece. It does separate real shells. On the dressed mesh it gives two pieces, body and garment, the garment moved 157 cm up, boxes 3.3 cm apart, and undoing the offset puts all 53,536 vertices back within 7.5e-6 cm.
+- Part ids are integers (glTF node index where there is one, else file order), and a face carries an integer `aux:part`. Names are display labels only.
 
 ## Composite methods
 

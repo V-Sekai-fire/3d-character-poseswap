@@ -7,7 +7,7 @@
  "name": "presence_edit",
  "source": "3d-character-poseswap",
  "version": "0.1.0",
- "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF, written in Lean 4, of which the mul_mat op is built and checked. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem. The AUX route then labels garment parts, measures whether each is rigid or soft from motion lag, and rigs them: relabel-coco: Map every source class of the Fashionpedia-class set into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail with a motion prior; drop nothing (repro/relabel_coco.py).; make-synth-set: Render GarmentCodeData drapes on the neutral body into a COCO set with exact part masks, split by garment (repro/gen_synth.py).; train-part-detector: Fine-tune RF-DETR-Seg-Small on the relabelled and the synthetic sets (repro/train_synth.py).; unitise-source: Normalise the source GLB into the unit cube before Segment; a centimetre source made the lookup distance 94 instead of 0.0007 (repro/common.py unitise_glb_inplace).; write-scale-sidecar: Write scale and offset beside every unit-cube mesh, with the metric size from a body-height prior; image-to-mesh models return unit-cube meshes only.; segment-labels: Run Alchemy3D-Segment with maps from the part detector; labels are anonymous clusters that need our own colour-to-class table.; build-warp: Build the NvidiaWarp-GarmentCode fork; fedora's gcc 16 is refused by CUDA 12.4 (gcc 13 is the limit), so a compatible host compiler is needed.; measure-motion-lag: Drape, move the body, and measure which vertices lag; a part that lags is soft, a part that follows is rigid. Clearance from the body is only a first signal.; make-hair-cards: HairDeck: portrait to hair cards on Apple MPS; needs SAM 3 and DINOv3 weights whose SHA-256 matches the pins.; make-spring-chains: HairDeck chain model: path, joints and stiffness per chain, in the normalised frame; apply the scale sidecar before fitting.; rig-aux-parts: Give soft parts spring-bone chains and rigid parts a parent bone, from the labels and the measured lag; SkinTokens rigs the body. Composite methods: /aux/labelled_parts (labels and scale sidecar), /aux/soft_rigid_known (labels and measured lag), /aux/rigged (labelled parts, the soft/rigid decision and the spring chains). Each AUX action states an ISO-8601 duration and a duration_basis (measured or estimate), so a plan's temporal total is a sum of those; the estimates are marked and should be replaced as runs are timed.",
+ "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF, written in Lean 4, of which the mul_mat op is built and checked. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem. The AUX route then labels garment parts, measures whether each is rigid or soft from motion lag, and rigs them: relabel-coco: Map every source class of the Fashionpedia-class set into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail with a motion prior; drop nothing (repro/relabel_coco.py).; make-synth-set: Render GarmentCodeData drapes on the neutral body into a COCO set with exact part masks, split by garment (repro/gen_synth.py).; train-part-detector: Fine-tune RF-DETR-Seg-Small on the relabelled and the synthetic sets (repro/train_synth.py).; unitise-source: Normalise the source GLB into the unit cube before Segment; a centimetre source made the lookup distance 94 instead of 0.0007 (repro/common.py unitise_glb_inplace).; write-scale-sidecar: Write scale and offset beside every unit-cube mesh, with the metric size from a body-height prior; image-to-mesh models return unit-cube meshes only.; segment-labels: Run Alchemy3D-Segment with maps from the part detector; labels are anonymous clusters that need our own colour-to-class table.; build-warp: Build the NvidiaWarp-GarmentCode fork; fedora's gcc 16 is refused by CUDA 12.4 (gcc 13 is the limit), so a compatible host compiler is needed.; measure-motion-lag: Drape, move the body, and measure which vertices lag; a part that lags is soft, a part that follows is rigid. Clearance from the body is only a first signal.; make-hair-cards: HairDeck: portrait to hair cards on Apple MPS; needs SAM 3 and DINOv3 weights whose SHA-256 matches the pins.; make-spring-chains: HairDeck chain model: path, joints and stiffness per chain, in the normalised frame; apply the scale sidecar before fitting.; rig-aux-parts: Give soft parts spring-bone chains and rigid parts a parent bone, from the labels and the measured lag; SkinTokens rigs the body. Composite methods: /aux/labelled_parts (labels and scale sidecar), /aux/soft_rigid_known (labels and measured lag), /aux/rigged (labelled parts, the soft/rigid decision and the spring chains). Each AUX action states an ISO-8601 duration and a duration_basis (measured or estimate), so a plan's temporal total is a sum of those; the estimates are marked and should be replaced as runs are timed. The source is ingested into OpenUSD, which keeps its unit and up axis as stage metadata, and every other format is delivered from the stage: unitise-source makes the unit-cube GLB for Segment and its sidecar from the stage, and restore-units is its inverse. Parts are keyed by integer ids, never by names. No weld step: the weld was a workaround for the unit bug.",
  "variables": [
   {
    "name": "part",
@@ -66,7 +66,7 @@
   {
    "name": "aux",
    "type": "int",
-   "description": "1 when a step of the AUX part-labelling and rigging route is done: coco_relabelled, synth_set, part_detector, unit_cube_source, part_labels, warp_built, motion_lag, hair_cards, spring_chains, scale_sidecar; composites labelled_parts, soft_rigid_known and rigged.",
+   "description": "1 when a step of the AUX part-labelling and rigging route is done: coco_relabelled, synth_set, part_detector, unit_cube_source, part_labels, warp_built, motion_lag, hair_cards, spring_chains, scale_sidecar; composites labelled_parts, soft_rigid_known and rigged; also usd_stage (the source ingested into OpenUSD in its own units) and metric_labels (Segment's labels put back on the real-size stage by restore-units).",
    "init": {}
   }
  ],
@@ -808,7 +808,7 @@
     {
      "eval": {
       "type": "pointer/ge",
-      "pointer": "/input/source_mesh",
+      "pointer": "/aux/usd_stage",
       "value": 1
      }
     },
@@ -818,7 +818,7 @@
     }
    ],
    "duration": "PT2S",
-   "duration_basis": "estimate: one mesh"
+   "duration_basis": "estimate: one mesh; writes the sidecar from the stage's own unit"
   },
   "write-scale-sidecar": {
    "params": [],
@@ -831,19 +831,12 @@
      }
     },
     {
-     "eval": {
-      "type": "pointer/ge",
-      "pointer": "/input/body_height_prior",
-      "value": 1
-     }
-    },
-    {
      "pointer/set": "/aux/scale_sidecar",
      "value": 1
     }
    ],
-   "duration": "PT1S",
-   "duration_basis": "estimate"
+   "duration": "PT2S",
+   "duration_basis": "estimate: checks the sidecar and the round trip; sidecar-from-height covers a mesh that has no unit"
   },
   "segment-labels": {
    "params": [],
@@ -1036,14 +1029,7 @@
     {
      "eval": {
       "type": "pointer/ge",
-      "pointer": "/aux/part_labels",
-      "value": 1
-     }
-    },
-    {
-     "eval": {
-      "type": "pointer/ge",
-      "pointer": "/aux/scale_sidecar",
+      "pointer": "/aux/metric_labels",
       "value": 1
      }
     },
@@ -1079,6 +1065,49 @@
    ],
    "duration": "PT1S",
    "duration_basis": "estimate"
+  },
+  "ingest-usd": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/source_mesh",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/usd_stage",
+     "value": 1
+    }
+   ],
+   "duration": "PT5S",
+   "duration_basis": "estimate: one garment ingested in a few seconds on the Mac"
+  },
+  "restore-units": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/part_labels",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/scale_sidecar",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/metric_labels",
+     "value": 1
+    }
+   ],
+   "duration": "PT5S",
+   "duration_basis": "estimate: the inverse of unitise-source; refuses when the geometry does not confirm the pairing"
   }
  },
  "methods": {
@@ -1433,8 +1462,12 @@
   "/aux/unit_cube_source": {
    "alternatives": [
     {
-     "name": "unitise-source",
+     "name": "unitise",
      "subtasks": [
+      [
+       "goal",
+       "/aux/usd_stage"
+      ],
       [
        "unitise-source"
       ]
@@ -1445,7 +1478,7 @@
   "/aux/scale_sidecar": {
    "alternatives": [
     {
-     "name": "write-scale-sidecar",
+     "name": "sidecar",
      "subtasks": [
       [
        "goal",
@@ -1573,11 +1606,7 @@
      "subtasks": [
       [
        "goal",
-       "/aux/part_labels"
-      ],
-      [
-       "goal",
-       "/aux/scale_sidecar"
+       "/aux/metric_labels"
       ],
       [
        "close-labelling"
@@ -1601,6 +1630,38 @@
       ],
       [
        "classify-soft-rigid"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/usd_stage": {
+   "alternatives": [
+    {
+     "name": "ingest",
+     "subtasks": [
+      [
+       "ingest-usd"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/metric_labels": {
+   "alternatives": [
+    {
+     "name": "restore",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/part_labels"
+      ],
+      [
+       "goal",
+       "/aux/scale_sidecar"
+      ],
+      [
+       "restore-units"
       ]
      ]
     }

@@ -10,6 +10,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 DOMAIN=domains/presence-edit.jsonld
 PLANNER=${PERSONA_PLAN:-.planner/.lake/build/bin/persona_plan}
+REPRO_SRC=${REPRO_SRC:-$HOME/.hermes/cache/scratch/repro-space}   # usd_io.py and units.py live in the repro Space
+USDPY="cd $REPRO_SRC && pixi run -q -e mac python"
 GPU_HOST=${GPU_HOST:-fedora}; REPRO=${REPRO:-'$HOME/og2/spike/repro'}
 HAIRDECK=${HAIRDECK:-$HOME/.hermes/cache/scratch/hairdeck}
 OUT=${OUT:-out}; mkdir -p "$OUT"
@@ -22,7 +24,7 @@ plan() {  # goal problem -> $OUT/plan.json ; exit 3 when the planner refuses
 }
 
 gpu() { if [ "${DRY_RUN:-0}" = 1 ]; then echo "[dry] ssh $GPU_HOST $*"; else ssh -o BatchMode=yes "$GPU_HOST" "$@"; fi; }
-local_() { if [ "${DRY_RUN:-0}" = 1 ]; then echo "[dry] $*"; else eval "$*"; fi; }
+local_() { if [ "${DRY_RUN:-0}" = 1 ]; then echo "[dry] $*"; else ( eval "$*" ); fi; }   # a subshell, so one step's cd cannot leak into the next
 todo() { echo "action $1 has no command yet: $2" >&2; [ "${DRY_RUN:-0}" = 1 ] || exit 2; }
 A3D='cd ~/og2/a3d-env && REPRO_ROOT=~/og2/spike ./run.sh python'   # the Segment environment on the GPU host
 
@@ -31,8 +33,10 @@ action() {
     relabel-coco)        gpu "python3 $REPRO/relabel_coco.py ~/og2/rfdetr-seg/data ~/og2/rfdetr-seg/data_aux" ;;
     make-synth-set)      gpu "$A3D $REPRO/gen_synth.py ~/og2/synth_aux 360" ;;
     train-part-detector) gpu "$A3D $REPRO/train_synth.py ~/og2/synth_aux ~/og2/synth_aux-run1 15" ;;
-    unitise-source)      todo "$1" "unitise_glb_inplace exists in repro/common.py but only runs inside garment.py; it needs a command line of its own" ;;
-    write-scale-sidecar) todo "$1" "the scale of one garment was written by hand to unit_frame.json; no code writes it" ;;
+    ingest-usd)          local_ "$USDPY repro/usd_io.py ingest \${SOURCE:?set SOURCE=<mesh>} $PWD/$OUT/stage.usda --unit \${UNIT:-cm} \${LABELS:+--labels \$LABELS --classmap \${CLASSMAP:?set CLASSMAP}}" ;;
+    unitise-source)      local_ "$USDPY repro/usd_io.py deliver $PWD/$OUT/stage.usda $PWD/$OUT/segment_input.glb --unit-cube" ;;
+    write-scale-sidecar) local_ "$USDPY repro/units.py selftest && test -s $PWD/$OUT/segment_input.glb.units.json" ;;
+    restore-units)       local_ "$USDPY repro/usd_io.py restore $PWD/$OUT/stage.usda \${LABELLED:?set LABELLED=<Segment output glb>} $PWD/$OUT/stage_labelled.usda --frame voxel" ;;
     segment-labels)      gpu "$A3D $REPRO/garment.py --mode textured && $A3D $REPRO/rfdetr_maps.py ~/og2/spike/out/garment-textured textured" ;;
     close-labelling)     local_ "test -f $OUT/plan.json && echo 'labelling closed (composite marker)'" ;;
     build-warp)          gpu "cd ~/og2/warp-pixi && ~/.pixi/bin/pixi run build" ;;

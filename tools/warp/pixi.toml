@@ -21,6 +21,13 @@ scipy = "*"
 pyyaml = "*"
 trimesh = "*"
 psutil = "*"
+svgpathtools = "*"
+svgwrite = "*"
+matplotlib = "*"
+cairosvg = "*"
+pandas = "*"
+pyrender = "*"   # imported at module scope by pygarment.meshgen.simulation, only its render step needs a display
+libblas = { version = "*", build = "*openblas" }
 
 [tasks.build]
 description = "Build the NvidiaWarp-GarmentCode fork without the LLVM standalone path"

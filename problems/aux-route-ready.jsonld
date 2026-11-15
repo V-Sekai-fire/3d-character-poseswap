@@ -131,7 +131,9 @@
     "spring_chains": 0,
     "labelled_parts": 0,
     "soft_rigid_known": 0,
-    "rigged": 0
+    "rigged": 0,
+    "usd_stage": 0,
+    "metric_labels": 0
    }
   }
  ],
