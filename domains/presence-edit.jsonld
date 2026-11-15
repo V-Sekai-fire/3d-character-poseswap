@@ -7,7 +7,7 @@
  "name": "presence_edit",
  "source": "3d-character-poseswap",
  "version": "0.1.0",
- "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF, written in Lean 4, of which the mul_mat op is built and checked. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem.",
+ "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF, written in Lean 4, of which the mul_mat op is built and checked. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem. The AUX route then labels garment parts, measures whether each is rigid or soft from motion lag, and rigs them: relabel-coco: Map every source class of the Fashionpedia-class set into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail with a motion prior; drop nothing (repro/relabel_coco.py).; make-synth-set: Render GarmentCodeData drapes on the neutral body into a COCO set with exact part masks, split by garment (repro/gen_synth.py).; train-part-detector: Fine-tune RF-DETR-Seg-Small on the relabelled and the synthetic sets (repro/train_synth.py).; unitise-source: Normalise the source GLB into the unit cube before Segment; a centimetre source made the lookup distance 94 instead of 0.0007 (repro/common.py unitise_glb_inplace).; write-scale-sidecar: Write scale and offset beside every unit-cube mesh, with the metric size from a body-height prior; image-to-mesh models return unit-cube meshes only.; segment-labels: Run Alchemy3D-Segment with maps from the part detector; labels are anonymous clusters that need our own colour-to-class table.; build-warp: Build the NvidiaWarp-GarmentCode fork; fedora's gcc 16 is refused by CUDA 12.4 (gcc 13 is the limit), so a compatible host compiler is needed.; measure-motion-lag: Drape, move the body, and measure which vertices lag; a part that lags is soft, a part that follows is rigid. Clearance from the body is only a first signal.; make-hair-cards: HairDeck: portrait to hair cards on Apple MPS; needs SAM 3 and DINOv3 weights whose SHA-256 matches the pins.; make-spring-chains: HairDeck chain model: path, joints and stiffness per chain, in the normalised frame; apply the scale sidecar before fitting.; rig-aux-parts: Give soft parts spring-bone chains and rigid parts a parent bone, from the labels and the measured lag; SkinTokens rigs the body. Composite methods: /aux/labelled_parts (labels and scale sidecar), /aux/soft_rigid_known (labels and measured lag), /aux/rigged (labelled parts, the soft/rigid decision and the spring chains).",
  "variables": [
   {
    "name": "part",
@@ -18,7 +18,7 @@
   {
    "name": "input",
    "type": "int",
-   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt.",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
    "init": {}
   },
   {
@@ -61,6 +61,12 @@
    "name": "image",
    "type": "int",
    "description": "1 when the image of a stage is produced.",
+   "init": {}
+  },
+  {
+   "name": "aux",
+   "type": "int",
+   "description": "1 when a step of the AUX part-labelling and rigging route is done: coco_relabelled, synth_set, part_detector, unit_cube_source, part_labels, warp_built, motion_lag, hair_cards, spring_chains, scale_sidecar; composites labelled_parts, soft_rigid_known and rigged.",
    "init": {}
   }
  ],
@@ -720,6 +726,333 @@
      "value": 1
     }
    ]
+  },
+  "relabel-coco": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/coco_set",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/coco_relabelled",
+     "value": 1
+    }
+   ]
+  },
+  "make-synth-set": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gcd_drapes",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/synth_set",
+     "value": 1
+    }
+   ]
+  },
+  "train-part-detector": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/coco_relabelled",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/synth_set",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/part_detector",
+     "value": 1
+    }
+   ]
+  },
+  "unitise-source": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/source_mesh",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/unit_cube_source",
+     "value": 1
+    }
+   ]
+  },
+  "write-scale-sidecar": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/unit_cube_source",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/body_height_prior",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/scale_sidecar",
+     "value": 1
+    }
+   ]
+  },
+  "segment-labels": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/part_detector",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/unit_cube_source",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/segment_weights",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/part_labels",
+     "value": 1
+    }
+   ]
+  },
+  "build-warp": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/host_cxx_ok",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/warp_built",
+     "value": 1
+    }
+   ]
+  },
+  "measure-motion-lag": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/part_labels",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/warp_built",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/body_motion_clip",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gcd_drapes",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/motion_lag",
+     "value": 1
+    }
+   ]
+  },
+  "make-hair-cards": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/portrait",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/sam3_dinov3_verified",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/hair_cards",
+     "value": 1
+    }
+   ]
+  },
+  "make-spring-chains": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/hair_cards",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/scale_sidecar",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/spring_chains",
+     "value": 1
+    }
+   ]
+  },
+  "rig-aux-parts": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/labelled_parts",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/soft_rigid_known",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/spring_chains",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/rigged",
+     "value": 1
+    }
+   ]
+  },
+  "close-labelling": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/part_labels",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/scale_sidecar",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/labelled_parts",
+     "value": 1
+    }
+   ]
+  },
+  "classify-soft-rigid": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/labelled_parts",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/motion_lag",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/soft_rigid_known",
+     "value": 1
+    }
+   ]
   }
  },
  "methods": {
@@ -1022,6 +1355,226 @@
       ],
       [
        "score"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/coco_relabelled": {
+   "alternatives": [
+    {
+     "name": "relabel-coco",
+     "subtasks": [
+      [
+       "relabel-coco"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/synth_set": {
+   "alternatives": [
+    {
+     "name": "make-synth-set",
+     "subtasks": [
+      [
+       "make-synth-set"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/part_detector": {
+   "alternatives": [
+    {
+     "name": "train-part-detector",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/coco_relabelled"
+      ],
+      [
+       "goal",
+       "/aux/synth_set"
+      ],
+      [
+       "train-part-detector"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/unit_cube_source": {
+   "alternatives": [
+    {
+     "name": "unitise-source",
+     "subtasks": [
+      [
+       "unitise-source"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/scale_sidecar": {
+   "alternatives": [
+    {
+     "name": "write-scale-sidecar",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/unit_cube_source"
+      ],
+      [
+       "write-scale-sidecar"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/part_labels": {
+   "alternatives": [
+    {
+     "name": "segment-labels",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/part_detector"
+      ],
+      [
+       "goal",
+       "/aux/unit_cube_source"
+      ],
+      [
+       "segment-labels"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/warp_built": {
+   "alternatives": [
+    {
+     "name": "build-warp",
+     "subtasks": [
+      [
+       "build-warp"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/motion_lag": {
+   "alternatives": [
+    {
+     "name": "measure-lag",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/part_labels"
+      ],
+      [
+       "goal",
+       "/aux/warp_built"
+      ],
+      [
+       "measure-motion-lag"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/hair_cards": {
+   "alternatives": [
+    {
+     "name": "make-hair-cards",
+     "subtasks": [
+      [
+       "make-hair-cards"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/spring_chains": {
+   "alternatives": [
+    {
+     "name": "make-spring-chains",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/hair_cards"
+      ],
+      [
+       "goal",
+       "/aux/scale_sidecar"
+      ],
+      [
+       "make-spring-chains"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/rigged": {
+   "alternatives": [
+    {
+     "name": "rig-parts",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/labelled_parts"
+      ],
+      [
+       "goal",
+       "/aux/soft_rigid_known"
+      ],
+      [
+       "goal",
+       "/aux/spring_chains"
+      ],
+      [
+       "rig-aux-parts"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/labelled_parts": {
+   "alternatives": [
+    {
+     "name": "label-parts",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/part_labels"
+      ],
+      [
+       "goal",
+       "/aux/scale_sidecar"
+      ],
+      [
+       "close-labelling"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/soft_rigid_known": {
+   "alternatives": [
+    {
+     "name": "decide-soft-or-rigid",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/labelled_parts"
+      ],
+      [
+       "goal",
+       "/aux/motion_lag"
+      ],
+      [
+       "classify-soft-rigid"
       ]
      ]
     }
