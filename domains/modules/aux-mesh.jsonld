@@ -1,0 +1,151 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Module",
+ "name": "aux-mesh",
+ "module": {
+  "summary": "Where the garment mesh comes from: the dataset's own mesh, or an image matted and turned into a mesh by Pixal3D (on TRELLIS.2)."
+ },
+ "variables": [
+  {
+   "name": "input",
+   "type": "int",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
+   "init": {
+    "gpu": 0,
+    "garment_image": 0,
+    "birefnet_weights": 0,
+    "pixal3d_weights": 0
+   }
+  },
+  {
+   "name": "aux",
+   "type": "int",
+   "description": "1 when a step of the AUX part-labelling and rigging route is done: coco_relabelled, synth_set, part_detector, unit_cube_source, part_labels, warp_built, motion_lag, hair_cards, spring_chains, scale_sidecar; composites labelled_parts, soft_rigid_known and rigged; also usd_stage (the source ingested into OpenUSD in its own units) and metric_labels (Segment's labels put back on the real-size stage by restore-units).",
+   "init": {}
+  }
+ ],
+ "actions": {
+  "use-dataset-mesh": {
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/source_mesh",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/source_mesh",
+     "value": 1
+    }
+   ],
+   "duration": "PT1S",
+   "duration_basis": "estimate: a bookkeeping step. It reads the mesh the desk states and does no work, so it takes the planner's smallest span, one second"
+  },
+  "matte-image": {
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/garment_image",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/birefnet_weights",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/matted_image",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: BiRefNet HR matting has run on poseswap portraits (HairDeck) but not as this step; no span is stated"
+  },
+  "pixal3d-image-to-mesh": {
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/matted_image",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/pixal3d_weights",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/source_mesh",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: Pixal3D (multi-view checkpoints, on TRELLIS.2) has been fetched but never run on a garment image; no span is stated"
+  }
+ },
+ "methods": {
+  "/aux/source_mesh": {
+   "alternatives": [
+    {
+     "name": "dataset",
+     "subtasks": [
+      [
+       "use-dataset-mesh"
+      ]
+     ]
+    },
+    {
+     "name": "from-image",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/matted_image"
+      ],
+      [
+       "pixal3d-image-to-mesh"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/matted_image": {
+   "alternatives": [
+    {
+     "name": "matte",
+     "subtasks": [
+      [
+       "matte-image"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

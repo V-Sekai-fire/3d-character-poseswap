@@ -6,23 +6,7 @@
  "@type": "domain:Module",
  "name": "aux-rig",
  "module": {
-  "summary": "Hair cards and spring chains from a portrait, then rig the parts.",
-  "provides": [
-   "/aux/hair_cards",
-   "/aux/rigged",
-   "/aux/spring_chains"
-  ],
-  "requires": {
-   "inputs": [
-    "/input/portrait",
-    "/input/sam3_dinov3_verified"
-   ],
-   "goals": [
-    "/aux/labelled_parts",
-    "/aux/scale_sidecar",
-    "/aux/soft_rigid_known"
-   ]
-  }
+  "summary": "Hair cards and spring chains from a portrait, then rig the parts."
  },
  "variables": [
   {

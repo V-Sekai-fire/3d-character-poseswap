@@ -6,25 +6,7 @@
  "@type": "domain:Module",
  "name": "aux-motion",
  "module": {
-  "summary": "Which parts are soft and which rigid: build Warp, measure motion lag and classify, or, when no body clip or drape is on hand, classify from the class prior.",
-  "provides": [
-   "/aux/motion_lag",
-   "/aux/soft_rigid_known",
-   "/aux/soft_rigid_prior_only",
-   "/aux/warp_built"
-  ],
-  "requires": {
-   "inputs": [
-    "/input/body_motion_clip",
-    "/input/gcd_drapes",
-    "/input/gpu_host",
-    "/input/host_cxx_ok"
-   ],
-   "goals": [
-    "/aux/labelled_parts",
-    "/aux/part_labels"
-   ]
-  }
+  "summary": "Which parts are soft and which rigid: build Warp, measure motion lag and classify, or, when no body clip or drape is on hand, classify from the class prior."
  },
  "variables": [
   {

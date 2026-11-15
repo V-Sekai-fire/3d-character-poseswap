@@ -6,31 +6,7 @@
  "@type": "domain:Module",
  "name": "omnigen2-edit",
  "module": {
-  "summary": "The poseswap edit and its score: load the OmniGen2 parts and the EditScore LoRA, merge, edit the snapshot, score the edit.",
-  "provides": [
-   "/image/edited",
-   "/image/scored",
-   "/model/editscore_lora",
-   "/model/editscore_merged",
-   "/model/omnigen2_transformer",
-   "/model/omnigen2_vae",
-   "/model/qwen25vl_conditioner",
-   "/op/mul_mat"
-  ],
-  "requires": {
-   "inputs": [
-    "/input/edit_prompt",
-    "/input/godot_double",
-    "/input/gpu_host",
-    "/input/omnigen2_elf",
-    "/input/omnigen2_mul_mat_elf",
-    "/part/editscore",
-    "/part/omnigen2"
-   ],
-   "goals": [
-    "/image/snapshot"
-   ]
-  }
+  "summary": "The poseswap edit and its score: load the OmniGen2 parts and the EditScore LoRA, merge, edit the snapshot, score the edit."
  },
  "variables": [
   {

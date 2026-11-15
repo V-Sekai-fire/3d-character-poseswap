@@ -20,7 +20,10 @@
    "type": "int",
    "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
    "init": {
-    "gpu": 0
+    "gpu": 0,
+    "garment_image": 0,
+    "birefnet_weights": 0,
+    "pixal3d_weights": 0
    }
   },
   {
@@ -1304,7 +1307,7 @@
     {
      "eval": {
       "type": "pointer/ge",
-      "pointer": "/input/source_mesh",
+      "pointer": "/aux/source_mesh",
       "value": 1
      }
     },
@@ -1340,6 +1343,87 @@
    ],
    "duration": "PT5S",
    "duration_basis": "estimate: the inverse of unitise-source; refuses when the geometry does not confirm the pairing"
+  },
+  "use-dataset-mesh": {
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/source_mesh",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/source_mesh",
+     "value": 1
+    }
+   ],
+   "duration": "PT1S",
+   "duration_basis": "estimate: a bookkeeping step. It reads the mesh the desk states and does no work, so it takes the planner's smallest span, one second"
+  },
+  "matte-image": {
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/garment_image",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/birefnet_weights",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/matted_image",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: BiRefNet HR matting has run on poseswap portraits (HairDeck) but not as this step; no span is stated"
+  },
+  "pixal3d-image-to-mesh": {
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/matted_image",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/pixal3d_weights",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/source_mesh",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: Pixal3D (multi-view checkpoints, on TRELLIS.2) has been fetched but never run on a garment image; no span is stated"
   }
  },
  "methods": {
@@ -1885,6 +1969,10 @@
      "name": "ingest",
      "subtasks": [
       [
+       "goal",
+       "/aux/source_mesh"
+      ],
+      [
        "ingest-usd"
       ]
      ]
@@ -1906,6 +1994,42 @@
       ],
       [
        "restore-units"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/source_mesh": {
+   "alternatives": [
+    {
+     "name": "dataset",
+     "subtasks": [
+      [
+       "use-dataset-mesh"
+      ]
+     ]
+    },
+    {
+     "name": "from-image",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/matted_image"
+      ],
+      [
+       "pixal3d-image-to-mesh"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/matted_image": {
+   "alternatives": [
+    {
+     "name": "matte",
+     "subtasks": [
+      [
+       "matte-image"
       ]
      ]
     }

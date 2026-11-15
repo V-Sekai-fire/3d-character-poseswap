@@ -238,7 +238,7 @@
    "ingest-usd"
   ],
   "preconditions": [
-   "/input/source_mesh"
+   "/aux/source_mesh"
   ],
   "total": "PT5S",
   "twice_total": "PT5S"
@@ -406,6 +406,25 @@
   "total": "PT8M32S",
   "twice_total": "PT8M32S"
  },
+ "matte-image": {
+  "command": {
+   "out": "unknown action: matte-image",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/aux/matted_image"
+  ],
+  "plan": [
+   "matte-image"
+  ],
+  "preconditions": [
+   "/input/garment_image",
+   "/input/birefnet_weights"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "measure-motion-lag": {
   "command": {
    "out": "action measure-motion-lag has no command yet: no motion-lag measurement exists yet; it needs the Warp build and a body motion clip",
@@ -449,6 +468,28 @@
   ],
   "total": "PT1S",
   "twice_total": "PT1S"
+ },
+ "pixal3d-image-to-mesh": {
+  "command": {
+   "out": "unknown action: pixal3d-image-to-mesh",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/aux/source_mesh",
+   "/input/gpu"
+  ],
+  "plan": [
+   "pixal3d-image-to-mesh"
+  ],
+  "preconditions": [
+   "/input/gpu",
+   "/aux/matted_image",
+   "/input/pixal3d_weights",
+   "/input/gpu_host"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
  },
  "play-curve": {
   "command": {
@@ -711,6 +752,24 @@
   ],
   "total": "PT2S",
   "twice_total": "PT2S"
+ },
+ "use-dataset-mesh": {
+  "command": {
+   "out": "unknown action: use-dataset-mesh",
+   "rc": 64
+  },
+  "duration": "PT1S",
+  "effects": [
+   "/aux/source_mesh"
+  ],
+  "plan": [
+   "use-dataset-mesh"
+  ],
+  "preconditions": [
+   "/input/source_mesh"
+  ],
+  "total": "PT1S",
+  "twice_total": "PT1S"
  },
  "write-scale-sidecar": {
   "command": {

@@ -10,7 +10,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 # The domain is its six modules, composed by the planner in this order (a method's alternatives are tried in the order the modules come):
 # the measured-lag route in aux-motion is listed before the class prior inside it, so the measured route comes first when its inputs are on hand.
-MODS=(presence-body presence-avatar omnigen2-edit aux-labels aux-motion aux-rig)
+MODS=(presence-body presence-avatar omnigen2-edit aux-mesh aux-labels aux-motion aux-rig)
 DOMAIN=${DOMAIN:-$(printf "domains/modules/%s.jsonld," "${MODS[@]}" | sed 's/,$//')}
 PLANNER=${PERSONA_PLAN:-.planner/.lake/build/bin/persona_plan}
 REPRO_SRC=${REPRO_SRC:-$HOME/.hermes/cache/scratch/repro-space}   # usd_io.py and units.py live in the repro Space

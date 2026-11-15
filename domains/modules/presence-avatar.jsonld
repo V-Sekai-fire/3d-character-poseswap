@@ -6,28 +6,7 @@
  "@type": "domain:Module",
  "name": "presence-avatar",
  "module": {
-  "summary": "The avatar on that body: fit ANNY, follow the played curve, take a snapshot image.",
-  "provides": [
-   "/avatar/fitted",
-   "/avatar/posed",
-   "/image/snapshot"
-  ],
-  "requires": {
-   "inputs": [
-    "/input/anny_fit_elf",
-    "/input/anny_glb",
-    "/input/clips",
-    "/input/godot_double",
-    "/input/mujoco_elf",
-    "/input/soma_pheno",
-    "/part/anny_fit",
-    "/part/anny_follow",
-    "/part/presence_gates"
-   ],
-   "goals": [
-    "/body/played"
-   ]
-  }
+  "summary": "The avatar on that body: fit ANNY, follow the played curve, take a snapshot image."
  },
  "variables": [
   {
