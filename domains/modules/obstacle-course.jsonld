@@ -1,0 +1,513 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Definition",
+ "name": "obstacle_course",
+ "module": "obstacle-course",
+ "variables": [
+  {
+   "name": "course_input",
+   "type": "int",
+   "description": "1 when an input of the obstacle course (entities-obstacle-course) is on hand: the SOMA clips under motion/, the skintokens.elf and mm.elf build products, a skinned model, the course script, a Godot project, vmc.elf and a VMC sender.",
+   "init": {}
+  },
+  {
+   "name": "course",
+   "type": "int",
+   "description": "1 when a step of the obstacle course is done: clips_baked, clips_on_model, shapes_baked, colliders_checked, input_ready, clip_picked, posed, grounded, muscle_driven, avatar_follows, finished.",
+   "init": {}
+  }
+ ],
+ "actions": {
+  "bake-clips": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/soma_clips",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/clips_baked",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "rig-clips-on-model": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/clips_baked",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/skintokens_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/rigged_model",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/clips_on_model",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "bake-course": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/course_script",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/shapes_baked",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "check-colliders": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/shapes_baked",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/colliders_checked",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "read-keyboard-or-pad": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/godot_project",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/input_ready",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "read-vmc-capture": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/godot_project",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/vmc_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/vmc_sender",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/input_ready",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "pick-clip": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/clips_baked",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/mm_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/input_ready",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/clip_picked",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "play-clips": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/clips_on_model",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/clip_picked",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/godot_project",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/posed",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "hold-at-walls": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/colliders_checked",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/posed",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/mujoco_elf",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/grounded",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "drive-muscles": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/grounded",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/mujoco_elf",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/muscle_driven",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "follow-muscle-skeleton": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/muscle_driven",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course_input/rigged_model",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/avatar_follows",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  },
+  "finish-course": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/course/avatar_follows",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/course/finished",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+  }
+ },
+ "methods": {
+  "/course/clips_baked": {
+   "alternatives": [
+    {
+     "name": "bake",
+     "subtasks": [
+      [
+       "bake-clips"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/clips_on_model": {
+   "alternatives": [
+    {
+     "name": "rig",
+     "subtasks": [
+      [
+       "goal",
+       "/course/clips_baked"
+      ],
+      [
+       "rig-clips-on-model"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/shapes_baked": {
+   "alternatives": [
+    {
+     "name": "bake",
+     "subtasks": [
+      [
+       "bake-course"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/colliders_checked": {
+   "alternatives": [
+    {
+     "name": "check",
+     "subtasks": [
+      [
+       "goal",
+       "/course/shapes_baked"
+      ],
+      [
+       "check-colliders"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/input_ready": {
+   "alternatives": [
+    {
+     "name": "keyboard or pad",
+     "subtasks": [
+      [
+       "read-keyboard-or-pad"
+      ]
+     ]
+    },
+    {
+     "name": "VMC capture",
+     "subtasks": [
+      [
+       "read-vmc-capture"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/clip_picked": {
+   "alternatives": [
+    {
+     "name": "pick",
+     "subtasks": [
+      [
+       "goal",
+       "/course/clips_baked"
+      ],
+      [
+       "goal",
+       "/course/input_ready"
+      ],
+      [
+       "pick-clip"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/posed": {
+   "alternatives": [
+    {
+     "name": "play",
+     "subtasks": [
+      [
+       "goal",
+       "/course/clips_on_model"
+      ],
+      [
+       "goal",
+       "/course/clip_picked"
+      ],
+      [
+       "play-clips"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/grounded": {
+   "alternatives": [
+    {
+     "name": "hold",
+     "subtasks": [
+      [
+       "goal",
+       "/course/colliders_checked"
+      ],
+      [
+       "goal",
+       "/course/posed"
+      ],
+      [
+       "hold-at-walls"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/muscle_driven": {
+   "alternatives": [
+    {
+     "name": "drive",
+     "subtasks": [
+      [
+       "goal",
+       "/course/grounded"
+      ],
+      [
+       "drive-muscles"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/avatar_follows": {
+   "alternatives": [
+    {
+     "name": "follow",
+     "subtasks": [
+      [
+       "goal",
+       "/course/muscle_driven"
+      ],
+      [
+       "follow-muscle-skeleton"
+      ]
+     ]
+    }
+   ]
+  },
+  "/course/finished": {
+   "alternatives": [
+    {
+     "name": "finish",
+     "subtasks": [
+      [
+       "goal",
+       "/course/avatar_follows"
+      ],
+      [
+       "finish-course"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

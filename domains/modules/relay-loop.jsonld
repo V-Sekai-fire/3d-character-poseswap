@@ -1,0 +1,297 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Definition",
+ "name": "relay_loop",
+ "module": "relay-loop",
+ "variables": [
+  {
+   "name": "relay_input",
+   "type": "int",
+   "description": "1 when an input of the zone relay (transport-zone-relay) is on hand: the socket for the first halves of frames, and the socket for the second halves.",
+   "init": {}
+  },
+  {
+   "name": "relay",
+   "type": "int",
+   "description": "1 when a step of one relay tick is done: datagrams, person, offered, handled, ticked, caught_up, next_tick.",
+   "init": {}
+  }
+ ],
+ "actions": {
+  "drain-sockets": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay_input/socket_first_half",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay_input/socket_second_half",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/relay/datagrams",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+  },
+  "identify-sender": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay/datagrams",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/relay/person",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+  },
+  "offer-frame": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay/person",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay/datagrams",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/relay/offered",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+  },
+  "send-to-others": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay/offered",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/relay/handled",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+  },
+  "count-refused": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay/person",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/relay/handled",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+  },
+  "tick-zones": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay/handled",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/relay/ticked",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+  },
+  "catch-up-if-late": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay/ticked",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/relay/caught_up",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+  },
+  "wait-for-next-tick": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/relay/caught_up",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/relay/next_tick",
+     "value": 1
+    }
+   ],
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+  }
+ },
+ "methods": {
+  "/relay/datagrams": {
+   "alternatives": [
+    {
+     "name": "drain",
+     "subtasks": [
+      [
+       "drain-sockets"
+      ]
+     ]
+    }
+   ]
+  },
+  "/relay/person": {
+   "alternatives": [
+    {
+     "name": "identify",
+     "subtasks": [
+      [
+       "goal",
+       "/relay/datagrams"
+      ],
+      [
+       "identify-sender"
+      ]
+     ]
+    }
+   ]
+  },
+  "/relay/offered": {
+   "alternatives": [
+    {
+     "name": "offer",
+     "subtasks": [
+      [
+       "goal",
+       "/relay/person"
+      ],
+      [
+       "offer-frame"
+      ]
+     ]
+    }
+   ]
+  },
+  "/relay/handled": {
+   "alternatives": [
+    {
+     "name": "forward",
+     "subtasks": [
+      [
+       "goal",
+       "/relay/offered"
+      ],
+      [
+       "send-to-others"
+      ]
+     ]
+    },
+    {
+     "name": "refuse",
+     "subtasks": [
+      [
+       "goal",
+       "/relay/person"
+      ],
+      [
+       "count-refused"
+      ]
+     ]
+    }
+   ]
+  },
+  "/relay/ticked": {
+   "alternatives": [
+    {
+     "name": "tick",
+     "subtasks": [
+      [
+       "goal",
+       "/relay/handled"
+      ],
+      [
+       "tick-zones"
+      ]
+     ]
+    }
+   ]
+  },
+  "/relay/caught_up": {
+   "alternatives": [
+    {
+     "name": "catch up",
+     "subtasks": [
+      [
+       "goal",
+       "/relay/ticked"
+      ],
+      [
+       "catch-up-if-late"
+      ]
+     ]
+    }
+   ]
+  },
+  "/relay/next_tick": {
+   "alternatives": [
+    {
+     "name": "wait",
+     "subtasks": [
+      [
+       "goal",
+       "/relay/caught_up"
+      ],
+      [
+       "wait-for-next-tick"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}
