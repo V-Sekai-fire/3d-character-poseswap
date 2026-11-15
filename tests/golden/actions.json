@@ -19,6 +19,44 @@
   "total": null,
   "twice_total": "PT0S"
  },
+ "bake-clips": {
+  "command": {
+   "out": "unknown action: bake-clips",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/clips_baked"
+  ],
+  "plan": [
+   "bake-clips"
+  ],
+  "preconditions": [
+   "/course_input/soma_clips",
+   "/input/godot_double"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "bake-course": {
+  "command": {
+   "out": "unknown action: bake-course",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/shapes_baked"
+  ],
+  "plan": [
+   "bake-course"
+  ],
+  "preconditions": [
+   "/course_input/course_script",
+   "/input/godot_double"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "build-warp": {
   "command": {
    "out": "[dry] ssh fedora cd ~/og2/warp-pixi && ~/.pixi/bin/pixi run build",
@@ -37,6 +75,42 @@
   ],
   "total": "PT30M",
   "twice_total": "PT30M"
+ },
+ "catch-up-if-late": {
+  "command": {
+   "out": "unknown action: catch-up-if-late",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/relay/caught_up"
+  ],
+  "plan": [
+   "catch-up-if-late"
+  ],
+  "preconditions": [
+   "/relay/ticked"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "check-colliders": {
+  "command": {
+   "out": "unknown action: check-colliders",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/colliders_checked"
+  ],
+  "plan": [
+   "check-colliders"
+  ],
+  "preconditions": [
+   "/course/shapes_baked"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
  },
  "check-mul-mat": {
   "command": {
@@ -114,6 +188,62 @@
   "total": "PT0S",
   "twice_total": "PT0S"
  },
+ "count-refused": {
+  "command": {
+   "out": "unknown action: count-refused",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/relay/handled"
+  ],
+  "plan": [
+   "count-refused"
+  ],
+  "preconditions": [
+   "/relay/person"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "drain-sockets": {
+  "command": {
+   "out": "unknown action: drain-sockets",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/relay/datagrams"
+  ],
+  "plan": [
+   "drain-sockets"
+  ],
+  "preconditions": [
+   "/relay_input/socket_first_half",
+   "/relay_input/socket_second_half"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "drive-muscles": {
+  "command": {
+   "out": "unknown action: drive-muscles",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/muscle_driven"
+  ],
+  "plan": [
+   "drive-muscles"
+  ],
+  "preconditions": [
+   "/course/grounded",
+   "/input/mujoco_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "edit": {
   "command": {
    "out": "unknown action: edit",
@@ -180,6 +310,24 @@
   "total": null,
   "twice_total": "PT0S"
  },
+ "finish-course": {
+  "command": {
+   "out": "unknown action: finish-course",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/finished"
+  ],
+  "plan": [
+   "finish-course"
+  ],
+  "preconditions": [
+   "/course/avatar_follows"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "fit-anny": {
   "command": {
    "out": "unknown action: fit-anny",
@@ -225,6 +373,63 @@
   "total": null,
   "twice_total": "PT0S"
  },
+ "follow-muscle-skeleton": {
+  "command": {
+   "out": "unknown action: follow-muscle-skeleton",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/avatar_follows"
+  ],
+  "plan": [
+   "follow-muscle-skeleton"
+  ],
+  "preconditions": [
+   "/course/muscle_driven",
+   "/course_input/rigged_model"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "hold-at-walls": {
+  "command": {
+   "out": "unknown action: hold-at-walls",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/grounded"
+  ],
+  "plan": [
+   "hold-at-walls"
+  ],
+  "preconditions": [
+   "/course/colliders_checked",
+   "/course/posed",
+   "/input/mujoco_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "identify-sender": {
+  "command": {
+   "out": "unknown action: identify-sender",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/relay/person"
+  ],
+  "plan": [
+   "identify-sender"
+  ],
+  "preconditions": [
+   "/relay/datagrams"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "ingest-usd": {
   "command": {
    "out": "[dry] cd $HOME/.hermes/cache/scratch/repro-space && pixi run -q -e mac python repro/usd_io.py ingest ${SOURCE:?set SOURCE=<mesh>} $REPO/$OUT_DIR/out/stage.usda --unit ${UNIT:-cm} ${LABELS:+--labels $LABELS --classmap ${CLASSMAP:?set CLASSMAP}}",
@@ -238,7 +443,7 @@
    "ingest-usd"
   ],
   "preconditions": [
-   "/input/source_mesh"
+   "/aux/source_mesh"
   ],
   "total": "PT5S",
   "twice_total": "PT5S"
@@ -406,6 +611,25 @@
   "total": "PT8M32S",
   "twice_total": "PT8M32S"
  },
+ "matte-image": {
+  "command": {
+   "out": "unknown action: matte-image",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/aux/matted_image"
+  ],
+  "plan": [
+   "matte-image"
+  ],
+  "preconditions": [
+   "/input/garment_image",
+   "/input/birefnet_weights"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "measure-motion-lag": {
   "command": {
    "out": "action measure-motion-lag has no command yet: no motion-lag measurement exists yet; it needs the Warp build and a body motion clip",
@@ -450,6 +674,87 @@
   "total": "PT1S",
   "twice_total": "PT1S"
  },
+ "offer-frame": {
+  "command": {
+   "out": "unknown action: offer-frame",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/relay/offered"
+  ],
+  "plan": [
+   "offer-frame"
+  ],
+  "preconditions": [
+   "/relay/person",
+   "/relay/datagrams"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "pick-clip": {
+  "command": {
+   "out": "unknown action: pick-clip",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/clip_picked"
+  ],
+  "plan": [
+   "pick-clip"
+  ],
+  "preconditions": [
+   "/course/clips_baked",
+   "/course_input/mm_elf",
+   "/course/input_ready"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "pixal3d-image-to-mesh": {
+  "command": {
+   "out": "unknown action: pixal3d-image-to-mesh",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/aux/source_mesh",
+   "/input/gpu"
+  ],
+  "plan": [
+   "pixal3d-image-to-mesh"
+  ],
+  "preconditions": [
+   "/input/gpu",
+   "/aux/matted_image",
+   "/input/pixal3d_weights",
+   "/input/gpu_host"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "play-clips": {
+  "command": {
+   "out": "unknown action: play-clips",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/posed"
+  ],
+  "plan": [
+   "play-clips"
+  ],
+  "preconditions": [
+   "/course/clips_on_model",
+   "/course/clip_picked",
+   "/course_input/godot_project"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "play-curve": {
   "command": {
    "out": "unknown action: play-curve",
@@ -466,6 +771,44 @@
    "/part/curve",
    "/input/godot_double",
    "/body/agreed"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "read-keyboard-or-pad": {
+  "command": {
+   "out": "unknown action: read-keyboard-or-pad",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/input_ready"
+  ],
+  "plan": [
+   "read-keyboard-or-pad"
+  ],
+  "preconditions": [
+   "/course_input/godot_project"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "read-vmc-capture": {
+  "command": {
+   "out": "unknown action: read-vmc-capture",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/input_ready"
+  ],
+  "plan": [
+   "read-vmc-capture"
+  ],
+  "preconditions": [
+   "/course_input/godot_project",
+   "/course_input/vmc_elf",
+   "/course_input/vmc_sender"
   ],
   "total": null,
   "twice_total": "PT0S"
@@ -526,6 +869,26 @@
   ],
   "total": "PT1M",
   "twice_total": "PT1M"
+ },
+ "rig-clips-on-model": {
+  "command": {
+   "out": "unknown action: rig-clips-on-model",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/course/clips_on_model"
+  ],
+  "plan": [
+   "rig-clips-on-model"
+  ],
+  "preconditions": [
+   "/course/clips_baked",
+   "/course_input/skintokens_elf",
+   "/course_input/rigged_model"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
  },
  "route-model": {
   "command": {
@@ -633,6 +996,24 @@
   "total": "PT1M",
   "twice_total": "PT1M"
  },
+ "send-to-others": {
+  "command": {
+   "out": "unknown action: send-to-others",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/relay/handled"
+  ],
+  "plan": [
+   "send-to-others"
+  ],
+  "preconditions": [
+   "/relay/offered"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "skip-agree": {
   "command": {
    "out": "unknown action: skip-agree",
@@ -668,6 +1049,24 @@
    "/part/presence_gates",
    "/input/godot_double",
    "/avatar/posed"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "tick-zones": {
+  "command": {
+   "out": "unknown action: tick-zones",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/relay/ticked"
+  ],
+  "plan": [
+   "tick-zones"
+  ],
+  "preconditions": [
+   "/relay/handled"
   ],
   "total": null,
   "twice_total": "PT0S"
@@ -711,6 +1110,42 @@
   ],
   "total": "PT2S",
   "twice_total": "PT2S"
+ },
+ "use-dataset-mesh": {
+  "command": {
+   "out": "unknown action: use-dataset-mesh",
+   "rc": 64
+  },
+  "duration": "PT1S",
+  "effects": [
+   "/aux/source_mesh"
+  ],
+  "plan": [
+   "use-dataset-mesh"
+  ],
+  "preconditions": [
+   "/input/source_mesh"
+  ],
+  "total": "PT1S",
+  "twice_total": "PT1S"
+ },
+ "wait-for-next-tick": {
+  "command": {
+   "out": "unknown action: wait-for-next-tick",
+   "rc": 64
+  },
+  "duration": null,
+  "effects": [
+   "/relay/next_tick"
+  ],
+  "plan": [
+   "wait-for-next-tick"
+  ],
+  "preconditions": [
+   "/relay/caught_up"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
  },
  "write-scale-sidecar": {
   "command": {

@@ -26,5 +26,5 @@ u = group(d); ck(secs(u["temporal"]["total"]) == 5, f"load group CONTROL without
 first = {}
 for st in g["steps"]: first.setdefault(st["action"], st)
 w = sorted((s["start"], s["end"]) for k, s in first.items() if k in GPU); ck(all(w[i][1] <= w[i + 1][0] for i in range(len(w) - 1)), f"INVARIANT no two GPU steps overlap ({len(w)} GPU steps in the load group)")
-ck(len(GPU) == 9 and all(any(b.get("pointer/set") == "/input/gpu" for b in a[k]["body"]) for k in GPU), "INVARIANT all 9 GPU actions read and set /input/gpu")
+ck(len(GPU) == 10 and all(any(b.get("pointer/set") == "/input/gpu" for b in a[k]["body"]) for k in GPU), "INVARIANT all 10 GPU actions read and set /input/gpu")
 print(f"---- {sum(R)} passed, {len(R) - sum(R)} failed"); sys.exit(0 if all(R) else 1)

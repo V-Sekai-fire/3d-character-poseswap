@@ -6,32 +6,7 @@
  "@type": "domain:Module",
  "name": "presence-body",
  "module": {
-  "summary": "A body's motion packets: fetch the clips, encode them, route, seal, judge, agree and play the curve.",
-  "provides": [
-   "/body/agreed",
-   "/body/judged",
-   "/body/packet",
-   "/body/played",
-   "/body/routed",
-   "/body/sealed",
-   "/input/clips"
-  ],
-  "requires": {
-   "inputs": [
-    "/bypass/replica",
-    "/input/godot_double",
-    "/input/packet_golden",
-    "/part/curve",
-    "/part/muscle_drive_release",
-    "/part/observer",
-    "/part/packets",
-    "/part/replica",
-    "/part/zone_relay",
-    "/part/zone_router",
-    "/switch/replica"
-   ],
-   "goals": []
-  }
+  "summary": "A body's motion packets: fetch the clips, encode them, route, seal, judge, agree and play the curve."
  },
  "variables": [
   {

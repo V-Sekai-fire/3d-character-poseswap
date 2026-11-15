@@ -6,28 +6,7 @@
  "@type": "domain:Module",
  "name": "aux-labels",
  "module": {
-  "summary": "Part labels for a garment: relabel the COCO set, make the synthetic set, train the detector, ingest the mesh into USD, unitise, label with Segment, restore units.",
-  "provides": [
-   "/aux/coco_relabelled",
-   "/aux/labelled_parts",
-   "/aux/metric_labels",
-   "/aux/part_detector",
-   "/aux/part_labels",
-   "/aux/scale_sidecar",
-   "/aux/synth_set",
-   "/aux/unit_cube_source",
-   "/aux/usd_stage"
-  ],
-  "requires": {
-   "inputs": [
-    "/input/coco_set",
-    "/input/gcd_drapes",
-    "/input/gpu_host",
-    "/input/segment_weights",
-    "/input/source_mesh"
-   ],
-   "goals": []
-  }
+  "summary": "Part labels for a garment: relabel the COCO set, make the synthetic set, train the detector, ingest the mesh into USD, unitise, label with Segment, restore units."
  },
  "variables": [
   {
@@ -35,7 +14,10 @@
    "type": "int",
    "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
    "init": {
-    "gpu": 0
+    "gpu": 0,
+    "garment_image": 0,
+    "birefnet_weights": 0,
+    "pixal3d_weights": 0
    }
   },
   {
@@ -242,7 +224,7 @@
     {
      "eval": {
       "type": "pointer/ge",
-      "pointer": "/input/source_mesh",
+      "pointer": "/aux/source_mesh",
       "value": 1
      }
     },
@@ -398,6 +380,10 @@
     {
      "name": "ingest",
      "subtasks": [
+      [
+       "goal",
+       "/aux/source_mesh"
+      ],
       [
        "ingest-usd"
       ]

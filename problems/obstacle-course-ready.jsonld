@@ -1,0 +1,89 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Problem",
+ "name": "obstacle_course_ready_problem",
+ "domain": "presence_edit",
+ "source": "3d-character-poseswap",
+ "version": "0.1.0",
+ "description": "A desk where entities-obstacle-course is a Godot project with its build products on hand (mm.elf, skintokens.elf, mujoco.elf), a skinned model and the SOMA clips. Today none of that is true: the repository has no project.godot. The planner returns the order of the course.",
+ "variables": [
+  {
+   "name": "input",
+   "type": "int",
+   "init": {
+    "godot_double": 1,
+    "packet_golden": 1,
+    "mujoco_elf": 1,
+    "clips": 0,
+    "anny_glb": 0,
+    "soma_pheno": 0,
+    "anny_fit_elf": 0,
+    "omnigen2_mul_mat_elf": 0,
+    "omnigen2_elf": 0,
+    "gpu_host": 1,
+    "edit_prompt": 1,
+    "coco_set": 1,
+    "gcd_drapes": 1,
+    "source_mesh": 1,
+    "body_height_prior": 1,
+    "segment_weights": 1,
+    "portrait": 1,
+    "sam3_dinov3_verified": 1,
+    "host_cxx_ok": 1,
+    "body_motion_clip": 1,
+    "gpu": 1
+   }
+  },
+  {
+   "name": "course_input",
+   "type": "int",
+   "init": {
+    "soma_clips": 1,
+    "skintokens_elf": 1,
+    "rigged_model": 1,
+    "course_script": 1,
+    "godot_project": 1,
+    "mm_elf": 1,
+    "vmc_elf": 1,
+    "vmc_sender": 0
+   }
+  },
+  {
+   "name": "course",
+   "type": "int",
+   "init": {
+    "clips_baked": 0,
+    "clips_on_model": 0,
+    "shapes_baked": 0,
+    "colliders_checked": 0,
+    "input_ready": 0,
+    "clip_picked": 0,
+    "posed": 0,
+    "grounded": 0,
+    "muscle_driven": 0,
+    "avatar_follows": 0,
+    "finished": 0
+   }
+  }
+ ],
+ "capabilities": {
+  "entities": {},
+  "graph": {
+   "edges": []
+  }
+ },
+ "todo_list": [
+  {
+   "goal": [
+    {
+     "pointer": "/course/finished",
+     "eq": 1
+    }
+   ]
+  }
+ ],
+ "origin": "2026-11-15T08:00:00Z"
+}

@@ -1,0 +1,28 @@
+{
+ "counts": {
+  "Accessory": {
+   "rigid": 2870,
+   "soft": 427
+  },
+  "Cape": {
+   "soft": 22
+  },
+  "Collar": {
+   "measure": 1026
+  },
+  "Detail": {
+   "parent": 5734
+  },
+  "Fitted": {
+   "measure": 2390,
+   "rigid": 9736
+  },
+  "Skirt": {
+   "soft": 595
+  },
+  "Sleeve": {
+   "measure": 5600
+  }
+ },
+ "source": "relabelled real COCO, train split"
+}

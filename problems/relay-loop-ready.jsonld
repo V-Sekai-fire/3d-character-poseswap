@@ -1,0 +1,52 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Problem",
+ "name": "relay_loop_ready_problem",
+ "domain": "presence_edit",
+ "source": "3d-character-poseswap",
+ "version": "0.1.0",
+ "description": "One tick of the zone relay with both sockets open.",
+ "variables": [
+  {
+   "name": "relay_input",
+   "type": "int",
+   "init": {
+    "socket_first_half": 1,
+    "socket_second_half": 1
+   }
+  },
+  {
+   "name": "relay",
+   "type": "int",
+   "init": {
+    "datagrams": 0,
+    "person": 0,
+    "offered": 0,
+    "handled": 0,
+    "ticked": 0,
+    "caught_up": 0,
+    "next_tick": 0
+   }
+  }
+ ],
+ "capabilities": {
+  "entities": {},
+  "graph": {
+   "edges": []
+  }
+ },
+ "todo_list": [
+  {
+   "goal": [
+    {
+     "pointer": "/relay/next_tick",
+     "eq": 1
+    }
+   ]
+  }
+ ],
+ "origin": "2026-11-15T08:00:00Z"
+}

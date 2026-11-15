@@ -6,25 +6,7 @@
  "@type": "domain:Module",
  "name": "aux-motion",
  "module": {
-  "summary": "Which parts are soft and which rigid: build Warp, measure motion lag and classify, or, when no body clip or drape is on hand, classify from the class prior.",
-  "provides": [
-   "/aux/motion_lag",
-   "/aux/soft_rigid_known",
-   "/aux/soft_rigid_prior_only",
-   "/aux/warp_built"
-  ],
-  "requires": {
-   "inputs": [
-    "/input/body_motion_clip",
-    "/input/gcd_drapes",
-    "/input/gpu_host",
-    "/input/host_cxx_ok"
-   ],
-   "goals": [
-    "/aux/labelled_parts",
-    "/aux/part_labels"
-   ]
-  }
+  "summary": "Which parts are soft and which rigid: build Warp, measure motion lag and classify, or, when no body clip or drape is on hand, classify from the class prior."
  },
  "variables": [
   {
@@ -162,13 +144,7 @@
     }
    ],
    "duration": "PT1S",
-   "duration_basis": "measured: tools/classify_prior.py over the 7-class count table ran in 0.02 s on the Mac, rounded up. It decides soft, rigid or parent for the classes whose prior covers 80% of their annotations and leaves Collar and Sleeve as measure: only the lag measurement settles those",
-   "measured": {
-    "runs_s": [
-     0.02
-    ],
-    "host": "this Mac, tools/classify_prior.py"
-   }
+   "duration_basis": "estimate: the table in tests/evidence/class_motion_counts.json decides soft, rigid or parent for each class whose motion covers 80% of its annotations (Skirt and Cape soft, Detail parent, Accessory and Fitted rigid) and leaves Collar and Sleeve as measure, which only the lag measurement settles. A lookup in a table of 7 classes; the script that once timed it at 0.02 s was removed, so no run backs the PT1S and the action has no code yet"
   }
  },
  "methods": {

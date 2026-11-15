@@ -6,31 +6,7 @@
  "@type": "domain:Module",
  "name": "omnigen2-edit",
  "module": {
-  "summary": "The poseswap edit and its score: load the OmniGen2 parts and the EditScore LoRA, merge, edit the snapshot, score the edit.",
-  "provides": [
-   "/image/edited",
-   "/image/scored",
-   "/model/editscore_lora",
-   "/model/editscore_merged",
-   "/model/omnigen2_transformer",
-   "/model/omnigen2_vae",
-   "/model/qwen25vl_conditioner",
-   "/op/mul_mat"
-  ],
-  "requires": {
-   "inputs": [
-    "/input/edit_prompt",
-    "/input/godot_double",
-    "/input/gpu_host",
-    "/input/omnigen2_elf",
-    "/input/omnigen2_mul_mat_elf",
-    "/part/editscore",
-    "/part/omnigen2"
-   ],
-   "goals": [
-    "/image/snapshot"
-   ]
-  }
+  "summary": "The poseswap edit and its score: load the OmniGen2 parts and the EditScore LoRA, merge, edit the snapshot, score the edit."
  },
  "variables": [
   {
@@ -166,7 +142,7 @@
    ],
    "duration": "PT4S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:12Z",
+   "end": "2026-11-15T08:00:17Z",
    "duration_basis": "measured: warm median 3.26 s of 4 runs, rounded up to whole seconds; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
@@ -223,7 +199,7 @@
    ],
    "duration": "PT1S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:01Z",
+   "end": "2026-11-15T08:00:18Z",
    "duration_basis": "measured: warm median 0.097 s of 4 runs, rounded up to whole seconds; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
@@ -319,7 +295,7 @@
    ],
    "duration": "PT1S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:13Z",
+   "end": "2026-11-15T08:00:19Z",
    "duration_basis": "measured: warm median 0.174 s of 4 runs, rounded up to whole seconds; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
@@ -497,7 +473,7 @@
    ],
    "duration": "PT22S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:01:43Z",
+   "end": "2026-11-15T08:01:49Z",
    "duration_basis": "measured: median 21.450000000000003 s per edit over 6 edits (K=4 passes of the Qwen3-VL-8B judge), rounded up; slowest 22.6 s. Excludes the one-time 24.9 s judge load and smoke test, which no action models. end is the deadline when the loads, edit and score all take their slowest run",
    "measured": {
     "runs_s": [
