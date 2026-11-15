@@ -1,0 +1,100 @@
+[workspace]
+name = "3d-character-poseswap"
+channels = ["conda-forge"]
+platforms = ["osx-arm64", "linux-64"]
+
+[dependencies]
+jq = "*"
+git = "*"
+
+# The planner is Lean 4 (interactor-taskweft-persona) and needs elan on PATH.
+[tasks.build-planner]
+description = "Clone and build the persona_plan planner into .planner/"
+cmd = "test -d .planner || git clone --depth 1 https://github.com/V-Sekai-fire/interactor-taskweft-persona.git .planner; cd .planner && lake build persona_plan"
+
+[tasks.aux-goals]
+description = "List the goals and composite methods of the AUX route"
+cmd = "bash tools/aux.sh goals"
+
+[tasks.aux-plan]
+description = "Print the planner's steps for a goal or composite method"
+args = [{ arg = "goal", default = "/aux/rigged" }, { arg = "problem", default = "problems/aux-route-ready.jsonld" }]
+cmd = "bash tools/aux.sh plan {{ goal }} {{ problem }}"
+
+[tasks.aux-run]
+description = "Plan a goal or composite method, then run each step"
+args = [{ arg = "goal", default = "/aux/rigged" }, { arg = "problem", default = "problems/aux-route-ready.jsonld" }]
+cmd = "bash tools/aux.sh run {{ goal }} {{ problem }}"
+
+[tasks.aux-action]
+description = "Run one primitive action"
+args = [{ arg = "name" }]
+cmd = "bash tools/aux.sh action {{ name }}"
+
+[tasks.test-actions]
+description = "Planner unit test: every action has a golden, a control and an invariant, and the measured ranges are checked"
+cmd = "python3 tests/test_actions.py"
+
+[tasks.test-actions-update]
+description = "Rewrite tests/golden/actions.json after an intended change to an action (read the diff)"
+cmd = "python3 tests/test_actions.py --update"
+
+[tasks.set-durations]
+description = "Write the measured durations and their spans into the domain from tests/evidence/"
+cmd = "python3 tools/set_durations.py"
+
+[tasks.aux-today]
+description = "Plan the goal on today's desk; the planner refuses it (exit 3)"
+cmd = "bash tools/aux.sh plan /aux/rigged problems/aux-route-2026-11-15.jsonld"
+
+[tasks.goal-coco-relabelled]
+description = "Composite or goal method /aux/coco_relabelled"
+cmd = "bash tools/aux.sh run /aux/coco_relabelled"
+
+[tasks.goal-synth-set]
+description = "Composite or goal method /aux/synth_set"
+cmd = "bash tools/aux.sh run /aux/synth_set"
+
+[tasks.goal-part-detector]
+description = "Composite or goal method /aux/part_detector"
+cmd = "bash tools/aux.sh run /aux/part_detector"
+
+[tasks.goal-unit-cube-source]
+description = "Composite or goal method /aux/unit_cube_source"
+cmd = "bash tools/aux.sh run /aux/unit_cube_source"
+
+[tasks.goal-scale-sidecar]
+description = "Composite or goal method /aux/scale_sidecar"
+cmd = "bash tools/aux.sh run /aux/scale_sidecar"
+
+[tasks.goal-part-labels]
+description = "Composite or goal method /aux/part_labels"
+cmd = "bash tools/aux.sh run /aux/part_labels"
+
+[tasks.goal-warp-built]
+description = "Composite or goal method /aux/warp_built"
+cmd = "bash tools/aux.sh run /aux/warp_built"
+
+[tasks.goal-motion-lag]
+description = "Composite or goal method /aux/motion_lag"
+cmd = "bash tools/aux.sh run /aux/motion_lag"
+
+[tasks.goal-hair-cards]
+description = "Composite or goal method /aux/hair_cards"
+cmd = "bash tools/aux.sh run /aux/hair_cards"
+
+[tasks.goal-spring-chains]
+description = "Composite or goal method /aux/spring_chains"
+cmd = "bash tools/aux.sh run /aux/spring_chains"
+
+[tasks.goal-rigged]
+description = "Composite or goal method /aux/rigged"
+cmd = "bash tools/aux.sh run /aux/rigged"
+
+[tasks.goal-labelled-parts]
+description = "Composite or goal method /aux/labelled_parts"
+cmd = "bash tools/aux.sh run /aux/labelled_parts"
+
+[tasks.goal-soft-rigid-known]
+description = "Composite or goal method /aux/soft_rigid_known"
+cmd = "bash tools/aux.sh run /aux/soft_rigid_known"

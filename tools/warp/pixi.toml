@@ -1,0 +1,45 @@
+[workspace]
+name = "warp-garmentcode-build"
+channels = ["nvidia", "conda-forge"]
+platforms = ["linux-64"]
+
+# conda-forge CUDA 12.6 packages accept gcc below 13, so the compiler comes from pixi and fedora's own gcc 16 is not used.
+# Python 3.11: newer Python breaks the ast.Str kernel codegen of the Warp fork.
+[dependencies]
+python = "3.11.*"
+numpy = "<2"
+gcc = "12.*"
+gxx = "12.*"
+cuda-nvcc = "12.6.*"
+cuda-cudart-dev = "12.6.*"
+cuda-cudart-static = "12.6.*"
+cuda-nvrtc-dev = "12.6.*"
+cuda-nvrtc-static = "12.6.*"
+# what warp.sim and the GarmentCode driver import
+igl = "*"
+scipy = "*"
+pyyaml = "*"
+trimesh = "*"
+psutil = "*"
+svgpathtools = "*"
+svgwrite = "*"
+matplotlib = "*"
+cairosvg = "*"
+pandas = "*"
+pyrender = "*"   # imported at module scope by pygarment.meshgen.simulation, only its render step needs a display
+libblas = { version = "*", build = "*openblas" }
+
+[tasks.build]
+description = "Build the NvidiaWarp-GarmentCode fork without the LLVM standalone path"
+cwd = "../../../src-warp"
+cmd = "python build_lib.py --no_standalone --cuda_path=$CONDA_PREFIX"
+
+# conda-forge puts the CUDA headers and libraries under targets/x86_64-linux, not include/ and lib64/.
+[activation.env]
+CPATH = "$CONDA_PREFIX/targets/x86_64-linux/include"
+LIBRARY_PATH = "$CONDA_PREFIX/targets/x86_64-linux/lib:$CONDA_PREFIX/targets/x86_64-linux/lib/stubs"
+
+[tasks.check]
+description = "Import warp and warp.sim and list the CUDA device"
+cwd = "../../../src-warp"
+cmd = "python -c \"import warp as wp, warp.sim; wp.init(); print(wp.get_devices(), warp.sim.XPBDIntegrator)\""

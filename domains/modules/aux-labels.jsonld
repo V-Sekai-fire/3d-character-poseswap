@@ -1,0 +1,429 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Module",
+ "name": "aux-labels",
+ "module": {
+  "summary": "Part labels for a garment: relabel the COCO set, make the synthetic set, train the detector, ingest the mesh into USD, unitise, label with Segment, restore units.",
+  "provides": [
+   "/aux/coco_relabelled",
+   "/aux/labelled_parts",
+   "/aux/metric_labels",
+   "/aux/part_detector",
+   "/aux/part_labels",
+   "/aux/scale_sidecar",
+   "/aux/synth_set",
+   "/aux/unit_cube_source",
+   "/aux/usd_stage"
+  ],
+  "requires": {
+   "inputs": [
+    "/input/coco_set",
+    "/input/gcd_drapes",
+    "/input/gpu_host",
+    "/input/segment_weights",
+    "/input/source_mesh"
+   ],
+   "goals": []
+  }
+ },
+ "variables": [
+  {
+   "name": "input",
+   "type": "int",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
+   "init": {
+    "gpu": 0
+   }
+  },
+  {
+   "name": "aux",
+   "type": "int",
+   "description": "1 when a step of the AUX part-labelling and rigging route is done: coco_relabelled, synth_set, part_detector, unit_cube_source, part_labels, warp_built, motion_lag, hair_cards, spring_chains, scale_sidecar; composites labelled_parts, soft_rigid_known and rigged; also usd_stage (the source ingested into OpenUSD in its own units) and metric_labels (Segment's labels put back on the real-size stage by restore-units).",
+   "init": {}
+  }
+ ],
+ "actions": {
+  "relabel-coco": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/coco_set",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/coco_relabelled",
+     "value": 1
+    }
+   ],
+   "duration": "PT10S",
+   "duration_basis": "estimate: a run of the script on fedora finished in seconds, not timed"
+  },
+  "make-synth-set": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gcd_drapes",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/synth_set",
+     "value": 1
+    }
+   ],
+   "duration": "PT8M32S",
+   "duration_basis": "measured: 360 garments on fedora, 2026-11-15"
+  },
+  "train-part-detector": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/coco_relabelled",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/synth_set",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/part_detector",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration": "PT19M24S",
+   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090"
+  },
+  "unitise-source": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/usd_stage",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/unit_cube_source",
+     "value": 1
+    }
+   ],
+   "duration": "PT2S",
+   "duration_basis": "estimate: one mesh; writes the sidecar from the stage's own unit"
+  },
+  "write-scale-sidecar": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/unit_cube_source",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/scale_sidecar",
+     "value": 1
+    }
+   ],
+   "duration": "PT2S",
+   "duration_basis": "estimate: checks the sidecar and the round trip; sidecar-from-height covers a mesh that has no unit"
+  },
+  "segment-labels": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/part_detector",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/unit_cube_source",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/segment_weights",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/part_labels",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration": "PT1M",
+   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps"
+  },
+  "close-labelling": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/metric_labels",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/labelled_parts",
+     "value": 1
+    }
+   ],
+   "duration": "PT0S",
+   "duration_basis": "composite marker"
+  },
+  "ingest-usd": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/source_mesh",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/usd_stage",
+     "value": 1
+    }
+   ],
+   "duration": "PT5S",
+   "duration_basis": "estimate: one garment ingested in a few seconds on the Mac"
+  },
+  "restore-units": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/part_labels",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/scale_sidecar",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/metric_labels",
+     "value": 1
+    }
+   ],
+   "duration": "PT5S",
+   "duration_basis": "estimate: the inverse of unitise-source; refuses when the geometry does not confirm the pairing"
+  }
+ },
+ "methods": {
+  "/aux/coco_relabelled": {
+   "alternatives": [
+    {
+     "name": "relabel-coco",
+     "subtasks": [
+      [
+       "relabel-coco"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/synth_set": {
+   "alternatives": [
+    {
+     "name": "make-synth-set",
+     "subtasks": [
+      [
+       "make-synth-set"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/part_detector": {
+   "alternatives": [
+    {
+     "name": "train-part-detector",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/coco_relabelled"
+      ],
+      [
+       "goal",
+       "/aux/synth_set"
+      ],
+      [
+       "train-part-detector"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/unit_cube_source": {
+   "alternatives": [
+    {
+     "name": "unitise",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/usd_stage"
+      ],
+      [
+       "unitise-source"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/scale_sidecar": {
+   "alternatives": [
+    {
+     "name": "sidecar",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/unit_cube_source"
+      ],
+      [
+       "write-scale-sidecar"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/part_labels": {
+   "alternatives": [
+    {
+     "name": "segment-labels",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/part_detector"
+      ],
+      [
+       "goal",
+       "/aux/unit_cube_source"
+      ],
+      [
+       "segment-labels"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/labelled_parts": {
+   "alternatives": [
+    {
+     "name": "label-parts",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/metric_labels"
+      ],
+      [
+       "close-labelling"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/usd_stage": {
+   "alternatives": [
+    {
+     "name": "ingest",
+     "subtasks": [
+      [
+       "ingest-usd"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/metric_labels": {
+   "alternatives": [
+    {
+     "name": "restore",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/part_labels"
+      ],
+      [
+       "goal",
+       "/aux/scale_sidecar"
+      ],
+      [
+       "restore-units"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

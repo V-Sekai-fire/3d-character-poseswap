@@ -1,0 +1,57 @@
+{
+ "load-qwen25vl-conditioner": {
+  "runs": [
+   4.429,
+   3.346,
+   3.202,
+   3.202,
+   3.142
+  ],
+  "cold": 4.429,
+  "warm_median": 3.202
+ },
+ "load-omnigen2-transformer": {
+  "runs": [
+   11.408,
+   3.257,
+   3.327,
+   3.179,
+   3.262
+  ],
+  "cold": 11.408,
+  "warm_median": 3.26
+ },
+ "load-omnigen2-vae": {
+  "runs": [
+   0.275,
+   0.096,
+   0.097,
+   0.097,
+   0.097
+  ],
+  "cold": 0.275,
+  "warm_median": 0.097
+ },
+ "load-editscore-lora": {
+  "runs": [
+   0.053,
+   0.006,
+   0.006,
+   0.006,
+   0.006
+  ],
+  "cold": 0.053,
+  "warm_median": 0.006
+ },
+ "merge-editscore-lora": {
+  "runs": [
+   0.328,
+   0.172,
+   0.174,
+   0.174,
+   0.174
+  ],
+  "cold": 0.328,
+  "warm_median": 0.174
+ }
+}

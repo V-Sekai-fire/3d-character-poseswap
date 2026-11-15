@@ -24,3 +24,6 @@ library/thumbs/
 library/data/
 garments/img/
 garments/data/
+.planner/
+out/
+.pixi/

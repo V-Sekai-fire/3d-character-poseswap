@@ -1,0 +1,240 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Module",
+ "name": "aux-motion",
+ "module": {
+  "summary": "Which parts are soft and which rigid: build Warp, measure motion lag and classify, or, when no body clip or drape is on hand, classify from the class prior.",
+  "provides": [
+   "/aux/motion_lag",
+   "/aux/soft_rigid_known",
+   "/aux/soft_rigid_prior_only",
+   "/aux/warp_built"
+  ],
+  "requires": {
+   "inputs": [
+    "/input/body_motion_clip",
+    "/input/gcd_drapes",
+    "/input/gpu_host",
+    "/input/host_cxx_ok"
+   ],
+   "goals": [
+    "/aux/labelled_parts",
+    "/aux/part_labels"
+   ]
+  }
+ },
+ "variables": [
+  {
+   "name": "input",
+   "type": "int",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
+   "init": {
+    "gpu": 0
+   }
+  },
+  {
+   "name": "aux",
+   "type": "int",
+   "description": "1 when a step of the AUX part-labelling and rigging route is done: coco_relabelled, synth_set, part_detector, unit_cube_source, part_labels, warp_built, motion_lag, hair_cards, spring_chains, scale_sidecar; composites labelled_parts, soft_rigid_known and rigged; also usd_stage (the source ingested into OpenUSD in its own units) and metric_labels (Segment's labels put back on the real-size stage by restore-units).",
+   "init": {}
+  }
+ ],
+ "actions": {
+  "build-warp": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/host_cxx_ok",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/warp_built",
+     "value": 1
+    }
+   ],
+   "duration": "PT30M",
+   "duration_basis": "estimate: not built yet; blocked on the host compiler"
+  },
+  "measure-motion-lag": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/part_labels",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/warp_built",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/body_motion_clip",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gcd_drapes",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/motion_lag",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration": "PT1H",
+   "duration_basis": "estimate: not built yet"
+  },
+  "classify-soft-rigid": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/labelled_parts",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/motion_lag",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/soft_rigid_known",
+     "value": 1
+    }
+   ],
+   "duration": "PT1S",
+   "duration_basis": "estimate"
+  },
+  "classify-by-class-prior": {
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/labelled_parts",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/soft_rigid_known",
+     "value": 1
+    },
+    {
+     "pointer/set": "/aux/soft_rigid_prior_only",
+     "value": 1
+    }
+   ],
+   "duration": "PT1S",
+   "duration_basis": "measured: tools/classify_prior.py over the 7-class count table ran in 0.02 s on the Mac, rounded up. It decides soft, rigid or parent for the classes whose prior covers 80% of their annotations and leaves Collar and Sleeve as measure: only the lag measurement settles those",
+   "measured": {
+    "runs_s": [
+     0.02
+    ],
+    "host": "this Mac, tools/classify_prior.py"
+   }
+  }
+ },
+ "methods": {
+  "/aux/warp_built": {
+   "alternatives": [
+    {
+     "name": "build-warp",
+     "subtasks": [
+      [
+       "build-warp"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/motion_lag": {
+   "alternatives": [
+    {
+     "name": "measure-lag",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/part_labels"
+      ],
+      [
+       "goal",
+       "/aux/warp_built"
+      ],
+      [
+       "measure-motion-lag"
+      ]
+     ]
+    }
+   ]
+  },
+  "/aux/soft_rigid_known": {
+   "alternatives": [
+    {
+     "name": "decide-soft-or-rigid",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/labelled_parts"
+      ],
+      [
+       "goal",
+       "/aux/motion_lag"
+      ],
+      [
+       "classify-soft-rigid"
+      ]
+     ]
+    },
+    {
+     "name": "decide-by-class-prior",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/labelled_parts"
+      ],
+      [
+       "classify-by-class-prior"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

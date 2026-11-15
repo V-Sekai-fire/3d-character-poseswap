@@ -1,0 +1,158 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Problem",
+ "name": "aux_route_2026_11_15_problem",
+ "domain": "presence_edit",
+ "source": "3d-character-poseswap",
+ "version": "0.1.0",
+ "description": "The desk of 2026-11-15 with the goal of rigged AUX parts. It is refused: fedora's gcc 16 is past what CUDA 12.4 accepts (gcc 13 is the limit), so the Warp fork is not built, and no body motion clip is on hand to measure motion lag. The COCO set, the GarmentCode drapes, the Segment weights, the verified SAM 3 and DINOv3 weights and a portrait are on hand.",
+ "variables": [
+  {
+   "name": "part",
+   "type": "int",
+   "init": {
+    "packets": 1,
+    "zone_router": 1,
+    "zone_relay": 1,
+    "observer": 1,
+    "curve": 1,
+    "replica": 1,
+    "anny_follow": 1,
+    "presence_gates": 1,
+    "muscle_drive_release": 1,
+    "anny_fit": 1,
+    "omnigen2": 1,
+    "editscore": 1
+   }
+  },
+  {
+   "name": "input",
+   "type": "int",
+   "init": {
+    "godot_double": 1,
+    "packet_golden": 1,
+    "mujoco_elf": 1,
+    "clips": 0,
+    "anny_glb": 0,
+    "soma_pheno": 0,
+    "anny_fit_elf": 0,
+    "omnigen2_mul_mat_elf": 0,
+    "omnigen2_elf": 0,
+    "gpu_host": 1,
+    "edit_prompt": 1,
+    "coco_set": 1,
+    "gcd_drapes": 1,
+    "source_mesh": 1,
+    "body_height_prior": 1,
+    "segment_weights": 1,
+    "portrait": 1,
+    "sam3_dinov3_verified": 1,
+    "host_cxx_ok": 0,
+    "body_motion_clip": 0,
+    "gpu": 1
+   }
+  },
+  {
+   "name": "switch",
+   "type": "int",
+   "init": {
+    "replica": 0
+   }
+  },
+  {
+   "name": "bypass",
+   "type": "int",
+   "init": {
+    "replica": 1
+   }
+  },
+  {
+   "name": "model",
+   "type": "int",
+   "init": {
+    "qwen25vl_conditioner": 0,
+    "omnigen2_transformer": 0,
+    "omnigen2_vae": 0,
+    "editscore_lora": 0,
+    "editscore_merged": 0
+   }
+  },
+  {
+   "name": "body",
+   "type": "int",
+   "init": {
+    "packet": 0,
+    "routed": 0,
+    "sealed": 0,
+    "judged": 0,
+    "agreed": 0,
+    "played": 0
+   }
+  },
+  {
+   "name": "avatar",
+   "type": "int",
+   "init": {
+    "fitted": 0,
+    "posed": 0
+   }
+  },
+  {
+   "name": "op",
+   "type": "int",
+   "init": {
+    "mul_mat": 0
+   }
+  },
+  {
+   "name": "image",
+   "type": "int",
+   "init": {
+    "snapshot": 0,
+    "edited": 0,
+    "scored": 0
+   }
+  },
+  {
+   "name": "aux",
+   "type": "int",
+   "init": {
+    "coco_relabelled": 0,
+    "synth_set": 0,
+    "part_detector": 0,
+    "unit_cube_source": 0,
+    "scale_sidecar": 0,
+    "part_labels": 0,
+    "warp_built": 0,
+    "motion_lag": 0,
+    "hair_cards": 0,
+    "spring_chains": 0,
+    "labelled_parts": 0,
+    "soft_rigid_known": 0,
+    "rigged": 0,
+    "usd_stage": 0,
+    "metric_labels": 0
+   }
+  }
+ ],
+ "capabilities": {
+  "entities": {},
+  "graph": {
+   "edges": []
+  }
+ },
+ "todo_list": [
+  {
+   "goal": [
+    {
+     "pointer": "/aux/rigged",
+     "eq": 1
+    }
+   ]
+  }
+ ],
+ "origin": "2026-11-15T08:00:00Z"
+}
