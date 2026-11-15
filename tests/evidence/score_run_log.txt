@@ -1,0 +1,13 @@
+tasks 40 keys ['id', 'source', 'garment_id', 'garment_cat', 'instruction']
+files 41 ['AUT-0033__fd369856da3.webp', 'AUT-0076__fb3719d7466.webp']
+picked 6
+24.9 SMOKE unchanged source: prompt_following=0.00 consistency=10.00 overall=0.00
+24.9 SET set todo=6
+45.7 SCORE set 1/6 SXY-0113__f8938dff7f9 avg_overall=9.20
+67.5 SCORE set 2/6 SXY-0122__fd4bf4ba6d3 avg_overall=7.66
+86.9 SCORE set 3/6 SXY-0015__f196fb19b74 avg_overall=9.25
+109.5 SCORE set 4/6 SXY-0078__f7c34a124c2 avg_overall=8.88
+130.6 SCORE set 5/6 SXY-0149__f7f25335c7c avg_overall=8.90
+152.7 SCORE set 6/6 PTY-0043__f8076a1ba2b avg_overall=8.68
+152.7 SCORE-OK
+WALL 154 s

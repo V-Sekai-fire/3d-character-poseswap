@@ -103,7 +103,7 @@
    "duration": "PT4S",
    "start": "2026-11-15T08:00:00Z",
    "end": "2026-11-15T08:00:05Z",
-   "duration_basis": "measured: warm median 3.202 s of 4 runs, rounded up to whole seconds; slowest run 4.429 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "duration_basis": "measured: warm median 3.202 s of 4 runs, rounded up to whole seconds; slowest run 4.429 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      4.429,
@@ -115,7 +115,8 @@
     "cold_s": 4.429,
     "warm_median_s": 3.202,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "resource": "gpu"
   },
   "load-omnigen2-transformer": {
    "params": [],
@@ -149,7 +150,7 @@
    "duration": "PT4S",
    "start": "2026-11-15T08:00:00Z",
    "end": "2026-11-15T08:00:12Z",
-   "duration_basis": "measured: warm median 3.26 s of 4 runs, rounded up to whole seconds; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "duration_basis": "measured: warm median 3.26 s of 4 runs, rounded up to whole seconds; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      11.408,
@@ -161,7 +162,8 @@
     "cold_s": 11.408,
     "warm_median_s": 3.26,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "resource": "gpu"
   },
   "load-omnigen2-vae": {
    "params": [],
@@ -195,7 +197,7 @@
    "duration": "PT1S",
    "start": "2026-11-15T08:00:00Z",
    "end": "2026-11-15T08:00:01Z",
-   "duration_basis": "measured: warm median 0.097 s of 4 runs, rounded up to whole seconds; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "duration_basis": "measured: warm median 0.097 s of 4 runs, rounded up to whole seconds; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      0.275,
@@ -207,7 +209,8 @@
     "cold_s": 0.275,
     "warm_median_s": 0.097,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "resource": "gpu"
   },
   "load-editscore-lora": {
    "params": [],
@@ -241,7 +244,7 @@
    "duration": "PT1S",
    "start": "2026-11-15T08:00:00Z",
    "end": "2026-11-15T08:00:01Z",
-   "duration_basis": "measured: warm median 0.006 s of 4 runs, rounded up to whole seconds; slowest run 0.053 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "duration_basis": "measured: warm median 0.006 s of 4 runs, rounded up to whole seconds; slowest run 0.053 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      0.053,
@@ -280,7 +283,7 @@
    "duration": "PT1S",
    "start": "2026-11-15T08:00:00Z",
    "end": "2026-11-15T08:00:13Z",
-   "duration_basis": "measured: warm median 0.174 s of 4 runs, rounded up to whole seconds; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the load group takes its slowest run, so the span covers every run measured",
+   "duration_basis": "measured: warm median 0.174 s of 4 runs, rounded up to whole seconds; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      0.328,
@@ -292,7 +295,8 @@
     "cold_s": 0.328,
     "warm_median_s": 0.174,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "resource": "gpu"
   },
   "fetch-clips": {
    "params": [],
@@ -776,7 +780,8 @@
      67.0
     ],
     "host": "fedora, RTX 4090 (baseline.log, one run)"
-   }
+   },
+   "resource": "gpu"
   },
   "score": {
    "params": [],
@@ -813,7 +818,24 @@
      "pointer/set": "/image/scored",
      "value": 1
     }
-   ]
+   ],
+   "resource": "gpu",
+   "duration": "PT22S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:01:43Z",
+   "duration_basis": "measured: median 21.450000000000003 s per edit over 6 edits (K=4 passes of the Qwen3-VL-8B judge), rounded up; slowest 22.6 s. Excludes the one-time 24.9 s judge load and smoke test, which no action models. end is the deadline when the loads, edit and score all take their slowest run",
+   "measured": {
+    "runs_s": [
+     20.8,
+     21.8,
+     19.4,
+     22.6,
+     21.1,
+     22.1
+    ],
+    "judge_load_and_smoke_s": 24.9,
+    "host": "fedora, RTX 4090, 6 edits of bf16-lora, tools/measure/time_score.sh, 2026-11-15"
+   }
   },
   "relabel-coco": {
    "params": [],
@@ -888,7 +910,8 @@
     }
    ],
    "duration": "PT19M24S",
-   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090"
+   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090",
+   "resource": "gpu"
   },
   "unitise-source": {
    "params": [],
@@ -963,7 +986,8 @@
     }
    ],
    "duration": "PT1M",
-   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps"
+   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps",
+   "resource": "gpu"
   },
   "build-warp": {
    "params": [],
@@ -1027,7 +1051,8 @@
     }
    ],
    "duration": "PT1H",
-   "duration_basis": "estimate: not built yet"
+   "duration_basis": "estimate: not built yet",
+   "resource": "gpu"
   },
   "make-hair-cards": {
    "params": [],

@@ -102,33 +102,36 @@ def run_tests(only=None, update=False):
     # ---- ranges: actions timed over several runs carry duration (typical), start (release) and end (deadline) = a span the planner checks
     ev_path = f"{ROOT}/tests/evidence/load_times.json"
     if not only and os.path.exists(ev_path):
-        ev = json.load(open(ev_path)); grp = list(ev); a = domain["actions"]
+        ev = json.load(open(ev_path)); loads = list(ev); sc = json.load(open(f"{ROOT}/tests/evidence/score_times.json"))["score"]; ev["score"] = {"runs": sc["runs"]}
+        grp = list(ev); chain = loads + ["edit", "score"]; a = domain["actions"]      # score runs behind edit, which runs behind the loads
         iso = lambda x: "PT" + (f"{x // 3600}H" if x >= 3600 else "") + (f"{x % 3600 // 60}M" if x % 3600 >= 60 else "") + (f"{x % 60}S" if x % 60 or x == 0 else "")
-        pre = {b["eval"]["pointer"] for k in grp for b in a[k]["body"] if "eval" in b} - {b["pointer/set"] for k in grp for b in a[k]["body"] if "pointer/set" in b}
+        pre = {b["eval"]["pointer"] for k in chain for b in a[k]["body"] if "eval" in b} - {b["pointer/set"] for k in chain for b in a[k]["body"] if "pointer/set" in b}
         def group(durs):
             dd = copy.deepcopy(domain)
             for k, x in durs.items(): dd["actions"][k]["duration"] = iso(x)
-            return plan(problem([(q, 1) for q in pre], [[k] for k in grp]), dd)[2]
+            return plan(problem([(q, 1) for q in pre], [[k] for k in chain]), dd)[2]
         def ends(out):
             f = {}
             for st in out["steps"]: f.setdefault(st["action"], st)
             return {k: int((stamp(v["end"]) - stamp(ORIGIN)).total_seconds()) for k, v in f.items()}
         import math, statistics
-        nom = {k: math.ceil(statistics.median(v["runs"][1:])) for k, v in ev.items()}; slow = {k: math.ceil(max(v["runs"])) for k, v in ev.items()}; fast = {k: math.ceil(min(v["runs"])) for k, v in ev.items()}
+        warm = lambda k: ev[k]["runs"] if k == "score" else ev[k]["runs"][1:]          # the judge was loaded once, so every score run is warm; a load's first run is cold
+        nom = {k: math.ceil(statistics.median(warm(k))) for k in ev}; slow = {k: math.ceil(max(v["runs"])) for k, v in ev.items()}; fast = {k: math.ceil(min(v["runs"])) for k, v in ev.items()}
         for k in grp:
             check(a[k]["measured"]["runs_s"] == ev[k]["runs"], f"{k}: RANGE GOLDEN the runs in the domain are the runs in tests/evidence/load_times.json")
-            check(secs(a[k]["duration"]) == nom[k], f"{k}: RANGE GOLDEN duration {a[k]['duration']} is the warm median ({statistics.median(ev[k]['runs'][1:])} s) rounded up")
-            check(secs(a[k]["duration"]) >= statistics.median(ev[k]["runs"][1:]) and secs(a[k]["duration"]) <= slow[k], f"{k}: RANGE INVARIANT the typical duration lies inside the measured range")
+            check(secs(a[k]["duration"]) == nom[k], f"{k}: RANGE GOLDEN duration {a[k]['duration']} is the warm median ({statistics.median(warm(k))} s) rounded up")
+            check(secs(a[k]["duration"]) >= statistics.median(warm(k)) and secs(a[k]["duration"]) <= slow[k], f"{k}: RANGE INVARIANT the typical duration lies inside the measured range")
             check(a[k]["start"] == ORIGIN, f"{k}: RANGE GOLDEN the span starts at the origin (the release time)")
         out_slow = group(slow); dead = ends(out_slow)
         for k in grp: check(int((stamp(a[k]["end"]) - stamp(ORIGIN)).total_seconds()) == dead[k], f"{k}: RANGE GOLDEN the deadline {a[k]['end']} is the earliest end when every action takes its slowest run ({dead[k]} s)")
         o_nom, o_fast = group(nom), group(fast)
+        check(slow["score"] == math.ceil(max(sc["runs"])) and sc["judge_load_and_smoke_s"] > max(sc["runs"]), "score: RANGE INVARIANT the one-time judge load (24.9 s) is kept out of the per-edit duration and is longer than any edit")
         check(group({})["temporal"]["consistent"] and o_nom["temporal"]["consistent"] and o_fast["temporal"]["consistent"] and out_slow["temporal"]["consistent"], "RANGE INVARIANT the group is consistent at the typical, the fastest and the slowest run")
         tf, tn, ts = (secs(o["temporal"]["total"]) for o in (o_fast, o_nom, out_slow)); check(tf <= tn <= ts, f"RANGE INVARIANT the group total grows with the durations: fastest {tf:g} s <= typical {tn:g} s <= slowest {ts:g} s")
         for k in grp:
             late = dict(slow); late[k] = slow[k] + 1; o = group(late)
             check(o.get("temporal", {}).get("consistent") is False, f"{k}: RANGE CONTROL one second slower than its slowest measured run makes the plan inconsistent")
-        check(sum(statistics.median(v["runs"][1:]) for v in ev.values()) <= 7.0 + 0.5, "RANGE INVARIANT the five warm medians add to no more than the 7.0 s the whole load took in baseline.log (+0.5 s)")
+        check(sum(statistics.median(ev[k]["runs"][1:]) for k in loads) <= 7.0 + 0.5, "RANGE INVARIANT the five warm medians of the loads add to no more than the 7.0 s the whole load took in baseline.log (+0.5 s)")
         sec = float(open(f"{ROOT}/tests/evidence/baseline_log_lines.txt").read().split("EDIT-OK")[1].split("seconds=")[1].split()[0])
         check(secs(a["edit"]["duration"]) == math.ceil(sec), f"edit: GOLDEN duration {a['edit']['duration']} is the {sec} s logged in baseline.log, rounded up")
     bad = [l for ok, l in results if not ok]; print(f"---- {len(results) - len(bad)} passed, {len(bad)} failed, {len(new)} actions")

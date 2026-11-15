@@ -81,6 +81,7 @@ Measured on fedora (RTX 4090, 2026-11-15, 5 runs each, the first cold from disk;
 | `load-omnigen2-vae` | PT1S (0.10 s) | 0.28 s | 1 s |
 | `load-editscore-lora` | PT1S (0.006 s) | 0.05 s | 1 s |
 | `merge-editscore-lora` | PT1S (0.17 s) | 0.33 s | 13 s (after the transformer) |
+| `score` | PT22S per edit (median of 6: 19.4 to 22.6 s) | 22.6 s | 1 min 43 s (after the loads and `edit`) |
 | `edit` | PT1M7S | one sample, no range | none |
 
 The warm medians add to 6.74 s against the 7.0 s the whole load took in `baseline.log`, which includes moving the pipeline to the GPU. A run one second slower than the slowest measured run makes the plan inconsistent, and the test checks that it does.
@@ -97,6 +98,6 @@ Planted faults the test catches: a tampered golden, a changed duration, a droppe
 
 ### What the test found
 
-- **14 actions still have no duration.** These are `fetch-clips`, `encode-packets`, `route-model`, `route-relay`, `seal-and-take`, `judge`, `agree`, `skip-agree`, `play-curve`, `check-mul-mat`, `fit-anny`, `follow`, `snapshot` and `score`. No log of a timed run exists for them here, so none was invented; each fails 2 checks until it is measured. They need a timed run, then a span in `tests/evidence/`.
+- **13 actions still have no duration:** `fetch-clips`, `encode-packets`, `route-model`, `route-relay`, `seal-and-take`, `judge`, `agree`, `skip-agree`, `play-curve`, `check-mul-mat`, `fit-anny`, `follow` and `snapshot`. They belong to the presence-slice gates (Godot guests and the clip fetch), which have not run here since the guests were rebuilt, so no timed run exists. None was invented; each fails 2 checks until it is measured.
 - **A repeated step is listed twice, not run twice.** Asking for `[ingest-usd, ingest-usd]` returns two rows, both 08:00:00 to 08:00:05. The planner lists a step once with its earliest times and again with its latest times, so the second row is the latest window of the same step, and the total stays PT5S. An earlier note in this session called this an overlap of two copies, which was wrong. The window is the planner's own range output.
-- **The schedule does not know about the single GPU.** Independent steps overlap. The domain has no resource constraint, so the total of the AUX plan is a lower bound while GPU actions share one card.
+- **The schedule does not know about the single GPU, and `tools/serialise.py` covers it.** Independent steps overlap in the planner's schedule. Actions that hold the card carry `"resource": "gpu"` (the planner ignores the key), and `tools/serialise.py <domain> <plan>` starts each step only after the previous step on the same resource and after the steps that set what it needs. For the AUX route the answer is the same, 5461 s: its GPU steps (train, segment, lag) already depend on one another. For the OmniGen2 load group the planner says 5 s and the serial total is 10 s, because three loads overlap on one card. `tests/test_resources.py` holds the golden, control and invariant for both.

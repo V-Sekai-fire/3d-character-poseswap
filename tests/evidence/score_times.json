@@ -1,0 +1,16 @@
+{
+ "score": {
+  "runs": [
+   20.8,
+   21.8,
+   19.4,
+   22.6,
+   21.1,
+   22.1
+  ],
+  "judge_load_and_smoke_s": 24.9,
+  "unit": "seconds per edit (K=4 passes of the Qwen3-VL-8B judge)",
+  "host": "fedora, RTX 4090, 6 edits of bf16-lora, tools/measure/time_score.sh, 2026-11-15",
+  "source": "tests/evidence/score_run_log.txt"
+ }
+}

@@ -541,7 +541,7 @@
    "out": "unknown action: score",
    "rc": 64
   },
-  "duration": null,
+  "duration": "PT22S",
   "effects": [
    "/image/scored"
   ],
@@ -554,8 +554,8 @@
    "/input/gpu_host",
    "/image/edited"
   ],
-  "total": null,
-  "twice_total": "PT0S"
+  "total": "PT22S",
+  "twice_total": "PT22S"
  },
  "seal-and-take": {
   "command": {
