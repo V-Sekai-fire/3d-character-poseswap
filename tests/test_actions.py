@@ -35,10 +35,21 @@ def spec(name):
         else: other.append(b)
     return pre, eff, other, a.get("duration"), a.get("duration_basis", "")
 
+def declare(p, ptr, val=0):
+    """The planner refuses a fact the problem does not state, so every fact an action reads or sets is declared, at 0 unless told."""
+    _, grp, key = ptr.split("/")
+    g = next((v for v in p["variables"] if v["name"] == grp), None)
+    if g is None: g = {"name": grp, "type": "int", "init": {}}; p["variables"].append(g)
+    g["init"].setdefault(key, val)
+
 def problem(true_ptrs, tasks):
     p = copy.deepcopy(base); p["todo_list"] = tasks
     for v in p["variables"]:
         for k in v["init"]: v["init"][k] = 0
+    for a in domain["actions"].values():
+        for b in a["body"]:
+            if "eval" in b: declare(p, b["eval"]["pointer"])
+            elif "pointer/set" in b: declare(p, b["pointer/set"])
     for ptr, val in true_ptrs:
         _, grp, key = ptr.split("/"); g = next(v for v in p["variables"] if v["name"] == grp); g["init"][key] = val
     return p
