@@ -105,7 +105,7 @@ def run_tests(only=None, update=False):
         ev = json.load(open(ev_path)); loads = list(ev); sc = json.load(open(f"{ROOT}/tests/evidence/score_times.json"))["score"]; ev["score"] = {"runs": sc["runs"]}
         grp = list(ev); chain = loads + ["edit", "score"]; a = domain["actions"]      # score runs behind edit, which runs behind the loads
         iso = lambda x: "PT" + (f"{x // 3600}H" if x >= 3600 else "") + (f"{x % 3600 // 60}M" if x % 3600 >= 60 else "") + (f"{x % 60}S" if x % 60 or x == 0 else "")
-        pre = {b["eval"]["pointer"] for k in chain for b in a[k]["body"] if "eval" in b} - {b["pointer/set"] for k in chain for b in a[k]["body"] if "pointer/set" in b}
+        pre = ({b["eval"]["pointer"] for k in chain for b in a[k]["body"] if "eval" in b} - {b["pointer/set"] for k in chain for b in a[k]["body"] if "pointer/set" in b}) | {"/input/gpu"}   # the desk states its GPU; every GPU action reads and re-sets it
         def group(durs):
             dd = copy.deepcopy(domain)
             for k, x in durs.items(): dd["actions"][k]["duration"] = iso(x)

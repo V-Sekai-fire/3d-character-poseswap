@@ -51,7 +51,8 @@
     "portrait": 1,
     "sam3_dinov3_verified": 1,
     "host_cxx_ok": 1,
-    "body_motion_clip": 1
+    "body_motion_clip": 1,
+    "gpu": 1
    }
   },
   {

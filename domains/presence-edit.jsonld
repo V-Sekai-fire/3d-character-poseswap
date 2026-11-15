@@ -19,7 +19,9 @@
    "name": "input",
    "type": "int",
    "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
-   "init": {}
+   "init": {
+    "gpu": 0
+   }
   },
   {
    "name": "switch",
@@ -77,6 +79,13 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/part/omnigen2",
       "value": 1
      }
@@ -98,6 +107,10 @@
     {
      "pointer/set": "/model/qwen25vl_conditioner",
      "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
     }
    ],
    "duration": "PT4S",
@@ -115,12 +128,18 @@
     "cold_s": 4.429,
     "warm_median_s": 3.202,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   },
-   "resource": "gpu"
+   }
   },
   "load-omnigen2-transformer": {
    "params": [],
    "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
     {
      "eval": {
       "type": "pointer/ge",
@@ -145,11 +164,15 @@
     {
      "pointer/set": "/model/omnigen2_transformer",
      "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
     }
    ],
    "duration": "PT4S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:12Z",
+   "end": "2026-11-15T08:00:17Z",
    "duration_basis": "measured: warm median 3.26 s of 4 runs, rounded up to whole seconds; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
@@ -162,12 +185,18 @@
     "cold_s": 11.408,
     "warm_median_s": 3.26,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   },
-   "resource": "gpu"
+   }
   },
   "load-omnigen2-vae": {
    "params": [],
    "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
     {
      "eval": {
       "type": "pointer/ge",
@@ -192,11 +221,15 @@
     {
      "pointer/set": "/model/omnigen2_vae",
      "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
     }
    ],
    "duration": "PT1S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:01Z",
+   "end": "2026-11-15T08:00:18Z",
    "duration_basis": "measured: warm median 0.097 s of 4 runs, rounded up to whole seconds; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
@@ -209,8 +242,7 @@
     "cold_s": 0.275,
     "warm_median_s": 0.097,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   },
-   "resource": "gpu"
+   }
   },
   "load-editscore-lora": {
    "params": [],
@@ -264,6 +296,13 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/model/omnigen2_transformer",
       "value": 1
      }
@@ -278,11 +317,15 @@
     {
      "pointer/set": "/model/editscore_merged",
      "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
     }
    ],
    "duration": "PT1S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:13Z",
+   "end": "2026-11-15T08:00:19Z",
    "duration_basis": "measured: warm median 0.174 s of 4 runs, rounded up to whole seconds; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
@@ -295,8 +338,7 @@
     "cold_s": 0.328,
     "warm_median_s": 0.174,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   },
-   "resource": "gpu"
+   }
   },
   "fetch-clips": {
    "params": [],
@@ -715,6 +757,13 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/image/snapshot",
       "value": 1
      }
@@ -771,6 +820,10 @@
     {
      "pointer/set": "/image/edited",
      "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
     }
    ],
    "duration": "PT1M7S",
@@ -780,12 +833,18 @@
      67.0
     ],
     "host": "fedora, RTX 4090 (baseline.log, one run)"
-   },
-   "resource": "gpu"
+   }
   },
   "score": {
    "params": [],
    "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
     {
      "eval": {
       "type": "pointer/ge",
@@ -817,12 +876,15 @@
     {
      "pointer/set": "/image/scored",
      "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
     }
    ],
-   "resource": "gpu",
    "duration": "PT22S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:01:43Z",
+   "end": "2026-11-15T08:01:49Z",
    "duration_basis": "measured: median 21.450000000000003 s per edit over 6 edits (K=4 passes of the Qwen3-VL-8B judge), rounded up; slowest 22.6 s. Excludes the one-time 24.9 s judge load and smoke test, which no action models. end is the deadline when the loads, edit and score all take their slowest run",
    "measured": {
     "runs_s": [
@@ -886,6 +948,13 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/aux/coco_relabelled",
       "value": 1
      }
@@ -907,11 +976,14 @@
     {
      "pointer/set": "/aux/part_detector",
      "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
     }
    ],
    "duration": "PT19M24S",
-   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090",
-   "resource": "gpu"
+   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090"
   },
   "unitise-source": {
    "params": [],
@@ -955,6 +1027,13 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/aux/part_detector",
       "value": 1
      }
@@ -983,11 +1062,14 @@
     {
      "pointer/set": "/aux/part_labels",
      "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
     }
    ],
    "duration": "PT1M",
-   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps",
-   "resource": "gpu"
+   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps"
   },
   "build-warp": {
    "params": [],
@@ -1020,6 +1102,13 @@
     {
      "eval": {
       "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
       "pointer": "/aux/part_labels",
       "value": 1
      }
@@ -1048,11 +1137,14 @@
     {
      "pointer/set": "/aux/motion_lag",
      "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
     }
    ],
    "duration": "PT1H",
-   "duration_basis": "estimate: not built yet",
-   "resource": "gpu"
+   "duration_basis": "estimate: not built yet"
   },
   "make-hair-cards": {
    "params": [],
@@ -1178,6 +1270,33 @@
    ],
    "duration": "PT1S",
    "duration_basis": "estimate"
+  },
+  "classify-by-class-prior": {
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/aux/labelled_parts",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/aux/soft_rigid_known",
+     "value": 1
+    },
+    {
+     "pointer/set": "/aux/soft_rigid_prior_only",
+     "value": 1
+    }
+   ],
+   "duration": "PT1S",
+   "duration_basis": "measured: tools/classify_prior.py over the 7-class count table ran in 0.02 s on the Mac, rounded up. It decides soft, rigid or parent for the classes whose prior covers 80% of their annotations and leaves Collar and Sleeve as measure: only the lag measurement settles those",
+   "measured": {
+    "runs_s": [
+     0.02
+    ],
+    "host": "this Mac, tools/classify_prior.py"
+   }
   },
   "ingest-usd": {
    "params": [],
@@ -1745,6 +1864,18 @@
        "classify-soft-rigid"
       ]
      ]
+    },
+    {
+     "name": "decide-by-class-prior",
+     "subtasks": [
+      [
+       "goal",
+       "/aux/labelled_parts"
+      ],
+      [
+       "classify-by-class-prior"
+      ]
+     ]
     }
    ]
   },
@@ -1780,5 +1911,13 @@
     }
    ]
   }
- }
+ },
+ "composed_from": [
+  "presence-body",
+  "presence-avatar",
+  "omnigen2-edit",
+  "aux-labels",
+  "aux-motion",
+  "aux-rig"
+ ]
 }

@@ -58,6 +58,25 @@
   "total": null,
   "twice_total": "PT0S"
  },
+ "classify-by-class-prior": {
+  "command": {
+   "out": "unknown action: classify-by-class-prior",
+   "rc": 64
+  },
+  "duration": "PT1S",
+  "effects": [
+   "/aux/soft_rigid_known",
+   "/aux/soft_rigid_prior_only"
+  ],
+  "plan": [
+   "classify-by-class-prior"
+  ],
+  "preconditions": [
+   "/aux/labelled_parts"
+  ],
+  "total": "PT1S",
+  "twice_total": "PT1S"
+ },
  "classify-soft-rigid": {
   "command": {
    "out": "action classify-soft-rigid has no command yet: needs the measured lag and a threshold",
@@ -102,12 +121,14 @@
   },
   "duration": "PT1M7S",
   "effects": [
-   "/image/edited"
+   "/image/edited",
+   "/input/gpu"
   ],
   "plan": [
    "edit"
   ],
   "preconditions": [
+   "/input/gpu",
    "/image/snapshot",
    "/input/edit_prompt",
    "/input/gpu_host",
@@ -269,12 +290,14 @@
   },
   "duration": "PT4S",
   "effects": [
-   "/model/omnigen2_transformer"
+   "/model/omnigen2_transformer",
+   "/input/gpu"
   ],
   "plan": [
    "load-omnigen2-transformer"
   ],
   "preconditions": [
+   "/input/gpu",
    "/part/omnigen2",
    "/input/omnigen2_elf",
    "/input/gpu_host"
@@ -289,12 +312,14 @@
   },
   "duration": "PT1S",
   "effects": [
-   "/model/omnigen2_vae"
+   "/model/omnigen2_vae",
+   "/input/gpu"
   ],
   "plan": [
    "load-omnigen2-vae"
   ],
   "preconditions": [
+   "/input/gpu",
    "/part/omnigen2",
    "/input/omnigen2_elf",
    "/input/gpu_host"
@@ -309,12 +334,14 @@
   },
   "duration": "PT4S",
   "effects": [
-   "/model/qwen25vl_conditioner"
+   "/model/qwen25vl_conditioner",
+   "/input/gpu"
   ],
   "plan": [
    "load-qwen25vl-conditioner"
   ],
   "preconditions": [
+   "/input/gpu",
    "/part/omnigen2",
    "/input/omnigen2_elf",
    "/input/gpu_host"
@@ -386,12 +413,14 @@
   },
   "duration": "PT1H",
   "effects": [
-   "/aux/motion_lag"
+   "/aux/motion_lag",
+   "/input/gpu"
   ],
   "plan": [
    "measure-motion-lag"
   ],
   "preconditions": [
+   "/input/gpu",
    "/aux/part_labels",
    "/aux/warp_built",
    "/input/body_motion_clip",
@@ -407,12 +436,14 @@
   },
   "duration": "PT1S",
   "effects": [
-   "/model/editscore_merged"
+   "/model/editscore_merged",
+   "/input/gpu"
   ],
   "plan": [
    "merge-editscore-lora"
   ],
   "preconditions": [
+   "/input/gpu",
    "/model/omnigen2_transformer",
    "/model/editscore_lora"
   ],
@@ -543,12 +574,14 @@
   },
   "duration": "PT22S",
   "effects": [
-   "/image/scored"
+   "/image/scored",
+   "/input/gpu"
   ],
   "plan": [
    "score"
   ],
   "preconditions": [
+   "/input/gpu",
    "/part/editscore",
    "/input/omnigen2_elf",
    "/input/gpu_host",
@@ -584,12 +617,14 @@
   },
   "duration": "PT1M",
   "effects": [
-   "/aux/part_labels"
+   "/aux/part_labels",
+   "/input/gpu"
   ],
   "plan": [
    "segment-labels"
   ],
   "preconditions": [
+   "/input/gpu",
    "/aux/part_detector",
    "/aux/unit_cube_source",
    "/input/segment_weights",
@@ -644,12 +679,14 @@
   },
   "duration": "PT19M24S",
   "effects": [
-   "/aux/part_detector"
+   "/aux/part_detector",
+   "/input/gpu"
   ],
   "plan": [
    "train-part-detector"
   ],
   "preconditions": [
+   "/input/gpu",
    "/aux/coco_relabelled",
    "/aux/synth_set",
    "/input/gpu_host"
