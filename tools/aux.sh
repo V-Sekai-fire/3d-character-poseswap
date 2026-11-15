@@ -35,7 +35,7 @@ action() {
     write-scale-sidecar) todo "$1" "the scale of one garment was written by hand to unit_frame.json; no code writes it" ;;
     segment-labels)      gpu "$A3D $REPRO/garment.py --mode textured && $A3D $REPRO/rfdetr_maps.py ~/og2/spike/out/garment-textured textured" ;;
     close-labelling)     local_ "test -f $OUT/plan.json && echo 'labelling closed (composite marker)'" ;;
-    build-warp)          gpu "bash ~/og2/build-warp.sh" ;;
+    build-warp)          gpu "cd ~/og2/warp-pixi && ~/.pixi/bin/pixi run build" ;;
     measure-motion-lag)  todo "$1" "no motion-lag measurement exists yet; it needs the Warp build and a body motion clip" ;;
     classify-soft-rigid) todo "$1" "needs the measured lag and a threshold" ;;
     make-spring-chains)  local_ "ls $PWD/$OUT/hair/*/chains_seed0.json" ;;   # HairDeck writes the chains in the same run as the cards

@@ -15,7 +15,7 @@ The goal is to separate the AUX parts (skirt, sleeve, collar, cape, loose trims)
 | 5 | `segment-labels` | Alchemy3D-Segment with maps from the detector. | Works on one GarmentCode garment: garment vs body ARI 0.58 with exact-label maps. One garment, one body. |
 | 6 | `write-scale-sidecar` | Write scale and offset next to each unit-cube mesh, with the metric size from a body-height prior. | Scale recorded for the tested garment (`unit_frame.json`). Not yet a step in the code. |
 | 7 | `close-labelling` | Composite: labels plus sidecar. | Planner only. |
-| 8 | `build-warp` | Build the NvidiaWarp-GarmentCode fork on fedora. | **Blocked.** CUDA 12.4 stops at gcc 13 and fedora has gcc 16.2. |
+| 8 | `build-warp` | Build the NvidiaWarp-GarmentCode fork on fedora, with its compiler and CUDA from pixi (`tools/warp/pixi.toml`: gcc 12.4, CUDA 12.6, Python 3.11). | **Built** on 2026-11-15. `warp.so` is 108 MB; `pixi run check` lists `cuda:0` (RTX 4090, sm_89) and imports `XPBDIntegrator`. No drape has been run on it yet. Fedora's own gcc 16 is not used. |
 | 9 | `measure-motion-lag` | Drape, move the body, measure which vertices lag. | Not started. Needs step 8 and a body motion clip. |
 | 10 | `classify-soft-rigid` | Composite: label plus lag gives soft or rigid. | Not started. Threshold unset. |
 | 11 | `make-hair-cards` | HairDeck, portrait to hair cards. | Ran on 9 poseswap portraits on the Mac (MPS): 54 to 153 cards, 35 s of compute each. Output not inspected beyond the mask. |
@@ -57,7 +57,7 @@ GPU steps run over ssh on `GPU_HOST` (default `fedora`). Steps run one after ano
 
 ## Open
 
-- Host compiler for the Warp fork on fedora, and a body motion clip.
+- A body motion clip, and a first drape on the built Warp fork.
 - Regenerate the synthetic set with the Fitted class and a measured `motion`.
 - Score the detector on the held-out test garment and on photographs, then rerun Segment with its maps.
 - The soft threshold, and whether lag from one motion clip generalises.
