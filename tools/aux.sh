@@ -8,7 +8,10 @@
 #      GPU_HOST (ssh alias, default fedora), REPRO (path of the repro scripts on that host), HAIRDECK (HairDeck checkout on this machine).
 set -euo pipefail
 cd "$(dirname "$0")/.."
-DOMAIN=domains/presence-edit.jsonld
+# The domain is its six modules, composed by the planner in this order (a method's alternatives are tried in the order the modules come):
+# the measured-lag route in aux-motion is listed before the class prior inside it, so the measured route comes first when its inputs are on hand.
+MODS=(presence-body presence-avatar omnigen2-edit aux-labels aux-motion aux-rig)
+DOMAIN=${DOMAIN:-$(printf "domains/modules/%s.jsonld," "${MODS[@]}" | sed 's/,$//')}
 PLANNER=${PERSONA_PLAN:-.planner/.lake/build/bin/persona_plan}
 REPRO_SRC=${REPRO_SRC:-$HOME/.hermes/cache/scratch/repro-space}   # usd_io.py and units.py live in the repro Space
 USDPY="cd $REPRO_SRC && pixi run -q -e mac python"
@@ -50,7 +53,7 @@ action() {
 }
 
 case ${1:-} in
-  goals)  jq -r '.methods|keys[]' "$DOMAIN" | grep '^/aux/' ;;
+  goals)  jq -r '.methods|keys[]' ${DOMAIN//,/ } | grep '^/aux/' ;;
   plan)   plan "${2:?goal}" "${3:-problems/aux-route-ready.jsonld}"; jq -r '.temporal|"total \(.total), consistent \(.consistent), origin \(.origin)"' "$OUT/plan.json"
           jq -r '.steps[]|"\(.start[11:19]) -> \(.end[11:19])  \(.duration)\t\(.action)"' "$OUT/plan.json" ;;
   run)    plan "${2:?goal}" "${3:-problems/aux-route-ready.jsonld}"; n=0
