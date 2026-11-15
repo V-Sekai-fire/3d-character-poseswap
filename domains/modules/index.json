@@ -1,0 +1,158 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Definition",
+ "name": "presence_edit",
+ "source": "3d-character-poseswap",
+ "version": "0.1.0",
+ "description": "A body is encoded to packets, routed, sealed and judged, optionally agreed by four replicas, played back on a curve, followed by the fitted ANNY avatar (interactor-anny-fit-guest fits it, interactor-anny-follow-guest poses it). The presence gates take a snapshot of that playback. OmniGen2 with the EditScore LoRA merged edits the snapshot, and EditScore scores the edit; both run in the interactor-omnigen2-guest ELF, written in Lean 4, of which the mul_mat op is built and checked. Each stage is a repository checked out beside the others. Variables are declared here and given their values by a problem. The AUX route then labels garment parts, measures whether each is rigid or soft from motion lag, and rigs them: relabel-coco: Map every source class of the Fashionpedia-class set into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail with a motion prior; drop nothing (repro/relabel_coco.py).; make-synth-set: Render GarmentCodeData drapes on the neutral body into a COCO set with exact part masks, split by garment (repro/gen_synth.py).; train-part-detector: Fine-tune RF-DETR-Seg-Small on the relabelled and the synthetic sets (repro/train_synth.py).; unitise-source: Normalise the source GLB into the unit cube before Segment; a centimetre source made the lookup distance 94 instead of 0.0007 (repro/common.py unitise_glb_inplace).; write-scale-sidecar: Write scale and offset beside every unit-cube mesh, with the metric size from a body-height prior; image-to-mesh models return unit-cube meshes only.; segment-labels: Run Alchemy3D-Segment with maps from the part detector; labels are anonymous clusters that need our own colour-to-class table.; build-warp: Build the NvidiaWarp-GarmentCode fork; fedora's gcc 16 is refused by CUDA 12.4 (gcc 13 is the limit), so a compatible host compiler is needed.; measure-motion-lag: Drape, move the body, and measure which vertices lag; a part that lags is soft, a part that follows is rigid. Clearance from the body is only a first signal.; make-hair-cards: HairDeck: portrait to hair cards on Apple MPS; needs SAM 3 and DINOv3 weights whose SHA-256 matches the pins.; make-spring-chains: HairDeck chain model: path, joints and stiffness per chain, in the normalised frame; apply the scale sidecar before fitting.; rig-aux-parts: Give soft parts spring-bone chains and rigid parts a parent bone, from the labels and the measured lag; SkinTokens rigs the body. Composite methods: /aux/labelled_parts (labels and scale sidecar), /aux/soft_rigid_known (labels and measured lag), /aux/rigged (labelled parts, the soft/rigid decision and the spring chains). Each AUX action states an ISO-8601 duration and a duration_basis (measured or estimate), so a plan's temporal total is a sum of those; the estimates are marked and should be replaced as runs are timed. The source is ingested into OpenUSD, which keeps its unit and up axis as stage metadata, and every other format is delivered from the stage: unitise-source makes the unit-cube GLB for Segment and its sidecar from the stage, and restore-units is its inverse. Parts are keyed by integer ids, never by names. No weld step: the weld was a workaround for the unit bug.",
+ "modules": [
+  "presence-body",
+  "presence-avatar",
+  "omnigen2-edit",
+  "aux-labels",
+  "aux-motion",
+  "aux-rig"
+ ],
+ "variables": [
+  {
+   "name": "part",
+   "type": "int",
+   "description": "1 when a repository of the presence slice, or a model repository, is checked out beside the others.",
+   "init": {}
+  },
+  {
+   "name": "input",
+   "type": "int",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
+   "init": {
+    "gpu": 0
+   }
+  },
+  {
+   "name": "switch",
+   "type": "int",
+   "description": "1 when the optional replica stage is on.",
+   "init": {}
+  },
+  {
+   "name": "bypass",
+   "type": "int",
+   "description": "1 when the replica stage is off and passes the judged body through.",
+   "init": {}
+  },
+  {
+   "name": "model",
+   "type": "int",
+   "description": "1 when a model file is loaded.",
+   "init": {}
+  },
+  {
+   "name": "body",
+   "type": "int",
+   "description": "1 when the body has passed a stage of the presence slice.",
+   "init": {}
+  },
+  {
+   "name": "avatar",
+   "type": "int",
+   "description": "1 when the avatar is fitted or posed.",
+   "init": {}
+  },
+  {
+   "name": "op",
+   "type": "int",
+   "description": "1 when an op of the OmniGen2 guest is checked against its fixture.",
+   "init": {}
+  },
+  {
+   "name": "image",
+   "type": "int",
+   "description": "1 when the image of a stage is produced.",
+   "init": {}
+  },
+  {
+   "name": "aux",
+   "type": "int",
+   "description": "1 when a step of the AUX part-labelling and rigging route is done: coco_relabelled, synth_set, part_detector, unit_cube_source, part_labels, warp_built, motion_lag, hair_cards, spring_chains, scale_sidecar; composites labelled_parts, soft_rigid_known and rigged; also usd_stage (the source ingested into OpenUSD in its own units) and metric_labels (Segment's labels put back on the real-size stage by restore-units).",
+   "init": {}
+  }
+ ],
+ "order": {
+  "actions": [
+   "load-qwen25vl-conditioner",
+   "load-omnigen2-transformer",
+   "load-omnigen2-vae",
+   "load-editscore-lora",
+   "merge-editscore-lora",
+   "fetch-clips",
+   "encode-packets",
+   "route-model",
+   "route-relay",
+   "seal-and-take",
+   "judge",
+   "agree",
+   "skip-agree",
+   "play-curve",
+   "check-mul-mat",
+   "fit-anny",
+   "follow",
+   "snapshot",
+   "edit",
+   "score",
+   "relabel-coco",
+   "make-synth-set",
+   "train-part-detector",
+   "unitise-source",
+   "write-scale-sidecar",
+   "segment-labels",
+   "build-warp",
+   "measure-motion-lag",
+   "make-hair-cards",
+   "make-spring-chains",
+   "rig-aux-parts",
+   "close-labelling",
+   "classify-soft-rigid",
+   "classify-by-class-prior",
+   "ingest-usd",
+   "restore-units"
+  ],
+  "methods": [
+   "/model/qwen25vl_conditioner",
+   "/model/omnigen2_transformer",
+   "/model/omnigen2_vae",
+   "/model/editscore_lora",
+   "/model/editscore_merged",
+   "/input/clips",
+   "/body/packet",
+   "/body/routed",
+   "/body/sealed",
+   "/body/judged",
+   "/body/agreed",
+   "/body/played",
+   "/op/mul_mat",
+   "/avatar/fitted",
+   "/avatar/posed",
+   "/image/snapshot",
+   "/image/edited",
+   "/image/scored",
+   "/aux/coco_relabelled",
+   "/aux/synth_set",
+   "/aux/part_detector",
+   "/aux/unit_cube_source",
+   "/aux/scale_sidecar",
+   "/aux/part_labels",
+   "/aux/warp_built",
+   "/aux/motion_lag",
+   "/aux/hair_cards",
+   "/aux/spring_chains",
+   "/aux/rigged",
+   "/aux/labelled_parts",
+   "/aux/soft_rigid_known",
+   "/aux/usd_stage",
+   "/aux/metric_labels"
+  ]
+ }
+}

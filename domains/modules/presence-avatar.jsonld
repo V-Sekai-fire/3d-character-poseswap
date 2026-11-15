@@ -1,0 +1,243 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Module",
+ "name": "presence-avatar",
+ "module": {
+  "summary": "The avatar on that body: fit ANNY, follow the played curve, take a snapshot image.",
+  "provides": [
+   "/avatar/fitted",
+   "/avatar/posed",
+   "/image/snapshot"
+  ],
+  "requires": {
+   "inputs": [
+    "/input/anny_fit_elf",
+    "/input/anny_glb",
+    "/input/clips",
+    "/input/godot_double",
+    "/input/mujoco_elf",
+    "/input/soma_pheno",
+    "/part/anny_fit",
+    "/part/anny_follow",
+    "/part/presence_gates"
+   ],
+   "goals": [
+    "/body/played"
+   ]
+  }
+ },
+ "variables": [
+  {
+   "name": "part",
+   "type": "int",
+   "description": "1 when a repository of the presence slice, or a model repository, is checked out beside the others.",
+   "init": {}
+  },
+  {
+   "name": "input",
+   "type": "int",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
+   "init": {
+    "gpu": 0
+   }
+  },
+  {
+   "name": "body",
+   "type": "int",
+   "description": "1 when the body has passed a stage of the presence slice.",
+   "init": {}
+  },
+  {
+   "name": "avatar",
+   "type": "int",
+   "description": "1 when the avatar is fitted or posed.",
+   "init": {}
+  },
+  {
+   "name": "image",
+   "type": "int",
+   "description": "1 when the image of a stage is produced.",
+   "init": {}
+  }
+ ],
+ "actions": {
+  "fit-anny": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/anny_fit",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/anny_fit_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/soma_pheno",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/avatar/fitted",
+     "value": 1
+    }
+   ]
+  },
+  "follow": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/anny_follow",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/avatar/fitted",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/mujoco_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/anny_glb",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/clips",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/played",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/avatar/posed",
+     "value": 1
+    }
+   ]
+  },
+  "snapshot": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/presence_gates",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/avatar/posed",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/image/snapshot",
+     "value": 1
+    }
+   ]
+  }
+ },
+ "methods": {
+  "/avatar/fitted": {
+   "alternatives": [
+    {
+     "name": "fit",
+     "subtasks": [
+      [
+       "fit-anny"
+      ]
+     ]
+    }
+   ]
+  },
+  "/avatar/posed": {
+   "alternatives": [
+    {
+     "name": "follow",
+     "subtasks": [
+      [
+       "goal",
+       "/body/played"
+      ],
+      [
+       "goal",
+       "/avatar/fitted"
+      ],
+      [
+       "follow"
+      ]
+     ]
+    }
+   ]
+  },
+  "/image/snapshot": {
+   "alternatives": [
+    {
+     "name": "snapshot",
+     "subtasks": [
+      [
+       "goal",
+       "/avatar/posed"
+      ],
+      [
+       "snapshot"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

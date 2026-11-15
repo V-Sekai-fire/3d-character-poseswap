@@ -1,0 +1,642 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Module",
+ "name": "omnigen2-edit",
+ "module": {
+  "summary": "The poseswap edit and its score: load the OmniGen2 parts and the EditScore LoRA, merge, edit the snapshot, score the edit.",
+  "provides": [
+   "/image/edited",
+   "/image/scored",
+   "/model/editscore_lora",
+   "/model/editscore_merged",
+   "/model/omnigen2_transformer",
+   "/model/omnigen2_vae",
+   "/model/qwen25vl_conditioner",
+   "/op/mul_mat"
+  ],
+  "requires": {
+   "inputs": [
+    "/input/edit_prompt",
+    "/input/godot_double",
+    "/input/gpu_host",
+    "/input/omnigen2_elf",
+    "/input/omnigen2_mul_mat_elf",
+    "/part/editscore",
+    "/part/omnigen2"
+   ],
+   "goals": [
+    "/image/snapshot"
+   ]
+  }
+ },
+ "variables": [
+  {
+   "name": "part",
+   "type": "int",
+   "description": "1 when a repository of the presence slice, or a model repository, is checked out beside the others.",
+   "init": {}
+  },
+  {
+   "name": "input",
+   "type": "int",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
+   "init": {
+    "gpu": 0
+   }
+  },
+  {
+   "name": "model",
+   "type": "int",
+   "description": "1 when a model file is loaded.",
+   "init": {}
+  },
+  {
+   "name": "op",
+   "type": "int",
+   "description": "1 when an op of the OmniGen2 guest is checked against its fixture.",
+   "init": {}
+  },
+  {
+   "name": "image",
+   "type": "int",
+   "description": "1 when the image of a stage is produced.",
+   "init": {}
+  }
+ ],
+ "actions": {
+  "load-qwen25vl-conditioner": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/qwen25vl_conditioner",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration": "PT4S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:05Z",
+   "duration_basis": "measured: warm median 3.202 s of 4 runs, rounded up to whole seconds; slowest run 4.429 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     4.429,
+     3.346,
+     3.202,
+     3.202,
+     3.142
+    ],
+    "cold_s": 4.429,
+    "warm_median_s": 3.202,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
+  },
+  "load-omnigen2-transformer": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/omnigen2_transformer",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration": "PT4S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:12Z",
+   "duration_basis": "measured: warm median 3.26 s of 4 runs, rounded up to whole seconds; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     11.408,
+     3.257,
+     3.327,
+     3.179,
+     3.262
+    ],
+    "cold_s": 11.408,
+    "warm_median_s": 3.26,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
+  },
+  "load-omnigen2-vae": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/omnigen2_vae",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration": "PT1S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:01Z",
+   "duration_basis": "measured: warm median 0.097 s of 4 runs, rounded up to whole seconds; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     0.275,
+     0.096,
+     0.097,
+     0.097,
+     0.097
+    ],
+    "cold_s": 0.275,
+    "warm_median_s": 0.097,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
+  },
+  "load-editscore-lora": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/editscore",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/editscore_lora",
+     "value": 1
+    }
+   ],
+   "duration": "PT1S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:01Z",
+   "duration_basis": "measured: warm median 0.006 s of 4 runs, rounded up to whole seconds; slowest run 0.053 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     0.053,
+     0.006,
+     0.006,
+     0.006,
+     0.006
+    ],
+    "cold_s": 0.053,
+    "warm_median_s": 0.006,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
+  },
+  "merge-editscore-lora": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/omnigen2_transformer",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/editscore_lora",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/model/editscore_merged",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration": "PT1S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:00:13Z",
+   "duration_basis": "measured: warm median 0.174 s of 4 runs, rounded up to whole seconds; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "measured": {
+    "runs_s": [
+     0.328,
+     0.172,
+     0.174,
+     0.174,
+     0.174
+    ],
+    "cold_s": 0.328,
+    "warm_median_s": 0.174,
+    "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
+   }
+  },
+  "check-mul-mat": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_mul_mat_elf",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/op/mul_mat",
+     "value": 1
+    }
+   ]
+  },
+  "edit": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/image/snapshot",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/edit_prompt",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/omnigen2",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/qwen25vl_conditioner",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/omnigen2_transformer",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/omnigen2_vae",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/model/editscore_merged",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/image/edited",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration": "PT1M7S",
+   "duration_basis": "measured once: 67.0 s for one 50-step BF16 edit at 672x1024 with the LoRA (baseline.log, fedora RTX 4090), rounded up; a single sample, so no range",
+   "measured": {
+    "runs_s": [
+     67.0
+    ],
+    "host": "fedora, RTX 4090 (baseline.log, one run)"
+   }
+  },
+  "score": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/editscore",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/omnigen2_elf",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/gpu_host",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/image/edited",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/image/scored",
+     "value": 1
+    },
+    {
+     "pointer/set": "/input/gpu",
+     "value": 1
+    }
+   ],
+   "duration": "PT22S",
+   "start": "2026-11-15T08:00:00Z",
+   "end": "2026-11-15T08:01:43Z",
+   "duration_basis": "measured: median 21.450000000000003 s per edit over 6 edits (K=4 passes of the Qwen3-VL-8B judge), rounded up; slowest 22.6 s. Excludes the one-time 24.9 s judge load and smoke test, which no action models. end is the deadline when the loads, edit and score all take their slowest run",
+   "measured": {
+    "runs_s": [
+     20.8,
+     21.8,
+     19.4,
+     22.6,
+     21.1,
+     22.1
+    ],
+    "judge_load_and_smoke_s": 24.9,
+    "host": "fedora, RTX 4090, 6 edits of bf16-lora, tools/measure/time_score.sh, 2026-11-15"
+   }
+  }
+ },
+ "methods": {
+  "/model/qwen25vl_conditioner": {
+   "alternatives": [
+    {
+     "name": "load",
+     "subtasks": [
+      [
+       "load-qwen25vl-conditioner"
+      ]
+     ]
+    }
+   ]
+  },
+  "/model/omnigen2_transformer": {
+   "alternatives": [
+    {
+     "name": "load",
+     "subtasks": [
+      [
+       "load-omnigen2-transformer"
+      ]
+     ]
+    }
+   ]
+  },
+  "/model/omnigen2_vae": {
+   "alternatives": [
+    {
+     "name": "load",
+     "subtasks": [
+      [
+       "load-omnigen2-vae"
+      ]
+     ]
+    }
+   ]
+  },
+  "/model/editscore_lora": {
+   "alternatives": [
+    {
+     "name": "load",
+     "subtasks": [
+      [
+       "load-editscore-lora"
+      ]
+     ]
+    }
+   ]
+  },
+  "/model/editscore_merged": {
+   "alternatives": [
+    {
+     "name": "merge",
+     "subtasks": [
+      [
+       "goal",
+       "/model/omnigen2_transformer"
+      ],
+      [
+       "goal",
+       "/model/editscore_lora"
+      ],
+      [
+       "merge-editscore-lora"
+      ]
+     ]
+    }
+   ]
+  },
+  "/op/mul_mat": {
+   "alternatives": [
+    {
+     "name": "check",
+     "subtasks": [
+      [
+       "check-mul-mat"
+      ]
+     ]
+    }
+   ]
+  },
+  "/image/edited": {
+   "alternatives": [
+    {
+     "name": "edit",
+     "subtasks": [
+      [
+       "goal",
+       "/image/snapshot"
+      ],
+      [
+       "goal",
+       "/model/qwen25vl_conditioner"
+      ],
+      [
+       "goal",
+       "/model/omnigen2_vae"
+      ],
+      [
+       "goal",
+       "/model/editscore_merged"
+      ],
+      [
+       "edit"
+      ]
+     ]
+    }
+   ]
+  },
+  "/image/scored": {
+   "alternatives": [
+    {
+     "name": "score",
+     "subtasks": [
+      [
+       "goal",
+       "/image/edited"
+      ],
+      [
+       "score"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}

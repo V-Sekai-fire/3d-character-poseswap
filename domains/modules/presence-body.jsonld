@@ -1,0 +1,462 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Module",
+ "name": "presence-body",
+ "module": {
+  "summary": "A body's motion packets: fetch the clips, encode them, route, seal, judge, agree and play the curve.",
+  "provides": [
+   "/body/agreed",
+   "/body/judged",
+   "/body/packet",
+   "/body/played",
+   "/body/routed",
+   "/body/sealed",
+   "/input/clips"
+  ],
+  "requires": {
+   "inputs": [
+    "/bypass/replica",
+    "/input/godot_double",
+    "/input/packet_golden",
+    "/part/curve",
+    "/part/muscle_drive_release",
+    "/part/observer",
+    "/part/packets",
+    "/part/replica",
+    "/part/zone_relay",
+    "/part/zone_router",
+    "/switch/replica"
+   ],
+   "goals": []
+  }
+ },
+ "variables": [
+  {
+   "name": "part",
+   "type": "int",
+   "description": "1 when a repository of the presence slice, or a model repository, is checked out beside the others.",
+   "init": {}
+  },
+  {
+   "name": "input",
+   "type": "int",
+   "description": "1 when an input is on hand: a double-precision Godot editor, the packet golden file, the MuJoCo guest, the 100 Hz clips, the ANNY base mesh, the SOMA phenotype data, the built ANNY fit guest ELF, the OmniGen2 guest ELF built with only the mul_mat op, the full OmniGen2 guest ELF, a free GPU host, an edit prompt; for the AUX route: a Fashionpedia-class COCO set, the GarmentCodeData drapes, the Segment weights, SAM 3 and DINOv3 weights checked against their pinned SHA-256, a host C++ compiler the CUDA toolkit accepts, a body motion clip, a portrait.",
+   "init": {
+    "gpu": 0
+   }
+  },
+  {
+   "name": "switch",
+   "type": "int",
+   "description": "1 when the optional replica stage is on.",
+   "init": {}
+  },
+  {
+   "name": "bypass",
+   "type": "int",
+   "description": "1 when the replica stage is off and passes the judged body through.",
+   "init": {}
+  },
+  {
+   "name": "body",
+   "type": "int",
+   "description": "1 when the body has passed a stage of the presence slice.",
+   "init": {}
+  }
+ ],
+ "actions": {
+  "fetch-clips": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/muscle_drive_release",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/input/clips",
+     "value": 1
+    }
+   ]
+  },
+  "encode-packets": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/packets",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/packet_golden",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/clips",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/packet",
+     "value": 1
+    }
+   ]
+  },
+  "route-model": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/zone_router",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/packet",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/routed",
+     "value": 1
+    }
+   ]
+  },
+  "route-relay": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/zone_relay",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/packet",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/routed",
+     "value": 1
+    }
+   ]
+  },
+  "seal-and-take": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/observer",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/routed",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/sealed",
+     "value": 1
+    }
+   ]
+  },
+  "judge": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/observer",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/sealed",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/judged",
+     "value": 1
+    }
+   ]
+  },
+  "agree": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/replica",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/switch/replica",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/judged",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/agreed",
+     "value": 1
+    }
+   ]
+  },
+  "skip-agree": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/bypass/replica",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/judged",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/agreed",
+     "value": 1
+    }
+   ]
+  },
+  "play-curve": {
+   "params": [],
+   "body": [
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/part/curve",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/input/godot_double",
+      "value": 1
+     }
+    },
+    {
+     "eval": {
+      "type": "pointer/ge",
+      "pointer": "/body/agreed",
+      "value": 1
+     }
+    },
+    {
+     "pointer/set": "/body/played",
+     "value": 1
+    }
+   ]
+  }
+ },
+ "methods": {
+  "/input/clips": {
+   "alternatives": [
+    {
+     "name": "fetch",
+     "subtasks": [
+      [
+       "fetch-clips"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/packet": {
+   "alternatives": [
+    {
+     "name": "encode",
+     "subtasks": [
+      [
+       "goal",
+       "/input/clips"
+      ],
+      [
+       "encode-packets"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/routed": {
+   "alternatives": [
+    {
+     "name": "model",
+     "subtasks": [
+      [
+       "goal",
+       "/body/packet"
+      ],
+      [
+       "route-model"
+      ]
+     ]
+    },
+    {
+     "name": "relay",
+     "subtasks": [
+      [
+       "goal",
+       "/body/packet"
+      ],
+      [
+       "route-relay"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/sealed": {
+   "alternatives": [
+    {
+     "name": "seal",
+     "subtasks": [
+      [
+       "goal",
+       "/body/routed"
+      ],
+      [
+       "seal-and-take"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/judged": {
+   "alternatives": [
+    {
+     "name": "judge",
+     "subtasks": [
+      [
+       "goal",
+       "/body/sealed"
+      ],
+      [
+       "judge"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/agreed": {
+   "alternatives": [
+    {
+     "name": "agree",
+     "subtasks": [
+      [
+       "goal",
+       "/body/judged"
+      ],
+      [
+       "agree"
+      ]
+     ]
+    },
+    {
+     "name": "passthrough",
+     "subtasks": [
+      [
+       "goal",
+       "/body/judged"
+      ],
+      [
+       "skip-agree"
+      ]
+     ]
+    }
+   ]
+  },
+  "/body/played": {
+   "alternatives": [
+    {
+     "name": "play",
+     "subtasks": [
+      [
+       "goal",
+       "/body/agreed"
+      ],
+      [
+       "play-curve"
+      ]
+     ]
+    }
+   ]
+  }
+ }
+}
