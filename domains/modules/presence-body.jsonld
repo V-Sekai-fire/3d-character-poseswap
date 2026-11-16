@@ -57,7 +57,9 @@
      "pointer/set": "/input/clips",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the muscle drive release repository checked out. Makes the clips on hand.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "encode-packets": {
    "params": [],
@@ -94,7 +96,9 @@
      "pointer/set": "/body/packet",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the packets repository checked out, the godot double on hand, the packet golden on hand and the clips on hand. Makes the body packet.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "route-model": {
    "params": [],
@@ -124,7 +128,9 @@
      "pointer/set": "/body/routed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the zone router repository checked out, the godot double on hand and the body packet. Makes the body routed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "route-relay": {
    "params": [],
@@ -154,7 +160,9 @@
      "pointer/set": "/body/routed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the zone relay repository checked out, the godot double on hand and the body packet. Makes the body routed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "seal-and-take": {
    "params": [],
@@ -184,7 +192,9 @@
      "pointer/set": "/body/sealed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the observer repository checked out, the godot double on hand and the body routed. Makes the body sealed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "judge": {
    "params": [],
@@ -214,7 +224,9 @@
      "pointer/set": "/body/judged",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the observer repository checked out, the godot double on hand and the body sealed. Makes the body judged.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "agree": {
    "params": [],
@@ -244,7 +256,9 @@
      "pointer/set": "/body/agreed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the replica repository checked out, the replica stage on and the body judged. Makes the body agreed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "skip-agree": {
    "params": [],
@@ -267,7 +281,9 @@
      "pointer/set": "/body/agreed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the replica stage bypassed and the body judged. Makes the body agreed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "play-curve": {
    "params": [],
@@ -297,7 +313,9 @@
      "pointer/set": "/body/played",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the curve repository checked out, the godot double on hand and the body agreed. Makes the body played.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {

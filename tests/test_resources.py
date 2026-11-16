@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The one GPU, with only what the domain already has: every GPU action reads /input/gpu and sets it back, so the planner puts GPU steps one after another.
-  GOLDEN     OmniGen2 load group: the four GPU steps run one after another, 10 s (4+4+1+1); AUX route 5461 s.
-  CONTROL    a desk that states no GPU (/input/gpu 0) is refused; with the read and set removed from the GPU actions the same group overlaps and the total falls to 5 s.
+  GOLDEN     OmniGen2 load group: the GPU steps run one after another, so the total is the sum of their durations; AUX route 5461 s.
+  CONTROL    a desk that states no GPU (/input/gpu 0) is refused; with the read and set removed from the GPU actions the same group overlaps and the total falls to the transformer load plus the merge.
   INVARIANT  no two GPU steps overlap in the plan, and every GPU action reads and sets /input/gpu.
 usage: tests/test_resources.py   env PERSONA_PLAN = planner binary"""
 import json, os, sys, copy
@@ -17,14 +17,19 @@ def group(d=None, gpu=1):
     dd = d or T.domain; return T.plan(T.problem([(q, gpu if q == "/input/gpu" else 1) for q in pre(dd, ["/input/gpu"])], [[k] for k in names]), d)[2]
 def route(gpu):
     p = json.load(open(T.BASE)); [v["init"].__setitem__("gpu", gpu) for v in p["variables"] if v["name"] == "input"]; p["todo_list"] = [{"goal": [{"pointer": "/aux/rigged", "eq": 1}]}]; return T.plan(p, None)[2]
-g = group(); ck(secs(g["temporal"]["total"]) == 10, f"load group GOLDEN total {g['temporal']['total']} = 4+4+1+1 s: the GPU steps one after another")
+g = group(); dur = lambda k: round(secs(a[k]["duration"]), 3); gpu_sum = round(sum(dur(k) for k in names if k in GPU), 3)
+ck(round(secs(g["temporal"]["total"]), 3) == gpu_sum, f"load group GOLDEN total {g['temporal']['total']} = the sum of the GPU steps' durations ({gpu_sum} s): they run one after another")
 r = route(1); ck(r["temporal"]["total"] == "PT1H31M1S", f"AUX route GOLDEN total {r['temporal']['total']}")
 ck(route(0).get("refused") == "unreachable", "desk without a GPU CONTROL the AUX route is refused as unreachable")
 d = copy.deepcopy(T.domain)
 for k in GPU: d["actions"][k]["body"] = [b for b in d["actions"][k]["body"] if b.get("pointer/set") != "/input/gpu" and b.get("eval", {}).get("pointer") != "/input/gpu"]
-u = group(d); ck(secs(u["temporal"]["total"]) == 5, f"load group CONTROL without the read and set the loads overlap: total {u['temporal']['total']} (5 s)")
+u = group(d); overlap = round(dur("load-omnigen2-transformer") + dur("merge-editscore-lora"), 3)
+ck(round(secs(u["temporal"]["total"]), 3) == overlap, f"load group CONTROL without the read and set the loads overlap: total {u['temporal']['total']} (the transformer load, then the merge: {overlap} s)")
 first = {}
 for st in g["steps"]: first.setdefault(st["action"], st)
 w = sorted((s["start"], s["end"]) for k, s in first.items() if k in GPU); ck(all(w[i][1] <= w[i + 1][0] for i in range(len(w) - 1)), f"INVARIANT no two GPU steps overlap ({len(w)} GPU steps in the load group)")
-ck(len(GPU) == 10 and all(any(b.get("pointer/set") == "/input/gpu" for b in a[k]["body"]) for k in GPU), "INVARIANT all 10 GPU actions read and set /input/gpu")
+GUEST_GPU = {"run-cloth-fit-guest", "run-skintokens-guest", "run-skintokens-rig-guest", "run-pixal3d-guest", "run-seethrough-guest"}   # guests whose README says the compute is on the GPU
+rest = [k for k in GPU if k not in GUEST_GPU]
+ck(len(rest) == 10 and set(GPU) >= GUEST_GPU and all(any(b.get("pointer/set") == "/input/gpu" for b in a[k]["body"]) for k in GPU), f"INVARIANT all {len(GPU)} GPU actions (10 and the {len(GUEST_GPU)} GPU-only guests) read and set /input/gpu")
+ck(not any(k in GPU for k in a if k.startswith("run-") and k.endswith("-guest") and k not in GUEST_GPU), "CONTROL a guest that is not GPU-only does not take the GPU")
 print(f"---- {sum(R)} passed, {len(R) - sum(R)} failed"); sys.exit(0 if all(R) else 1)

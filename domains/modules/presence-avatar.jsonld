@@ -78,7 +78,9 @@
      "pointer/set": "/avatar/fitted",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the anny fit repository checked out, the godot double on hand, the anny fit elf on hand and the soma pheno on hand. Makes the avatar fitted.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "follow": {
    "params": [],
@@ -136,7 +138,9 @@
      "pointer/set": "/avatar/posed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the anny follow repository checked out, the avatar fitted, the godot double on hand, the mujoco elf on hand, the anny glb on hand, the clips on hand and the body played. Makes the avatar posed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "snapshot": {
    "params": [],
@@ -166,7 +170,9 @@
      "pointer/set": "/image/snapshot",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the presence gates repository checked out, the godot double on hand and the avatar posed. Makes the snapshot image.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {

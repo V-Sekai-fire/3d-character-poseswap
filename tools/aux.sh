@@ -10,7 +10,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 # The domain is its six modules, composed by the planner in this order (a method's alternatives are tried in the order the modules come):
 # the measured-lag route in aux-motion is listed before the class prior inside it, so the measured route comes first when its inputs are on hand.
-MODS=(presence-body presence-avatar omnigen2-edit aux-mesh aux-labels aux-motion aux-rig obstacle-course relay-loop)
+MODS=(presence-body presence-avatar omnigen2-edit aux-mesh aux-labels aux-motion aux-rig obstacle-course relay-loop guest-elf cad-guest)
 DOMAIN=${DOMAIN:-$(printf "domains/modules/%s.jsonld," "${MODS[@]}" | sed 's/,$//')}
 PLANNER=${PERSONA_PLAN:-.planner/.lake/build/bin/persona_plan}
 REPRO_SRC=${REPRO_SRC:-$HOME/.hermes/cache/scratch/repro-space}   # usd_io.py and units.py live in the repro Space
@@ -47,6 +47,8 @@ action() {
     classify-soft-rigid) todo "$1" "needs the measured lag and a threshold" ;;
     make-spring-chains)  local_ "ls $PWD/$OUT/hair/*/chains_seed0.json" ;;   # HairDeck writes the chains in the same run as the cards
     make-hair-cards)     local_ "cd $HAIRDECK/HairDeck && HAIRDECK_ROOT=$HAIRDECK/ws .venv/bin/python scripts/image_to_hair.py \${PORTRAIT:?set PORTRAIT=<image>} --out $PWD/$OUT/hair --n 1" ;;
+    solid-default|solid-box|solid-mesh|solid-script|solid-command-count) todo "$1" "a CAD guest function is called through godot-sandbox; this desk has no runner for it yet" ;;
+    run-*-guest)         todo "$1" "a guest ELF runs inside godot-sandbox; this desk has no runner for it yet" ;;
     rig-aux-parts)       todo "$1" "no code gives soft parts spring-bone chains and rigid parts a parent bone yet" ;;
     *) echo "unknown action: $1" >&2; exit 64 ;;
   esac

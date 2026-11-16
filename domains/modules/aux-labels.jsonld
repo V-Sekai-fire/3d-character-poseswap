@@ -43,8 +43,21 @@
      "value": 1
     }
    ],
-   "duration": "PT10S",
-   "duration_basis": "estimate: a run of the script on fedora finished in seconds, not timed"
+   "duration": "PT7.81S",
+   "duration_basis": "measured: warm median 7.81 s of 5 runs, to the millisecond; the first run took 7.907 s. Wall clock of tools/aux.sh action relabel-coco on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     7.907,
+     7.864,
+     7.83,
+     7.796,
+     7.81,
+     7.796
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   },
+   "description": "Map every source class of the Fashionpedia-class set into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail with a motion prior.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "make-synth-set": {
    "params": [],
@@ -69,7 +82,9 @@
     }
    ],
    "duration": "PT8M32S",
-   "duration_basis": "measured: 360 garments on fedora, 2026-11-15"
+   "duration_basis": "measured: 360 garments on fedora, 2026-11-15",
+   "description": "Render GarmentCodeData drapes on the neutral body into a COCO set with exact part masks, split by garment (repro/gen_synth.py).",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "train-part-detector": {
    "params": [],
@@ -112,7 +127,9 @@
     }
    ],
    "duration": "PT19M24S",
-   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090"
+   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090",
+   "description": "Fine-tune RF-DETR-Seg-Small on the relabelled and the synthetic sets (repro/train_synth.py).",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "unitise-source": {
    "params": [],
@@ -129,8 +146,21 @@
      "value": 1
     }
    ],
-   "duration": "PT2S",
-   "duration_basis": "estimate: one mesh; writes the sidecar from the stage's own unit"
+   "duration": "PT0.698S",
+   "duration_basis": "measured: warm median 0.698 s of 5 runs, to the millisecond; the first run took 0.693 s. Wall clock of tools/aux.sh action unitise-source on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     0.693,
+     0.699,
+     0.696,
+     0.698,
+     0.71,
+     0.698
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   },
+   "description": "Normalise the source GLB into the unit cube before Segment.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "write-scale-sidecar": {
    "params": [],
@@ -147,8 +177,21 @@
      "value": 1
     }
    ],
-   "duration": "PT2S",
-   "duration_basis": "estimate: checks the sidecar and the round trip; sidecar-from-height covers a mesh that has no unit"
+   "duration": "PT0.423S",
+   "duration_basis": "measured: warm median 0.423 s of 5 runs, to the millisecond; the first run took 0.434 s. Wall clock of tools/aux.sh action write-scale-sidecar on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     0.434,
+     0.423,
+     0.427,
+     0.423,
+     0.422,
+     0.423
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   },
+   "description": "Write scale and offset beside every unit-cube mesh, with the metric size from a body-height prior.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "segment-labels": {
    "params": [],
@@ -198,7 +241,9 @@
     }
    ],
    "duration": "PT1M",
-   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps"
+   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps",
+   "description": "Run Alchemy3D-Segment with maps from the part detector.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "close-labelling": {
    "params": [],
@@ -216,7 +261,9 @@
     }
    ],
    "duration": "PT0S",
-   "duration_basis": "composite marker"
+   "duration_basis": "composite marker",
+   "description": "Needs metric labels. Makes labelled parts.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "ingest-usd": {
    "params": [],
@@ -233,8 +280,21 @@
      "value": 1
     }
    ],
-   "duration": "PT5S",
-   "duration_basis": "estimate: one garment ingested in a few seconds on the Mac"
+   "duration": "PT0.658S",
+   "duration_basis": "measured: warm median 0.658 s of 5 runs, to the millisecond; the first run took 0.646 s. Wall clock of tools/aux.sh action ingest-usd on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     0.646,
+     0.658,
+     0.645,
+     0.643,
+     0.672,
+     0.672
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   },
+   "description": "Needs source mesh. Makes usd stage.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "restore-units": {
    "params": [],
@@ -258,8 +318,21 @@
      "value": 1
     }
    ],
-   "duration": "PT5S",
-   "duration_basis": "estimate: the inverse of unitise-source; refuses when the geometry does not confirm the pairing"
+   "duration": "PT0.741S",
+   "duration_basis": "measured: warm median 0.741 s of 5 runs, to the millisecond; the first run took 0.741 s. Wall clock of tools/aux.sh action restore-units on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     0.741,
+     0.739,
+     0.739,
+     0.741,
+     0.744,
+     0.765
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   },
+   "description": "Needs part labels and scale sidecar. Makes metric labels.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {

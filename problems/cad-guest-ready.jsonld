@@ -1,0 +1,67 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Problem",
+ "name": "cad_guest_ready_problem",
+ "domain": "presence_edit",
+ "source": "3d-character-poseswap",
+ "version": "0.1.0",
+ "description": "The SolidCraft engine checked out, the CAD guest built: call each of its five functions.",
+ "variables": [
+  {
+   "name": "cad_input",
+   "type": "int",
+   "init": {
+    "solidcraft_engine": 1,
+    "guest_repo": 1,
+    "guest_elf": 1
+   }
+  },
+  {
+   "name": "cad",
+   "type": "int",
+   "init": {
+    "solid_default": 0,
+    "solid_box": 0,
+    "solid_mesh": 0,
+    "solid_script": 0,
+    "solid_command_count": 0
+   }
+  }
+ ],
+ "capabilities": {
+  "entities": {},
+  "graph": {
+   "edges": []
+  }
+ },
+ "todo_list": [
+  {
+   "goal": [
+    {
+     "pointer": "/cad/solid_default",
+     "eq": 1
+    },
+    {
+     "pointer": "/cad/solid_box",
+     "eq": 1
+    },
+    {
+     "pointer": "/cad/solid_mesh",
+     "eq": 1
+    },
+    {
+     "pointer": "/cad/solid_script",
+     "eq": 1
+    },
+    {
+     "pointer": "/cad/solid_command_count",
+     "eq": 1
+    }
+   ]
+  }
+ ],
+ "origin": "2026-11-15T08:00:00Z"
+}

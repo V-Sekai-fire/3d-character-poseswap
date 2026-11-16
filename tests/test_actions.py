@@ -21,10 +21,17 @@ DOMAIN = f"{ROOT}/domains/presence-edit.jsonld"; BASE = f"{ROOT}/problems/aux-ro
 PLANNER = os.environ.get("PERSONA_PLAN") or f"{ROOT}/.planner/.lake/build/bin/persona_plan"
 ISO = re.compile(r"^P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?$")
 
+def iso_s(x):
+    """Seconds as a canonical ISO 8601 duration at millisecond resolution, the way the planner writes one: PT0.056S, PT1M7S."""
+    ms = round(x * 1000); s, f = divmod(ms, 1000); h, r = divmod(s, 3600); m, sec = divmod(r, 60)
+    out = "PT" + (f"{h}H" if h else "") + (f"{m}M" if m else "")
+    if sec or f or (not h and not m): out += f"{sec}" + (("." + f"{f:03d}".rstrip("0")) if f else "") + "S"
+    return out
+
 def secs(iso):
     m = ISO.match(iso); assert m and iso != "P" and not iso.endswith("T"), f"not an ISO 8601 duration: {iso!r}"
     d, h, mi, s = (float(x) if x else 0.0 for x in m.groups()); return d * 86400 + h * 3600 + mi * 60 + s
-def stamp(t): return dt.datetime.strptime(t, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
+def stamp(t): return dt.datetime.strptime(t, "%Y-%m-%dT%H:%M:%S.%fZ" if "." in t else "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
 
 domain = json.load(open(DOMAIN)); base = json.load(open(BASE)); ORIGIN = base["origin"]
 def spec(name):
@@ -115,7 +122,7 @@ def run_tests(only=None, update=False):
     if not only and os.path.exists(ev_path):
         ev = json.load(open(ev_path)); loads = list(ev); sc = json.load(open(f"{ROOT}/tests/evidence/score_times.json"))["score"]; ev["score"] = {"runs": sc["runs"]}
         grp = list(ev); chain = loads + ["edit", "score"]; a = domain["actions"]      # score runs behind edit, which runs behind the loads
-        iso = lambda x: "PT" + (f"{x // 3600}H" if x >= 3600 else "") + (f"{x % 3600 // 60}M" if x % 3600 >= 60 else "") + (f"{x % 60}S" if x % 60 or x == 0 else "")
+        iso = iso_s
         pre = ({b["eval"]["pointer"] for k in chain for b in a[k]["body"] if "eval" in b} - {b["pointer/set"] for k in chain for b in a[k]["body"] if "pointer/set" in b}) | {"/input/gpu"}   # the desk states its GPU; every GPU action reads and re-sets it
         def group(durs):
             dd = copy.deepcopy(domain)
@@ -124,19 +131,19 @@ def run_tests(only=None, update=False):
         def ends(out):
             f = {}
             for st in out["steps"]: f.setdefault(st["action"], st)
-            return {k: int((stamp(v["end"]) - stamp(ORIGIN)).total_seconds()) for k, v in f.items()}
+            return {k: round((stamp(v["end"]) - stamp(ORIGIN)).total_seconds(), 3) for k, v in f.items()}
         import math, statistics
         warm = lambda k: ev[k]["runs"] if k == "score" else ev[k]["runs"][1:]          # the judge was loaded once, so every score run is warm; a load's first run is cold
-        nom = {k: math.ceil(statistics.median(warm(k))) for k in ev}; slow = {k: math.ceil(max(v["runs"])) for k, v in ev.items()}; fast = {k: math.ceil(min(v["runs"])) for k, v in ev.items()}
+        nom = {k: round(statistics.median(warm(k)), 3) for k in ev}; slow = {k: round(max(v["runs"]), 3) for k, v in ev.items()}; fast = {k: round(min(v["runs"]), 3) for k, v in ev.items()}
         for k in grp:
             check(a[k]["measured"]["runs_s"] == ev[k]["runs"], f"{k}: RANGE GOLDEN the runs in the domain are the runs in tests/evidence/load_times.json")
-            check(secs(a[k]["duration"]) == nom[k], f"{k}: RANGE GOLDEN duration {a[k]['duration']} is the warm median ({statistics.median(warm(k))} s) rounded up")
-            check(secs(a[k]["duration"]) >= statistics.median(warm(k)) and secs(a[k]["duration"]) <= slow[k], f"{k}: RANGE INVARIANT the typical duration lies inside the measured range")
+            check(round(secs(a[k]["duration"]), 3) == nom[k], f"{k}: RANGE GOLDEN duration {a[k]['duration']} is the warm median ({statistics.median(warm(k))} s) to the millisecond")
+            check(secs(a[k]["duration"]) >= round(statistics.median(warm(k)), 3) and secs(a[k]["duration"]) <= slow[k], f"{k}: RANGE INVARIANT the typical duration lies inside the measured range")
             check(a[k]["start"] == ORIGIN, f"{k}: RANGE GOLDEN the span starts at the origin (the release time)")
         out_slow = group(slow); dead = ends(out_slow)
-        for k in grp: check(int((stamp(a[k]["end"]) - stamp(ORIGIN)).total_seconds()) == dead[k], f"{k}: RANGE GOLDEN the deadline {a[k]['end']} is the earliest end when every action takes its slowest run ({dead[k]} s)")
+        for k in grp: check(round((stamp(a[k]["end"]) - stamp(ORIGIN)).total_seconds(), 3) == dead[k], f"{k}: RANGE GOLDEN the deadline {a[k]['end']} is the earliest end when every action takes its slowest run ({dead[k]} s)")
         o_nom, o_fast = group(nom), group(fast)
-        check(slow["score"] == math.ceil(max(sc["runs"])) and sc["judge_load_and_smoke_s"] > max(sc["runs"]), "score: RANGE INVARIANT the one-time judge load (24.9 s) is kept out of the per-edit duration and is longer than any edit")
+        check(slow["score"] == round(max(sc["runs"]), 3) and sc["judge_load_and_smoke_s"] > max(sc["runs"]), "score: RANGE INVARIANT the one-time judge load (24.9 s) is kept out of the per-edit duration and is longer than any edit")
         check(group({})["temporal"]["consistent"] and o_nom["temporal"]["consistent"] and o_fast["temporal"]["consistent"] and out_slow["temporal"]["consistent"], "RANGE INVARIANT the group is consistent at the typical, the fastest and the slowest run")
         tf, tn, ts = (secs(o["temporal"]["total"]) for o in (o_fast, o_nom, out_slow)); check(tf <= tn <= ts, f"RANGE INVARIANT the group total grows with the durations: fastest {tf:g} s <= typical {tn:g} s <= slowest {ts:g} s")
         for k in grp:
@@ -144,7 +151,7 @@ def run_tests(only=None, update=False):
             check(o.get("temporal", {}).get("consistent") is False, f"{k}: RANGE CONTROL one second slower than its slowest measured run makes the plan inconsistent")
         check(sum(statistics.median(ev[k]["runs"][1:]) for k in loads) <= 7.0 + 0.5, "RANGE INVARIANT the five warm medians of the loads add to no more than the 7.0 s the whole load took in baseline.log (+0.5 s)")
         sec = float(open(f"{ROOT}/tests/evidence/baseline_log_lines.txt").read().split("EDIT-OK")[1].split("seconds=")[1].split()[0])
-        check(secs(a["edit"]["duration"]) == math.ceil(sec), f"edit: GOLDEN duration {a['edit']['duration']} is the {sec} s logged in baseline.log, rounded up")
+        check(round(secs(a["edit"]["duration"]), 3) == round(sec, 3), f"edit: GOLDEN duration {a['edit']['duration']} is the {sec} s logged in baseline.log")
     bad = [l for ok, l in results if not ok]; print(f"---- {len(results) - len(bad)} passed, {len(bad)} failed, {len(new)} actions")
     return 1 if bad else 0
 

@@ -14,7 +14,9 @@
   "omnigen2-edit",
   "aux-labels",
   "aux-motion",
-  "aux-rig"
+  "aux-rig",
+  "guest-elf",
+  "cad-guest"
  ],
  "variables": [
   {
@@ -78,6 +80,30 @@
    "type": "int",
    "description": "1 when a step of the AUX part-labelling and rigging route is done: coco_relabelled, synth_set, part_detector, unit_cube_source, part_labels, warp_built, motion_lag, hair_cards, spring_chains, scale_sidecar; composites labelled_parts, soft_rigid_known and rigged; also usd_stage (the source ingested into OpenUSD in its own units) and metric_labels (Segment's labels put back on the real-size stage by restore-units).",
    "init": {}
+  },
+  {
+   "name": "guest_input",
+   "type": "int",
+   "description": "1 when a guest of the sandbox is ready to run: its repository is checked out (<name>_repo) or its ELF is built (<name>_elf), for usd, udim_unpack, remesh, cage, drape, cloth_fit, garment_fit, headfit, skintokens, skintokens_rig, pixal3d, seethrough.",
+   "init": {}
+  },
+  {
+   "name": "guest",
+   "type": "int",
+   "description": "1 when the guest ELF of that name has run its stage: usd, udim_unpack, remesh, cage, drape, cloth_fit, garment_fit, headfit, skintokens, skintokens_rig, pixal3d, seethrough.",
+   "init": {}
+  },
+  {
+   "name": "cad_input",
+   "type": "int",
+   "description": "1 when what the CAD guest needs is on hand: the SolidCraft engine checkout (solidcraft_engine), the guest repository (guest_repo) and solidcraft-guest.elf built (guest_elf).",
+   "init": {}
+  },
+  {
+   "name": "cad",
+   "type": "int",
+   "description": "1 when the CAD guest function of that name has run: solid_default, solid_box, solid_mesh, solid_script, solid_command_count.",
+   "init": {}
   }
  ],
  "order": {
@@ -117,7 +143,24 @@
    "classify-soft-rigid",
    "classify-by-class-prior",
    "ingest-usd",
-   "restore-units"
+   "restore-units",
+   "run-usd-guest",
+   "run-udim-unpack-guest",
+   "run-remesh-guest",
+   "run-cage-guest",
+   "run-drape-guest",
+   "run-cloth-fit-guest",
+   "run-garment-fit-guest",
+   "run-headfit-guest",
+   "run-skintokens-guest",
+   "run-skintokens-rig-guest",
+   "run-pixal3d-guest",
+   "run-seethrough-guest",
+   "solid-default",
+   "solid-box",
+   "solid-mesh",
+   "solid-script",
+   "solid-command-count"
   ],
   "methods": [
    "/model/qwen25vl_conditioner",
@@ -152,7 +195,24 @@
    "/aux/labelled_parts",
    "/aux/soft_rigid_known",
    "/aux/usd_stage",
-   "/aux/metric_labels"
+   "/aux/metric_labels",
+   "/guest/usd",
+   "/guest/udim_unpack",
+   "/guest/remesh",
+   "/guest/cage",
+   "/guest/drape",
+   "/guest/cloth_fit",
+   "/guest/garment_fit",
+   "/guest/headfit",
+   "/guest/skintokens",
+   "/guest/skintokens_rig",
+   "/guest/pixal3d",
+   "/guest/seethrough",
+   "/cad/solid_default",
+   "/cad/solid_box",
+   "/cad/solid_mesh",
+   "/cad/solid_script",
+   "/cad/solid_command_count"
   ]
  }
 }

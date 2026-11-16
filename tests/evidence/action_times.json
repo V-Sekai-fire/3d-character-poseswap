@@ -1,0 +1,57 @@
+{
+ "ingest-usd": {
+  "runs_s": [
+   0.646,
+   0.658,
+   0.645,
+   0.643,
+   0.672,
+   0.672
+  ],
+  "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net"
+ },
+ "unitise-source": {
+  "runs_s": [
+   0.693,
+   0.699,
+   0.696,
+   0.698,
+   0.71,
+   0.698
+  ],
+  "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net"
+ },
+ "write-scale-sidecar": {
+  "runs_s": [
+   0.434,
+   0.423,
+   0.427,
+   0.423,
+   0.422,
+   0.423
+  ],
+  "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net"
+ },
+ "restore-units": {
+  "runs_s": [
+   0.741,
+   0.739,
+   0.739,
+   0.741,
+   0.744,
+   0.765
+  ],
+  "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net"
+ },
+ "relabel-coco": {
+  "runs_s": [
+   7.907,
+   7.864,
+   7.83,
+   7.796,
+   7.81,
+   7.796
+  ],
+  "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net"
+ }
+}

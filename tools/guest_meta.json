@@ -1,0 +1,100 @@
+{
+ "usd": {
+  "repo": "interactor-usd-guest",
+  "description": "",
+  "first": "OpenUSD compiled into a RISC-V sandbox guest that opens a stage from bytes, with the probe guest that first proved it could.",
+  "elf": [
+   "usd.elf",
+   "usd_probe.elf"
+  ],
+  "lic": "MIT"
+ },
+ "drape": {
+  "repo": "interactor-drape-guest",
+  "description": "The drape stage as a godot-sandbox guest: AVBD cloth from Lean kernels on the CPU and on RenderingDevice",
+  "first": "The drape stage as a godot-sandbox guest: AVBD cloth from Lean kernels, run on the CPU and on RenderingDevice.",
+  "elf": [],
+  "lic": "MIT"
+ },
+ "cloth-fit": {
+  "repo": "interactor-cloth-fit-guest",
+  "description": "The cloth-fit stage as a godot-sandbox guest whose compute runs on the GPU (no CPU path)",
+  "first": "The cloth-fit stage as a godot-sandbox guest whose compute runs on the GPU: a garment is retargeted onto a new body without intersections.",
+  "elf": [],
+  "lic": "MIT"
+ },
+ "garment-fit": {
+  "repo": "interactor-garment-fit-guest",
+  "description": "The fit stage as a godot-sandbox guest: cloth-fit's PolyFEM garment solve with the Lean SDF sampler",
+  "first": "The garment fit stage as a godot-sandbox guest: an intersection-free retargeting solve with a signed-distance sampler emitted from Lean.",
+  "elf": [],
+  "lic": "MIT"
+ },
+ "headfit": {
+  "repo": "interactor-headfit-guest",
+  "description": "The head fit as a godot-sandbox guest: the ANNY head fit and the unified-expression transfer",
+  "first": "The head fit as a sandboxed guest program: it fits the parametric body model's head and transfers a shared facial-expression set onto it.",
+  "elf": [
+   "headfit.elf"
+  ],
+  "lic": "MIT"
+ },
+ "skintokens": {
+  "repo": "interactor-skintokens-guest",
+  "description": "",
+  "first": "SkinTokens auto-rigging on ggml-rd, built as a sandboxed guest program. The host passes it a mesh and the model's weights, and it returns the rigged model as a GLB.",
+  "elf": [
+   "skintokens.elf"
+  ],
+  "lic": "Apache-2.0"
+ },
+ "skintokens-rig": {
+  "repo": "interactor-skintokens-rig-guest",
+  "description": "Godot host that runs the SkinTokens rig guest on WebGPU, Vulkan or Metal",
+  "first": "A small Godot 4 project that runs the SkinTokens rig guest, `skintokens.elf`, on Godot's RenderingDevice. It rigs one GLB file and writes the rigged GLB.",
+  "elf": [
+   "skintokens.elf"
+  ],
+  "lic": "MIT"
+ },
+ "pixal3d": {
+  "repo": "interactor-pixal3d-guest",
+  "description": "Pixal3D (image to 3D) as a godot-sandbox guest ELF on ggml-rd",
+  "first": "Pixal3D (image to 3D, a TRELLIS.2 pipeline) as a godot-sandbox guest ELF whose ggml graph runs on ggml-rd.",
+  "elf": [],
+  "lic": "MIT"
+ },
+ "udim-unpack": {
+  "repo": "interactor-udim-unpack-guest",
+  "description": "UDIM unpack (the fbx-udim-unpack algorithm) as a godot-sandbox guest ELF",
+  "first": "`udim.elf` unpacks UDIM tiles inside a godot-sandbox guest. It is the algorithm of [V-Sekai/fbx-udim-unpack](https://github.com/V-Sekai/fbx-udim-unpack) (`UdimUnpack.cpp`, `CalculateUdimTile` and `CalculateUdimPart`) with no FBX SDK, and it is independent of `",
+  "elf": [
+   "udim.elf",
+   "usd.elf"
+  ],
+  "lic": "MIT"
+ },
+ "remesh": {
+  "repo": "interactor-remesh-guest",
+  "description": "meshoptimizer's voxel remesher and simplifier as a godot-sandbox guest, the remesh stage of RFD 2284",
+  "first": "A remesher, simplifier and level-of-detail builder for avatar meshes that runs as a sandbox guest and works on flat arrays.",
+  "elf": [
+   "remesh.elf"
+  ],
+  "lic": "MIT"
+ },
+ "cage": {
+  "repo": "interactor-cage-guest",
+  "description": "The cage stage as a godot-sandbox guest: the (1,3) biharmonic bind and the in-motion cage fit on L-BFGS-B",
+  "first": "The cage stage as a godot-sandbox guest: the (1,3) biharmonic bind and the in-motion cage fit on L-BFGS-B.",
+  "elf": [],
+  "lic": "MIT"
+ },
+ "seethrough": {
+  "repo": "interactor-seethrough-guest",
+  "description": "See-Through (anime illustration to inpainted layers + depth) as a godot-sandbox guest on ggml-rd",
+  "first": "See-Through (anime illustration -> inpainted semantic layers + depth) as a godot-sandbox guest ELF whose ggml graph runs on ggml-rd.",
+  "elf": [],
+  "lic": "Apache-2.0"
+ }
+}
