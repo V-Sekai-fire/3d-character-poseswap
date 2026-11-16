@@ -55,7 +55,9 @@
      7.796
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Map every source class of the Fashionpedia-class set into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail with a motion prior.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "make-synth-set": {
    "params": [],
@@ -80,7 +82,9 @@
     }
    ],
    "duration": "PT8M32S",
-   "duration_basis": "measured: 360 garments on fedora, 2026-11-15"
+   "duration_basis": "measured: 360 garments on fedora, 2026-11-15",
+   "description": "Render GarmentCodeData drapes on the neutral body into a COCO set with exact part masks, split by garment (repro/gen_synth.py).",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "train-part-detector": {
    "params": [],
@@ -123,7 +127,9 @@
     }
    ],
    "duration": "PT19M24S",
-   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090"
+   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090",
+   "description": "Fine-tune RF-DETR-Seg-Small on the relabelled and the synthetic sets (repro/train_synth.py).",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "unitise-source": {
    "params": [],
@@ -152,7 +158,9 @@
      0.698
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Normalise the source GLB into the unit cube before Segment.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "write-scale-sidecar": {
    "params": [],
@@ -181,7 +189,9 @@
      0.423
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Write scale and offset beside every unit-cube mesh, with the metric size from a body-height prior.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "segment-labels": {
    "params": [],
@@ -231,7 +241,9 @@
     }
    ],
    "duration": "PT1M",
-   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps"
+   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps",
+   "description": "Run Alchemy3D-Segment with maps from the part detector.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "close-labelling": {
    "params": [],
@@ -249,7 +261,9 @@
     }
    ],
    "duration": "PT0S",
-   "duration_basis": "composite marker"
+   "duration_basis": "composite marker",
+   "description": "Needs metric labels. Makes labelled parts.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "ingest-usd": {
    "params": [],
@@ -278,7 +292,9 @@
      0.672
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Needs source mesh. Makes usd stage.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "restore-units": {
    "params": [],
@@ -314,7 +330,9 @@
      0.765
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Needs part labels and scale sidecar. Makes metric labels.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {

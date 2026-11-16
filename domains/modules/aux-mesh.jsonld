@@ -43,7 +43,9 @@
     }
    ],
    "duration": "PT1S",
-   "duration_basis": "estimate: a bookkeeping step. It reads the mesh the desk states and does no work, so it takes the planner's smallest span, one second"
+   "duration_basis": "estimate: a bookkeeping step. It reads the mesh the desk states and does no work, so it takes the planner's smallest span, one second",
+   "description": "Needs the source mesh on hand. Makes source mesh.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "matte-image": {
    "body": [
@@ -79,7 +81,9 @@
     ],
     "model_load_s": 4.75,
     "host": "fedora, NVIDIA GeForce RTX 4090, torch 2.8.0+cu128, tools/measure/time_matte.py, 2026-11-15"
-   }
+   },
+   "description": "Needs the garment image on hand and the birefnet weights on hand. Makes matted image.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "pixal3d-image-to-mesh": {
    "body": [
@@ -120,7 +124,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: Pixal3D (multi-view checkpoints, on TRELLIS.2) has been fetched but never run on a garment image; no span is stated"
+   "duration_basis": "not timed: Pixal3D (multi-view checkpoints, on TRELLIS.2) has been fetched but never run on a garment image; no span is stated",
+   "description": "Needs matted image, the pixal3d weights on hand and a free GPU host. Makes source mesh.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {

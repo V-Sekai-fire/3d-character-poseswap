@@ -48,7 +48,9 @@
     }
    ],
    "duration": "PT30M",
-   "duration_basis": "estimate: not built yet; blocked on the host compiler"
+   "duration_basis": "estimate: not built yet; blocked on the host compiler",
+   "description": "Build the NvidiaWarp-GarmentCode fork.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "measure-motion-lag": {
    "params": [],
@@ -98,7 +100,9 @@
     }
    ],
    "duration": "PT1H",
-   "duration_basis": "estimate: not built yet"
+   "duration_basis": "estimate: not built yet",
+   "description": "Drape, move the body, and measure which vertices lag.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "classify-soft-rigid": {
    "params": [],
@@ -123,7 +127,9 @@
     }
    ],
    "duration": "PT1S",
-   "duration_basis": "estimate"
+   "duration_basis": "estimate",
+   "description": "Needs labelled parts and motion lag. Makes soft rigid known.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "classify-by-class-prior": {
    "body": [
@@ -144,7 +150,9 @@
     }
    ],
    "duration": "PT1S",
-   "duration_basis": "estimate: the table in tests/evidence/class_motion_counts.json decides soft, rigid or parent for each class whose motion covers 80% of its annotations (Skirt and Cape soft, Detail parent, Accessory and Fitted rigid) and leaves Collar and Sleeve as measure, which only the lag measurement settles. A lookup in a table of 7 classes; the script that once timed it at 0.02 s was removed, so no run backs the PT1S and the action has no code yet"
+   "duration_basis": "estimate: the table in tests/evidence/class_motion_counts.json decides soft, rigid or parent for each class whose motion covers 80% of its annotations (Skirt and Cape soft, Detail parent, Accessory and Fitted rigid) and leaves Collar and Sleeve as measure, which only the lag measurement settles. A lookup in a table of 7 classes; the script that once timed it at 0.02 s was removed, so no run backs the PT1S and the action has no code yet",
+   "description": "Needs labelled parts. Makes soft rigid known and soft rigid prior only.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {

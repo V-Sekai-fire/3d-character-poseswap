@@ -57,7 +57,9 @@
      21.084
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "HairDeck: portrait to hair cards on Apple MPS.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "make-spring-chains": {
    "params": [],
@@ -82,7 +84,9 @@
     }
    ],
    "duration": "PT2S",
-   "duration_basis": "measured: 1.3 s inside the same HairDeck run"
+   "duration_basis": "measured: 1.3 s inside the same HairDeck run",
+   "description": "HairDeck chain model: path, joints and stiffness per chain, in the normalised frame.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "rig-aux-parts": {
    "params": [],
@@ -114,7 +118,9 @@
     }
    ],
    "duration": "PT1M",
-   "duration_basis": "estimate: not built yet"
+   "duration_basis": "estimate: not built yet",
+   "description": "Give soft parts spring-bone chains and rigid parts a parent bone, from the labels and the measured lag.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   }
  },
  "methods": {

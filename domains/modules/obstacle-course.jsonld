@@ -43,7 +43,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs the soma clips on hand and the godot double on hand. Makes clips baked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "rig-clips-on-model": {
    "params": [],
@@ -74,7 +76,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs clips baked, the skintokens elf on hand and the rigged model on hand. Makes clips on model.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "bake-course": {
    "params": [],
@@ -98,7 +102,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs the course script on hand and the godot double on hand. Makes shapes baked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "check-colliders": {
    "params": [],
@@ -115,7 +121,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs shapes baked. Makes colliders checked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "read-keyboard-or-pad": {
    "params": [],
@@ -132,7 +140,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs the godot project on hand. Makes input ready.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "read-vmc-capture": {
    "params": [],
@@ -163,7 +173,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs the godot project on hand, the vmc elf on hand and the vmc sender on hand. Makes input ready.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "pick-clip": {
    "params": [],
@@ -194,7 +206,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs clips baked, the mm elf on hand and input ready. Makes clip picked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "play-clips": {
    "params": [],
@@ -225,7 +239,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs clips on model, clip picked and the godot project on hand. Makes posed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "hold-at-walls": {
    "params": [],
@@ -256,7 +272,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs colliders checked, posed and the mujoco elf on hand. Makes grounded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "drive-muscles": {
    "params": [],
@@ -280,7 +298,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs grounded and the mujoco elf on hand. Makes muscle driven.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "follow-muscle-skeleton": {
    "params": [],
@@ -304,7 +324,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs muscle driven and the rigged model on hand. Makes avatar follows.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "finish-course": {
    "params": [],
@@ -321,7 +343,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs avatar follows. Makes finished.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {

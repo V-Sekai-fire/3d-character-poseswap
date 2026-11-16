@@ -98,7 +98,9 @@
     "cold_s": 4.429,
     "warm_median_s": 3.202,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the omnigen2 repository checked out, the omnigen2 elf on hand and a free GPU host. Makes the qwen25vl conditioner loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "load-omnigen2-transformer": {
    "params": [],
@@ -155,7 +157,9 @@
     "cold_s": 11.408,
     "warm_median_s": 3.26,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the omnigen2 repository checked out, the omnigen2 elf on hand and a free GPU host. Makes the omnigen2 transformer loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "load-omnigen2-vae": {
    "params": [],
@@ -212,7 +216,9 @@
     "cold_s": 0.275,
     "warm_median_s": 0.097,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the omnigen2 repository checked out, the omnigen2 elf on hand and a free GPU host. Makes the omnigen2 vae loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "load-editscore-lora": {
    "params": [],
@@ -258,7 +264,9 @@
     "cold_s": 0.053,
     "warm_median_s": 0.006,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the editscore repository checked out, the omnigen2 elf on hand and a free GPU host. Makes the editscore lora loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "merge-editscore-lora": {
    "params": [],
@@ -308,7 +316,9 @@
     "cold_s": 0.328,
     "warm_median_s": 0.174,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the omnigen2 transformer loaded and the editscore lora loaded. Makes the editscore merged loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "check-mul-mat": {
    "params": [],
@@ -338,7 +348,9 @@
      "pointer/set": "/op/mul_mat",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the omnigen2 repository checked out, the godot double on hand and the omnigen2 mul mat elf on hand. Makes the mul mat op checked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "edit": {
    "params": [],
@@ -422,7 +434,9 @@
      67.0
     ],
     "host": "fedora, RTX 4090 (baseline.log, one run)"
-   }
+   },
+   "description": "Needs the snapshot image, an edit prompt, a free GPU host, the omnigen2 repository checked out, the qwen25vl conditioner loaded, the omnigen2 transformer loaded, the omnigen2 vae loaded and the editscore merged loaded. Makes the edited image.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "score": {
    "params": [],
@@ -486,7 +500,9 @@
     ],
     "judge_load_and_smoke_s": 24.9,
     "host": "fedora, RTX 4090, 6 edits of bf16-lora, tools/measure/time_score.sh, 2026-11-15"
-   }
+   },
+   "description": "Needs the editscore repository checked out, the omnigen2 elf on hand, a free GPU host and the edited image. Makes the scored image.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {

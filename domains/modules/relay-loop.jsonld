@@ -43,7 +43,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs the socket first half on hand and the socket second half on hand. Makes datagrams.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "identify-sender": {
    "params": [],
@@ -60,7 +62,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs datagrams. Makes person.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "offer-frame": {
    "params": [],
@@ -84,7 +88,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs person and datagrams. Makes offered.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "send-to-others": {
    "params": [],
@@ -101,7 +107,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs offered. Makes handled.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "count-refused": {
    "params": [],
@@ -118,7 +126,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs person. Makes handled.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "tick-zones": {
    "params": [],
@@ -135,7 +145,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs handled. Makes ticked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "catch-up-if-late": {
    "params": [],
@@ -152,7 +164,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs ticked. Makes caught up.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "wait-for-next-tick": {
    "params": [],
@@ -169,7 +183,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs caught up. Makes next tick.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {

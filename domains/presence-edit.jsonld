@@ -155,7 +155,9 @@
     "cold_s": 4.429,
     "warm_median_s": 3.202,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the omnigen2 repository checked out, the omnigen2 elf on hand and a free GPU host. Makes the qwen25vl conditioner loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "load-omnigen2-transformer": {
    "params": [],
@@ -212,7 +214,9 @@
     "cold_s": 11.408,
     "warm_median_s": 3.26,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the omnigen2 repository checked out, the omnigen2 elf on hand and a free GPU host. Makes the omnigen2 transformer loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "load-omnigen2-vae": {
    "params": [],
@@ -269,7 +273,9 @@
     "cold_s": 0.275,
     "warm_median_s": 0.097,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the omnigen2 repository checked out, the omnigen2 elf on hand and a free GPU host. Makes the omnigen2 vae loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "load-editscore-lora": {
    "params": [],
@@ -315,7 +321,9 @@
     "cold_s": 0.053,
     "warm_median_s": 0.006,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the editscore repository checked out, the omnigen2 elf on hand and a free GPU host. Makes the editscore lora loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "merge-editscore-lora": {
    "params": [],
@@ -365,7 +373,9 @@
     "cold_s": 0.328,
     "warm_median_s": 0.174,
     "host": "fedora, RTX 4090, driver 615.71.09, BF16 base weights, 5 runs, the first cold from disk (tools/measure/time_loads.py, 2026-11-15)"
-   }
+   },
+   "description": "Needs the omnigen2 transformer loaded and the editscore lora loaded. Makes the editscore merged loaded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "fetch-clips": {
    "params": [],
@@ -381,7 +391,9 @@
      "pointer/set": "/input/clips",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the muscle drive release repository checked out. Makes the clips on hand.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "encode-packets": {
    "params": [],
@@ -418,7 +430,9 @@
      "pointer/set": "/body/packet",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the packets repository checked out, the godot double on hand, the packet golden on hand and the clips on hand. Makes the body packet.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "route-model": {
    "params": [],
@@ -448,7 +462,9 @@
      "pointer/set": "/body/routed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the zone router repository checked out, the godot double on hand and the body packet. Makes the body routed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "route-relay": {
    "params": [],
@@ -478,7 +494,9 @@
      "pointer/set": "/body/routed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the zone relay repository checked out, the godot double on hand and the body packet. Makes the body routed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "seal-and-take": {
    "params": [],
@@ -508,7 +526,9 @@
      "pointer/set": "/body/sealed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the observer repository checked out, the godot double on hand and the body routed. Makes the body sealed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "judge": {
    "params": [],
@@ -538,7 +558,9 @@
      "pointer/set": "/body/judged",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the observer repository checked out, the godot double on hand and the body sealed. Makes the body judged.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "agree": {
    "params": [],
@@ -568,7 +590,9 @@
      "pointer/set": "/body/agreed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the replica repository checked out, the replica stage on and the body judged. Makes the body agreed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "skip-agree": {
    "params": [],
@@ -591,7 +615,9 @@
      "pointer/set": "/body/agreed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the replica stage bypassed and the body judged. Makes the body agreed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "play-curve": {
    "params": [],
@@ -621,7 +647,9 @@
      "pointer/set": "/body/played",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the curve repository checked out, the godot double on hand and the body agreed. Makes the body played.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "check-mul-mat": {
    "params": [],
@@ -651,7 +679,9 @@
      "pointer/set": "/op/mul_mat",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the omnigen2 repository checked out, the godot double on hand and the omnigen2 mul mat elf on hand. Makes the mul mat op checked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "fit-anny": {
    "params": [],
@@ -688,7 +718,9 @@
      "pointer/set": "/avatar/fitted",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the anny fit repository checked out, the godot double on hand, the anny fit elf on hand and the soma pheno on hand. Makes the avatar fitted.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "follow": {
    "params": [],
@@ -746,7 +778,9 @@
      "pointer/set": "/avatar/posed",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the anny follow repository checked out, the avatar fitted, the godot double on hand, the mujoco elf on hand, the anny glb on hand, the clips on hand and the body played. Makes the avatar posed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "snapshot": {
    "params": [],
@@ -776,7 +810,9 @@
      "pointer/set": "/image/snapshot",
      "value": 1
     }
-   ]
+   ],
+   "description": "Needs the presence gates repository checked out, the godot double on hand and the avatar posed. Makes the snapshot image.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "edit": {
    "params": [],
@@ -860,7 +896,9 @@
      67.0
     ],
     "host": "fedora, RTX 4090 (baseline.log, one run)"
-   }
+   },
+   "description": "Needs the snapshot image, an edit prompt, a free GPU host, the omnigen2 repository checked out, the qwen25vl conditioner loaded, the omnigen2 transformer loaded, the omnigen2 vae loaded and the editscore merged loaded. Makes the edited image.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "score": {
    "params": [],
@@ -924,7 +962,9 @@
     ],
     "judge_load_and_smoke_s": 24.9,
     "host": "fedora, RTX 4090, 6 edits of bf16-lora, tools/measure/time_score.sh, 2026-11-15"
-   }
+   },
+   "description": "Needs the editscore repository checked out, the omnigen2 elf on hand, a free GPU host and the edited image. Makes the scored image.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "relabel-coco": {
    "params": [],
@@ -953,7 +993,9 @@
      7.796
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Map every source class of the Fashionpedia-class set into Skirt, Sleeve, Collar, Cape, Accessory, Fitted and Detail with a motion prior.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "make-synth-set": {
    "params": [],
@@ -978,7 +1020,9 @@
     }
    ],
    "duration": "PT8M32S",
-   "duration_basis": "measured: 360 garments on fedora, 2026-11-15"
+   "duration_basis": "measured: 360 garments on fedora, 2026-11-15",
+   "description": "Render GarmentCodeData drapes on the neutral body into a COCO set with exact part masks, split by garment (repro/gen_synth.py).",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "train-part-detector": {
    "params": [],
@@ -1021,7 +1065,9 @@
     }
    ],
    "duration": "PT19M24S",
-   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090"
+   "duration_basis": "measured: 15 epochs on the 3-class set, one RTX 4090",
+   "description": "Fine-tune RF-DETR-Seg-Small on the relabelled and the synthetic sets (repro/train_synth.py).",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "unitise-source": {
    "params": [],
@@ -1050,7 +1096,9 @@
      0.698
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Normalise the source GLB into the unit cube before Segment.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "write-scale-sidecar": {
    "params": [],
@@ -1079,7 +1127,9 @@
      0.423
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Write scale and offset beside every unit-cube mesh, with the metric size from a body-height prior.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "segment-labels": {
    "params": [],
@@ -1129,7 +1179,9 @@
     }
    ],
    "duration": "PT1M",
-   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps"
+   "duration_basis": "estimate: Segment alone took 6 to 12 s on the pony example; this adds the garment render and the maps",
+   "description": "Run Alchemy3D-Segment with maps from the part detector.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "build-warp": {
    "params": [],
@@ -1154,7 +1206,9 @@
     }
    ],
    "duration": "PT30M",
-   "duration_basis": "estimate: not built yet; blocked on the host compiler"
+   "duration_basis": "estimate: not built yet; blocked on the host compiler",
+   "description": "Build the NvidiaWarp-GarmentCode fork.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "measure-motion-lag": {
    "params": [],
@@ -1204,7 +1258,9 @@
     }
    ],
    "duration": "PT1H",
-   "duration_basis": "estimate: not built yet"
+   "duration_basis": "estimate: not built yet",
+   "description": "Drape, move the body, and measure which vertices lag.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "make-hair-cards": {
    "params": [],
@@ -1238,7 +1294,9 @@
      21.084
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "HairDeck: portrait to hair cards on Apple MPS.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "make-spring-chains": {
    "params": [],
@@ -1263,7 +1321,9 @@
     }
    ],
    "duration": "PT2S",
-   "duration_basis": "measured: 1.3 s inside the same HairDeck run"
+   "duration_basis": "measured: 1.3 s inside the same HairDeck run",
+   "description": "HairDeck chain model: path, joints and stiffness per chain, in the normalised frame.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "rig-aux-parts": {
    "params": [],
@@ -1295,7 +1355,9 @@
     }
    ],
    "duration": "PT1M",
-   "duration_basis": "estimate: not built yet"
+   "duration_basis": "estimate: not built yet",
+   "description": "Give soft parts spring-bone chains and rigid parts a parent bone, from the labels and the measured lag.",
+   "description_basis": "written: the sentence the domain description gives for this action"
   },
   "close-labelling": {
    "params": [],
@@ -1313,7 +1375,9 @@
     }
    ],
    "duration": "PT0S",
-   "duration_basis": "composite marker"
+   "duration_basis": "composite marker",
+   "description": "Needs metric labels. Makes labelled parts.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "classify-soft-rigid": {
    "params": [],
@@ -1338,7 +1402,9 @@
     }
    ],
    "duration": "PT1S",
-   "duration_basis": "estimate"
+   "duration_basis": "estimate",
+   "description": "Needs labelled parts and motion lag. Makes soft rigid known.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "classify-by-class-prior": {
    "body": [
@@ -1359,7 +1425,9 @@
     }
    ],
    "duration": "PT1S",
-   "duration_basis": "estimate: the table in tests/evidence/class_motion_counts.json decides soft, rigid or parent for each class whose motion covers 80% of its annotations (Skirt and Cape soft, Detail parent, Accessory and Fitted rigid) and leaves Collar and Sleeve as measure, which only the lag measurement settles. A lookup in a table of 7 classes; the script that once timed it at 0.02 s was removed, so no run backs the PT1S and the action has no code yet"
+   "duration_basis": "estimate: the table in tests/evidence/class_motion_counts.json decides soft, rigid or parent for each class whose motion covers 80% of its annotations (Skirt and Cape soft, Detail parent, Accessory and Fitted rigid) and leaves Collar and Sleeve as measure, which only the lag measurement settles. A lookup in a table of 7 classes; the script that once timed it at 0.02 s was removed, so no run backs the PT1S and the action has no code yet",
+   "description": "Needs labelled parts. Makes soft rigid known and soft rigid prior only.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "ingest-usd": {
    "params": [],
@@ -1388,7 +1456,9 @@
      0.672
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Needs source mesh. Makes usd stage.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "restore-units": {
    "params": [],
@@ -1424,7 +1494,9 @@
      0.765
     ],
     "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
-   }
+   },
+   "description": "Needs part labels and scale sidecar. Makes metric labels.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "use-dataset-mesh": {
    "body": [
@@ -1441,7 +1513,9 @@
     }
    ],
    "duration": "PT1S",
-   "duration_basis": "estimate: a bookkeeping step. It reads the mesh the desk states and does no work, so it takes the planner's smallest span, one second"
+   "duration_basis": "estimate: a bookkeeping step. It reads the mesh the desk states and does no work, so it takes the planner's smallest span, one second",
+   "description": "Needs the source mesh on hand. Makes source mesh.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "matte-image": {
    "body": [
@@ -1477,7 +1551,9 @@
     ],
     "model_load_s": 4.75,
     "host": "fedora, NVIDIA GeForce RTX 4090, torch 2.8.0+cu128, tools/measure/time_matte.py, 2026-11-15"
-   }
+   },
+   "description": "Needs the garment image on hand and the birefnet weights on hand. Makes matted image.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "pixal3d-image-to-mesh": {
    "body": [
@@ -1518,7 +1594,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: Pixal3D (multi-view checkpoints, on TRELLIS.2) has been fetched but never run on a garment image; no span is stated"
+   "duration_basis": "not timed: Pixal3D (multi-view checkpoints, on TRELLIS.2) has been fetched but never run on a garment image; no span is stated",
+   "description": "Needs matted image, the pixal3d weights on hand and a free GPU host. Makes source mesh.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "bake-clips": {
    "params": [],
@@ -1542,7 +1620,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs the soma clips on hand and the godot double on hand. Makes clips baked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "rig-clips-on-model": {
    "params": [],
@@ -1573,7 +1653,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs clips baked, the skintokens elf on hand and the rigged model on hand. Makes clips on model.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "bake-course": {
    "params": [],
@@ -1597,7 +1679,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs the course script on hand and the godot double on hand. Makes shapes baked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "check-colliders": {
    "params": [],
@@ -1614,7 +1698,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs shapes baked. Makes colliders checked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "read-keyboard-or-pad": {
    "params": [],
@@ -1631,7 +1717,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs the godot project on hand. Makes input ready.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "read-vmc-capture": {
    "params": [],
@@ -1662,7 +1750,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs the godot project on hand, the vmc elf on hand and the vmc sender on hand. Makes input ready.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "pick-clip": {
    "params": [],
@@ -1693,7 +1783,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs clips baked, the mm elf on hand and input ready. Makes clip picked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "play-clips": {
    "params": [],
@@ -1724,7 +1816,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs clips on model, clip picked and the godot project on hand. Makes posed.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "hold-at-walls": {
    "params": [],
@@ -1755,7 +1849,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs colliders checked, posed and the mujoco elf on hand. Makes grounded.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "drive-muscles": {
    "params": [],
@@ -1779,7 +1875,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs grounded and the mujoco elf on hand. Makes muscle driven.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "follow-muscle-skeleton": {
    "params": [],
@@ -1803,7 +1901,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs muscle driven and the rigged model on hand. Makes avatar follows.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "finish-course": {
    "params": [],
@@ -1820,7 +1920,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot"
+   "duration_basis": "not timed: the repository is not a Godot project yet and none of it has run under Godot",
+   "description": "Needs avatar follows. Makes finished.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "drain-sockets": {
    "params": [],
@@ -1844,7 +1946,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs the socket first half on hand and the socket second half on hand. Makes datagrams.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "identify-sender": {
    "params": [],
@@ -1861,7 +1965,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs datagrams. Makes person.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "offer-frame": {
    "params": [],
@@ -1885,7 +1991,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs person and datagrams. Makes offered.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "send-to-others": {
    "params": [],
@@ -1902,7 +2010,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs offered. Makes handled.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "count-refused": {
    "params": [],
@@ -1919,7 +2029,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs person. Makes handled.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "tick-zones": {
    "params": [],
@@ -1936,7 +2048,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs handled. Makes ticked.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "catch-up-if-late": {
    "params": [],
@@ -1953,7 +2067,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs ticked. Makes caught up.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   },
   "wait-for-next-tick": {
    "params": [],
@@ -1970,7 +2086,9 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only"
+   "duration_basis": "not timed here; docs/zone-net.md measures the loop on loopback only",
+   "description": "Needs caught up. Makes next tick.",
+   "description_basis": "drafted from the action's own preconditions and effects; no other source"
   }
  },
  "methods": {
