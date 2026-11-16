@@ -930,6 +930,244 @@
   "total": null,
   "twice_total": "PT0S"
  },
+ "run-cage-guest": {
+  "command": {
+   "out": "action run-cage-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/cage"
+  ],
+  "plan": [
+   "run-cage-guest"
+  ],
+  "preconditions": [
+   "/guest_input/cage_repo",
+   "/guest_input/cage_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-cloth-fit-guest": {
+  "command": {
+   "out": "action run-cloth-fit-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/cloth_fit",
+   "/input/gpu"
+  ],
+  "plan": [
+   "run-cloth-fit-guest"
+  ],
+  "preconditions": [
+   "/input/gpu",
+   "/guest_input/cloth_fit_repo",
+   "/guest_input/cloth_fit_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-drape-guest": {
+  "command": {
+   "out": "action run-drape-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/drape"
+  ],
+  "plan": [
+   "run-drape-guest"
+  ],
+  "preconditions": [
+   "/guest_input/drape_repo",
+   "/guest_input/drape_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-garment-fit-guest": {
+  "command": {
+   "out": "action run-garment-fit-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/garment_fit"
+  ],
+  "plan": [
+   "run-garment-fit-guest"
+  ],
+  "preconditions": [
+   "/guest_input/garment_fit_repo",
+   "/guest_input/garment_fit_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-headfit-guest": {
+  "command": {
+   "out": "action run-headfit-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/headfit"
+  ],
+  "plan": [
+   "run-headfit-guest"
+  ],
+  "preconditions": [
+   "/guest_input/headfit_repo",
+   "/guest_input/headfit_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-pixal3d-guest": {
+  "command": {
+   "out": "action run-pixal3d-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/pixal3d",
+   "/input/gpu"
+  ],
+  "plan": [
+   "run-pixal3d-guest"
+  ],
+  "preconditions": [
+   "/input/gpu",
+   "/guest_input/pixal3d_repo",
+   "/guest_input/pixal3d_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-remesh-guest": {
+  "command": {
+   "out": "action run-remesh-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/remesh"
+  ],
+  "plan": [
+   "run-remesh-guest"
+  ],
+  "preconditions": [
+   "/guest_input/remesh_repo",
+   "/guest_input/remesh_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-seethrough-guest": {
+  "command": {
+   "out": "action run-seethrough-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/seethrough",
+   "/input/gpu"
+  ],
+  "plan": [
+   "run-seethrough-guest"
+  ],
+  "preconditions": [
+   "/input/gpu",
+   "/guest_input/seethrough_repo",
+   "/guest_input/seethrough_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-skintokens-guest": {
+  "command": {
+   "out": "action run-skintokens-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/skintokens",
+   "/input/gpu"
+  ],
+  "plan": [
+   "run-skintokens-guest"
+  ],
+  "preconditions": [
+   "/input/gpu",
+   "/guest_input/skintokens_repo",
+   "/guest_input/skintokens_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-skintokens-rig-guest": {
+  "command": {
+   "out": "action run-skintokens-rig-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/skintokens_rig",
+   "/input/gpu"
+  ],
+  "plan": [
+   "run-skintokens-rig-guest"
+  ],
+  "preconditions": [
+   "/input/gpu",
+   "/guest_input/skintokens_rig_repo",
+   "/guest_input/skintokens_rig_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-udim-unpack-guest": {
+  "command": {
+   "out": "action run-udim-unpack-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/udim_unpack"
+  ],
+  "plan": [
+   "run-udim-unpack-guest"
+  ],
+  "preconditions": [
+   "/guest_input/udim_unpack_repo",
+   "/guest_input/udim_unpack_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "run-usd-guest": {
+  "command": {
+   "out": "action run-usd-guest has no command yet: a guest ELF runs inside godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/guest/usd"
+  ],
+  "plan": [
+   "run-usd-guest"
+  ],
+  "preconditions": [
+   "/guest_input/usd_repo",
+   "/guest_input/usd_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "score": {
   "command": {
    "out": "unknown action: score",

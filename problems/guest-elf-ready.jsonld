@@ -1,0 +1,130 @@
+{
+ "@context": {
+  "VSEKAI": "https://v-sekai.org/",
+  "domain": "VSEKAI:planning/domain/"
+ },
+ "@type": "domain:Problem",
+ "name": "guest_elf_ready_problem",
+ "domain": "presence_edit",
+ "source": "3d-character-poseswap",
+ "version": "0.1.0",
+ "description": "Every guest ELF built and its repository checked out, a free GPU: run them all.",
+ "variables": [
+  {
+   "name": "input",
+   "type": "int",
+   "init": {
+    "gpu": 1
+   }
+  },
+  {
+   "name": "guest_input",
+   "type": "int",
+   "init": {
+    "usd_repo": 1,
+    "usd_elf": 1,
+    "udim_unpack_repo": 1,
+    "udim_unpack_elf": 1,
+    "remesh_repo": 1,
+    "remesh_elf": 1,
+    "cage_repo": 1,
+    "cage_elf": 1,
+    "drape_repo": 1,
+    "drape_elf": 1,
+    "cloth_fit_repo": 1,
+    "cloth_fit_elf": 1,
+    "garment_fit_repo": 1,
+    "garment_fit_elf": 1,
+    "headfit_repo": 1,
+    "headfit_elf": 1,
+    "skintokens_repo": 1,
+    "skintokens_elf": 1,
+    "skintokens_rig_repo": 1,
+    "skintokens_rig_elf": 1,
+    "pixal3d_repo": 1,
+    "pixal3d_elf": 1,
+    "seethrough_repo": 1,
+    "seethrough_elf": 1
+   }
+  },
+  {
+   "name": "guest",
+   "type": "int",
+   "init": {
+    "usd": 0,
+    "udim_unpack": 0,
+    "remesh": 0,
+    "cage": 0,
+    "drape": 0,
+    "cloth_fit": 0,
+    "garment_fit": 0,
+    "headfit": 0,
+    "skintokens": 0,
+    "skintokens_rig": 0,
+    "pixal3d": 0,
+    "seethrough": 0
+   }
+  }
+ ],
+ "capabilities": {
+  "entities": {},
+  "graph": {
+   "edges": []
+  }
+ },
+ "todo_list": [
+  {
+   "goal": [
+    {
+     "pointer": "/guest/usd",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/udim_unpack",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/remesh",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/cage",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/drape",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/cloth_fit",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/garment_fit",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/headfit",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/skintokens",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/skintokens_rig",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/pixal3d",
+     "eq": 1
+    },
+    {
+     "pointer": "/guest/seethrough",
+     "eq": 1
+    }
+   ]
+  }
+ ],
+ "origin": "2026-11-15T08:00:00Z"
+}

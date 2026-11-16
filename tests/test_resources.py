@@ -28,5 +28,8 @@ ck(round(secs(u["temporal"]["total"]), 3) == overlap, f"load group CONTROL witho
 first = {}
 for st in g["steps"]: first.setdefault(st["action"], st)
 w = sorted((s["start"], s["end"]) for k, s in first.items() if k in GPU); ck(all(w[i][1] <= w[i + 1][0] for i in range(len(w) - 1)), f"INVARIANT no two GPU steps overlap ({len(w)} GPU steps in the load group)")
-ck(len(GPU) == 10 and all(any(b.get("pointer/set") == "/input/gpu" for b in a[k]["body"]) for k in GPU), "INVARIANT all 10 GPU actions read and set /input/gpu")
+GUEST_GPU = {"run-cloth-fit-guest", "run-skintokens-guest", "run-skintokens-rig-guest", "run-pixal3d-guest", "run-seethrough-guest"}   # guests whose README says the compute is on the GPU
+rest = [k for k in GPU if k not in GUEST_GPU]
+ck(len(rest) == 10 and set(GPU) >= GUEST_GPU and all(any(b.get("pointer/set") == "/input/gpu" for b in a[k]["body"]) for k in GPU), f"INVARIANT all {len(GPU)} GPU actions (10 and the {len(GUEST_GPU)} GPU-only guests) read and set /input/gpu")
+ck(not any(k in GPU for k in a if k.startswith("run-") and k.endswith("-guest") and k not in GUEST_GPU), "CONTROL a guest that is not GPU-only does not take the GPU")
 print(f"---- {sum(R)} passed, {len(R) - sum(R)} failed"); sys.exit(0 if all(R) else 1)
