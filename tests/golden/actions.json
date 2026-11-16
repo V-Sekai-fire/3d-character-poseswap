@@ -435,7 +435,7 @@
    "out": "[dry] cd $HOME/.hermes/cache/scratch/repro-space && pixi run -q -e mac python repro/usd_io.py ingest ${SOURCE:?set SOURCE=<mesh>} $REPO/$OUT_DIR/out/stage.usda --unit ${UNIT:-cm} ${LABELS:+--labels $LABELS --classmap ${CLASSMAP:?set CLASSMAP}}",
    "rc": 0
   },
-  "duration": "PT5S",
+  "duration": "PT0.658S",
   "effects": [
    "/aux/usd_stage"
   ],
@@ -445,8 +445,8 @@
   "preconditions": [
    "/aux/source_mesh"
   ],
-  "total": "PT5S",
-  "twice_total": "PT5S"
+  "total": "PT0.658S",
+  "twice_total": "PT0.658S"
  },
  "judge": {
   "command": {
@@ -473,7 +473,7 @@
    "out": "unknown action: load-editscore-lora",
    "rc": 64
   },
-  "duration": "PT1S",
+  "duration": "PT0.006S",
   "effects": [
    "/model/editscore_lora"
   ],
@@ -485,15 +485,15 @@
    "/input/omnigen2_elf",
    "/input/gpu_host"
   ],
-  "total": "PT1S",
-  "twice_total": "PT1S"
+  "total": "PT0.006S",
+  "twice_total": "PT0.006S"
  },
  "load-omnigen2-transformer": {
   "command": {
    "out": "unknown action: load-omnigen2-transformer",
    "rc": 64
   },
-  "duration": "PT4S",
+  "duration": "PT3.26S",
   "effects": [
    "/model/omnigen2_transformer",
    "/input/gpu"
@@ -507,15 +507,15 @@
    "/input/omnigen2_elf",
    "/input/gpu_host"
   ],
-  "total": "PT4S",
-  "twice_total": "PT4S"
+  "total": "PT3.26S",
+  "twice_total": "PT3.26S"
  },
  "load-omnigen2-vae": {
   "command": {
    "out": "unknown action: load-omnigen2-vae",
    "rc": 64
   },
-  "duration": "PT1S",
+  "duration": "PT0.097S",
   "effects": [
    "/model/omnigen2_vae",
    "/input/gpu"
@@ -529,15 +529,15 @@
    "/input/omnigen2_elf",
    "/input/gpu_host"
   ],
-  "total": "PT1S",
-  "twice_total": "PT1S"
+  "total": "PT0.097S",
+  "twice_total": "PT0.097S"
  },
  "load-qwen25vl-conditioner": {
   "command": {
    "out": "unknown action: load-qwen25vl-conditioner",
    "rc": 64
   },
-  "duration": "PT4S",
+  "duration": "PT3.202S",
   "effects": [
    "/model/qwen25vl_conditioner",
    "/input/gpu"
@@ -551,15 +551,15 @@
    "/input/omnigen2_elf",
    "/input/gpu_host"
   ],
-  "total": "PT4S",
-  "twice_total": "PT4S"
+  "total": "PT3.202S",
+  "twice_total": "PT3.202S"
  },
  "make-hair-cards": {
   "command": {
    "out": "[dry] cd $HOME/.hermes/cache/scratch/hairdeck/HairDeck && HAIRDECK_ROOT=$HOME/.hermes/cache/scratch/hairdeck/ws .venv/bin/python scripts/image_to_hair.py ${PORTRAIT:?set PORTRAIT=<image>} --out $REPO/$OUT_DIR/out/hair --n 1",
    "rc": 0
   },
-  "duration": "PT1M28S",
+  "duration": "PT21.082S",
   "effects": [
    "/aux/hair_cards"
   ],
@@ -570,8 +570,8 @@
    "/input/portrait",
    "/input/sam3_dinov3_verified"
   ],
-  "total": "PT1M28S",
-  "twice_total": "PT1M28S"
+  "total": "PT21.082S",
+  "twice_total": "PT21.082S"
  },
  "make-spring-chains": {
   "command": {
@@ -616,7 +616,7 @@
    "out": "unknown action: matte-image",
    "rc": 64
   },
-  "duration": null,
+  "duration": "PT0.056S",
   "effects": [
    "/aux/matted_image"
   ],
@@ -627,8 +627,8 @@
    "/input/garment_image",
    "/input/birefnet_weights"
   ],
-  "total": null,
-  "twice_total": "PT0S"
+  "total": "PT0.056S",
+  "twice_total": "PT0.056S"
  },
  "measure-motion-lag": {
   "command": {
@@ -658,7 +658,7 @@
    "out": "unknown action: merge-editscore-lora",
    "rc": 64
   },
-  "duration": "PT1S",
+  "duration": "PT0.174S",
   "effects": [
    "/model/editscore_merged",
    "/input/gpu"
@@ -671,8 +671,8 @@
    "/model/omnigen2_transformer",
    "/model/editscore_lora"
   ],
-  "total": "PT1S",
-  "twice_total": "PT1S"
+  "total": "PT0.174S",
+  "twice_total": "PT0.174S"
  },
  "offer-frame": {
   "command": {
@@ -818,7 +818,7 @@
    "out": "[dry] ssh fedora python3 $HOME/og2/spike/repro/relabel_coco.py ~/og2/rfdetr-seg/data ~/og2/rfdetr-seg/data_aux",
    "rc": 0
   },
-  "duration": "PT10S",
+  "duration": "PT7.81S",
   "effects": [
    "/aux/coco_relabelled"
   ],
@@ -828,15 +828,15 @@
   "preconditions": [
    "/input/coco_set"
   ],
-  "total": "PT10S",
-  "twice_total": "PT10S"
+  "total": "PT7.81S",
+  "twice_total": "PT7.81S"
  },
  "restore-units": {
   "command": {
    "out": "[dry] cd $HOME/.hermes/cache/scratch/repro-space && pixi run -q -e mac python repro/usd_io.py restore $REPO/$OUT_DIR/out/stage.usda ${LABELLED:?set LABELLED=<Segment output glb>} $REPO/$OUT_DIR/out/stage_labelled.usda --frame voxel",
    "rc": 0
   },
-  "duration": "PT5S",
+  "duration": "PT0.741S",
   "effects": [
    "/aux/metric_labels"
   ],
@@ -847,8 +847,8 @@
    "/aux/part_labels",
    "/aux/scale_sidecar"
   ],
-  "total": "PT5S",
-  "twice_total": "PT5S"
+  "total": "PT0.741S",
+  "twice_total": "PT0.741S"
  },
  "rig-aux-parts": {
   "command": {
@@ -935,7 +935,7 @@
    "out": "unknown action: score",
    "rc": 64
   },
-  "duration": "PT22S",
+  "duration": "PT21.45S",
   "effects": [
    "/image/scored",
    "/input/gpu"
@@ -950,8 +950,8 @@
    "/input/gpu_host",
    "/image/edited"
   ],
-  "total": "PT22S",
-  "twice_total": "PT22S"
+  "total": "PT21.45S",
+  "twice_total": "PT21.45S"
  },
  "seal-and-take": {
   "command": {
@@ -1098,7 +1098,7 @@
    "out": "[dry] cd $HOME/.hermes/cache/scratch/repro-space && pixi run -q -e mac python repro/usd_io.py deliver $REPO/$OUT_DIR/out/stage.usda $REPO/$OUT_DIR/out/segment_input.glb --unit-cube",
    "rc": 0
   },
-  "duration": "PT2S",
+  "duration": "PT0.698S",
   "effects": [
    "/aux/unit_cube_source"
   ],
@@ -1108,8 +1108,8 @@
   "preconditions": [
    "/aux/usd_stage"
   ],
-  "total": "PT2S",
-  "twice_total": "PT2S"
+  "total": "PT0.698S",
+  "twice_total": "PT0.698S"
  },
  "use-dataset-mesh": {
   "command": {
@@ -1152,7 +1152,7 @@
    "out": "[dry] cd $HOME/.hermes/cache/scratch/repro-space && pixi run -q -e mac python repro/units.py selftest && test -s $REPO/$OUT_DIR/out/segment_input.glb.units.json",
    "rc": 0
   },
-  "duration": "PT2S",
+  "duration": "PT0.423S",
   "effects": [
    "/aux/scale_sidecar"
   ],
@@ -1162,7 +1162,7 @@
   "preconditions": [
    "/aux/unit_cube_source"
   ],
-  "total": "PT2S",
-  "twice_total": "PT2S"
+  "total": "PT0.423S",
+  "twice_total": "PT0.423S"
  }
 }

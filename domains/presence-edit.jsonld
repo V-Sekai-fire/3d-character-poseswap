@@ -140,10 +140,10 @@
      "value": 1
     }
    ],
-   "duration": "PT4S",
+   "duration": "PT3.202S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:05Z",
-   "duration_basis": "measured: warm median 3.202 s of 4 runs, rounded up to whole seconds; slowest run 4.429 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:04.429Z",
+   "duration_basis": "measured: warm median 3.202 s of 4 runs, exact to the millisecond; slowest run 4.429 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      4.429,
@@ -197,10 +197,10 @@
      "value": 1
     }
    ],
-   "duration": "PT4S",
+   "duration": "PT3.26S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:17Z",
-   "duration_basis": "measured: warm median 3.26 s of 4 runs, rounded up to whole seconds; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:15.837Z",
+   "duration_basis": "measured: warm median 3.26 s of 4 runs, exact to the millisecond; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      11.408,
@@ -254,10 +254,10 @@
      "value": 1
     }
    ],
-   "duration": "PT1S",
+   "duration": "PT0.097S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:18Z",
-   "duration_basis": "measured: warm median 0.097 s of 4 runs, rounded up to whole seconds; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:16.112Z",
+   "duration_basis": "measured: warm median 0.097 s of 4 runs, exact to the millisecond; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      0.275,
@@ -300,10 +300,10 @@
      "value": 1
     }
    ],
-   "duration": "PT1S",
+   "duration": "PT0.006S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:01Z",
-   "duration_basis": "measured: warm median 0.006 s of 4 runs, rounded up to whole seconds; slowest run 0.053 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:00.053Z",
+   "duration_basis": "measured: warm median 0.006 s of 4 runs, exact to the millisecond; slowest run 0.053 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      0.053,
@@ -350,10 +350,10 @@
      "value": 1
     }
    ],
-   "duration": "PT1S",
+   "duration": "PT0.174S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:19Z",
-   "duration_basis": "measured: warm median 0.174 s of 4 runs, rounded up to whole seconds; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:16.440Z",
+   "duration_basis": "measured: warm median 0.174 s of 4 runs, exact to the millisecond; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      0.328,
@@ -854,7 +854,7 @@
     }
    ],
    "duration": "PT1M7S",
-   "duration_basis": "measured once: 67.0 s for one 50-step BF16 edit at 672x1024 with the LoRA (baseline.log, fedora RTX 4090), rounded up; a single sample, so no range",
+   "duration_basis": "measured once: 67.0 s for one 50-step BF16 edit at 672x1024 with the LoRA (baseline.log, fedora RTX 4090), exact to the millisecond; a single sample, so no range",
    "measured": {
     "runs_s": [
      67.0
@@ -909,10 +909,10 @@
      "value": 1
     }
    ],
-   "duration": "PT22S",
+   "duration": "PT21.45S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:01:49Z",
-   "duration_basis": "measured: median 21.450000000000003 s per edit over 6 edits (K=4 passes of the Qwen3-VL-8B judge), rounded up; slowest 22.6 s. Excludes the one-time 24.9 s judge load and smoke test, which no action models. end is the deadline when the loads, edit and score all take their slowest run",
+   "end": "2026-11-15T08:01:46.040Z",
+   "duration_basis": "measured: median 21.450000000000003 s per edit over 6 edits (K=4 passes of the Qwen3-VL-8B judge), exact to the millisecond; slowest 22.6 s. Excludes the one-time 24.9 s judge load and smoke test, which no action models. end is the deadline when the loads, edit and score all take their slowest run",
    "measured": {
     "runs_s": [
      20.8,
@@ -941,8 +941,19 @@
      "value": 1
     }
    ],
-   "duration": "PT10S",
-   "duration_basis": "estimate: a run of the script on fedora finished in seconds, not timed"
+   "duration": "PT7.81S",
+   "duration_basis": "measured: warm median 7.81 s of 5 runs, to the millisecond; the first run took 7.907 s. Wall clock of tools/aux.sh action relabel-coco on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     7.907,
+     7.864,
+     7.83,
+     7.796,
+     7.81,
+     7.796
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   }
   },
   "make-synth-set": {
    "params": [],
@@ -1027,8 +1038,19 @@
      "value": 1
     }
    ],
-   "duration": "PT2S",
-   "duration_basis": "estimate: one mesh; writes the sidecar from the stage's own unit"
+   "duration": "PT0.698S",
+   "duration_basis": "measured: warm median 0.698 s of 5 runs, to the millisecond; the first run took 0.693 s. Wall clock of tools/aux.sh action unitise-source on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     0.693,
+     0.699,
+     0.696,
+     0.698,
+     0.71,
+     0.698
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   }
   },
   "write-scale-sidecar": {
    "params": [],
@@ -1045,8 +1067,19 @@
      "value": 1
     }
    ],
-   "duration": "PT2S",
-   "duration_basis": "estimate: checks the sidecar and the round trip; sidecar-from-height covers a mesh that has no unit"
+   "duration": "PT0.423S",
+   "duration_basis": "measured: warm median 0.423 s of 5 runs, to the millisecond; the first run took 0.434 s. Wall clock of tools/aux.sh action write-scale-sidecar on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     0.434,
+     0.423,
+     0.427,
+     0.423,
+     0.422,
+     0.423
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   }
   },
   "segment-labels": {
    "params": [],
@@ -1195,8 +1228,17 @@
      "value": 1
     }
    ],
-   "duration": "PT1M28S",
-   "duration_basis": "measured: first portrait on the Mac (MPS), 18 to 40 s model load plus 35 s of compute"
+   "duration": "PT21.082S",
+   "duration_basis": "measured: warm median 21.082 s of 3 runs, to the millisecond; the first run took 21.851 s. Wall clock of tools/aux.sh action make-hair-cards on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     21.851,
+     21.07,
+     21.082,
+     21.084
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   }
   },
   "make-spring-chains": {
    "params": [],
@@ -1334,8 +1376,19 @@
      "value": 1
     }
    ],
-   "duration": "PT5S",
-   "duration_basis": "estimate: one garment ingested in a few seconds on the Mac"
+   "duration": "PT0.658S",
+   "duration_basis": "measured: warm median 0.658 s of 5 runs, to the millisecond; the first run took 0.646 s. Wall clock of tools/aux.sh action ingest-usd on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     0.646,
+     0.658,
+     0.645,
+     0.643,
+     0.672,
+     0.672
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   }
   },
   "restore-units": {
    "params": [],
@@ -1359,8 +1412,19 @@
      "value": 1
     }
    ],
-   "duration": "PT5S",
-   "duration_basis": "estimate: the inverse of unitise-source; refuses when the geometry does not confirm the pairing"
+   "duration": "PT0.741S",
+   "duration_basis": "measured: warm median 0.741 s of 5 runs, to the millisecond; the first run took 0.741 s. Wall clock of tools/aux.sh action restore-units on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     0.741,
+     0.739,
+     0.739,
+     0.741,
+     0.744,
+     0.765
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   }
   },
   "use-dataset-mesh": {
    "body": [
@@ -1400,7 +1464,20 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: BiRefNet HR matting has run on poseswap portraits (HairDeck) but not as this step; no span is stated"
+   "duration_basis": "measured: warm median 0.0564 s per image of 5 runs, to the millisecond; the cold first run took 0.8301 s. Excludes the one-time 4.75 s model load, which no action models. One portrait (768x960), BiRefNet-matting at 1024, half precision",
+   "duration": "PT0.056S",
+   "measured": {
+    "runs_s": [
+     0.8301,
+     0.0552,
+     0.0576,
+     0.0548,
+     0.057,
+     0.0564
+    ],
+    "model_load_s": 4.75,
+    "host": "fedora, NVIDIA GeForce RTX 4090, torch 2.8.0+cu128, tools/measure/time_matte.py, 2026-11-15"
+   }
   },
   "pixal3d-image-to-mesh": {
    "body": [

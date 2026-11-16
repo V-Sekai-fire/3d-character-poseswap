@@ -1,0 +1,22 @@
+{
+ "matte-image": {
+  "runs_s": [
+   0.8301,
+   0.0552,
+   0.0576,
+   0.0548,
+   0.057,
+   0.0564
+  ],
+  "model_load_s": 4.75,
+  "input": [
+   768,
+   960
+  ],
+  "alpha_min": 1.410649019817356e-07,
+  "alpha_max": 1.0,
+  "alpha_mean": 0.6857,
+  "device": "NVIDIA GeForce RTX 4090",
+  "torch": "2.8.0+cu128"
+ }
+}
