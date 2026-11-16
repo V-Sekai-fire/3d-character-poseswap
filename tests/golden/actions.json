@@ -1291,6 +1291,106 @@
   "total": null,
   "twice_total": "PT0S"
  },
+ "solid-box": {
+  "command": {
+   "out": "action solid-box has no command yet: a CAD guest function is called through godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/cad/solid_box"
+  ],
+  "plan": [
+   "solid-box"
+  ],
+  "preconditions": [
+   "/cad_input/solidcraft_engine",
+   "/cad_input/guest_repo",
+   "/cad_input/guest_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "solid-command-count": {
+  "command": {
+   "out": "action solid-command-count has no command yet: a CAD guest function is called through godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/cad/solid_command_count"
+  ],
+  "plan": [
+   "solid-command-count"
+  ],
+  "preconditions": [
+   "/cad_input/solidcraft_engine",
+   "/cad_input/guest_repo",
+   "/cad_input/guest_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "solid-default": {
+  "command": {
+   "out": "action solid-default has no command yet: a CAD guest function is called through godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/cad/solid_default"
+  ],
+  "plan": [
+   "solid-default"
+  ],
+  "preconditions": [
+   "/cad_input/solidcraft_engine",
+   "/cad_input/guest_repo",
+   "/cad_input/guest_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "solid-mesh": {
+  "command": {
+   "out": "action solid-mesh has no command yet: a CAD guest function is called through godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/cad/solid_mesh"
+  ],
+  "plan": [
+   "solid-mesh"
+  ],
+  "preconditions": [
+   "/cad_input/solidcraft_engine",
+   "/cad_input/guest_repo",
+   "/cad_input/guest_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
+ "solid-script": {
+  "command": {
+   "out": "action solid-script has no command yet: a CAD guest function is called through godot-sandbox; this desk has no runner for it yet",
+   "rc": 0
+  },
+  "duration": null,
+  "effects": [
+   "/cad/solid_script"
+  ],
+  "plan": [
+   "solid-script"
+  ],
+  "preconditions": [
+   "/cad_input/solidcraft_engine",
+   "/cad_input/guest_repo",
+   "/cad_input/guest_elf"
+  ],
+  "total": null,
+  "twice_total": "PT0S"
+ },
  "tick-zones": {
   "command": {
    "out": "unknown action: tick-zones",

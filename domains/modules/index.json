@@ -15,7 +15,8 @@
   "aux-labels",
   "aux-motion",
   "aux-rig",
-  "guest-elf"
+  "guest-elf",
+  "cad-guest"
  ],
  "variables": [
   {
@@ -91,6 +92,18 @@
    "type": "int",
    "description": "1 when the guest ELF of that name has run its stage: usd, udim_unpack, remesh, cage, drape, cloth_fit, garment_fit, headfit, skintokens, skintokens_rig, pixal3d, seethrough.",
    "init": {}
+  },
+  {
+   "name": "cad_input",
+   "type": "int",
+   "description": "1 when what the CAD guest needs is on hand: the SolidCraft engine checkout (solidcraft_engine), the guest repository (guest_repo) and solidcraft-guest.elf built (guest_elf).",
+   "init": {}
+  },
+  {
+   "name": "cad",
+   "type": "int",
+   "description": "1 when the CAD guest function of that name has run: solid_default, solid_box, solid_mesh, solid_script, solid_command_count.",
+   "init": {}
   }
  ],
  "order": {
@@ -142,7 +155,12 @@
    "run-skintokens-guest",
    "run-skintokens-rig-guest",
    "run-pixal3d-guest",
-   "run-seethrough-guest"
+   "run-seethrough-guest",
+   "solid-default",
+   "solid-box",
+   "solid-mesh",
+   "solid-script",
+   "solid-command-count"
   ],
   "methods": [
    "/model/qwen25vl_conditioner",
@@ -189,7 +207,12 @@
    "/guest/skintokens",
    "/guest/skintokens_rig",
    "/guest/pixal3d",
-   "/guest/seethrough"
+   "/guest/seethrough",
+   "/cad/solid_default",
+   "/cad/solid_box",
+   "/cad/solid_mesh",
+   "/cad/solid_script",
+   "/cad/solid_command_count"
   ]
  }
 }
