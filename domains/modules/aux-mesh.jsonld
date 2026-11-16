@@ -66,7 +66,20 @@
      "value": 1
     }
    ],
-   "duration_basis": "not timed: BiRefNet HR matting has run on poseswap portraits (HairDeck) but not as this step; no span is stated"
+   "duration_basis": "measured: warm median 0.0564 s per image of 5 runs, to the millisecond; the cold first run took 0.8301 s. Excludes the one-time 4.75 s model load, which no action models. One portrait (768x960), BiRefNet-matting at 1024, half precision",
+   "duration": "PT0.056S",
+   "measured": {
+    "runs_s": [
+     0.8301,
+     0.0552,
+     0.0576,
+     0.0548,
+     0.057,
+     0.0564
+    ],
+    "model_load_s": 4.75,
+    "host": "fedora, NVIDIA GeForce RTX 4090, torch 2.8.0+cu128, tools/measure/time_matte.py, 2026-11-15"
+   }
   },
   "pixal3d-image-to-mesh": {
    "body": [

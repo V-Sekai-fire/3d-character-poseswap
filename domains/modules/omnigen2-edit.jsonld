@@ -83,10 +83,10 @@
      "value": 1
     }
    ],
-   "duration": "PT4S",
+   "duration": "PT3.202S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:05Z",
-   "duration_basis": "measured: warm median 3.202 s of 4 runs, rounded up to whole seconds; slowest run 4.429 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:04.429Z",
+   "duration_basis": "measured: warm median 3.202 s of 4 runs, exact to the millisecond; slowest run 4.429 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      4.429,
@@ -140,10 +140,10 @@
      "value": 1
     }
    ],
-   "duration": "PT4S",
+   "duration": "PT3.26S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:17Z",
-   "duration_basis": "measured: warm median 3.26 s of 4 runs, rounded up to whole seconds; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:15.837Z",
+   "duration_basis": "measured: warm median 3.26 s of 4 runs, exact to the millisecond; slowest run 11.408 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      11.408,
@@ -197,10 +197,10 @@
      "value": 1
     }
    ],
-   "duration": "PT1S",
+   "duration": "PT0.097S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:18Z",
-   "duration_basis": "measured: warm median 0.097 s of 4 runs, rounded up to whole seconds; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:16.112Z",
+   "duration_basis": "measured: warm median 0.097 s of 4 runs, exact to the millisecond; slowest run 0.275 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      0.275,
@@ -243,10 +243,10 @@
      "value": 1
     }
    ],
-   "duration": "PT1S",
+   "duration": "PT0.006S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:01Z",
-   "duration_basis": "measured: warm median 0.006 s of 4 runs, rounded up to whole seconds; slowest run 0.053 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:00.053Z",
+   "duration_basis": "measured: warm median 0.006 s of 4 runs, exact to the millisecond; slowest run 0.053 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      0.053,
@@ -293,10 +293,10 @@
      "value": 1
     }
    ],
-   "duration": "PT1S",
+   "duration": "PT0.174S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:00:19Z",
-   "duration_basis": "measured: warm median 0.174 s of 4 runs, rounded up to whole seconds; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
+   "end": "2026-11-15T08:00:16.440Z",
+   "duration_basis": "measured: warm median 0.174 s of 4 runs, exact to the millisecond; slowest run 0.328 s (cold). start is the release time and end the deadline if every action in the chain takes its slowest run, so the span covers every run measured",
    "measured": {
     "runs_s": [
      0.328,
@@ -416,7 +416,7 @@
     }
    ],
    "duration": "PT1M7S",
-   "duration_basis": "measured once: 67.0 s for one 50-step BF16 edit at 672x1024 with the LoRA (baseline.log, fedora RTX 4090), rounded up; a single sample, so no range",
+   "duration_basis": "measured once: 67.0 s for one 50-step BF16 edit at 672x1024 with the LoRA (baseline.log, fedora RTX 4090), exact to the millisecond; a single sample, so no range",
    "measured": {
     "runs_s": [
      67.0
@@ -471,10 +471,10 @@
      "value": 1
     }
    ],
-   "duration": "PT22S",
+   "duration": "PT21.45S",
    "start": "2026-11-15T08:00:00Z",
-   "end": "2026-11-15T08:01:49Z",
-   "duration_basis": "measured: median 21.450000000000003 s per edit over 6 edits (K=4 passes of the Qwen3-VL-8B judge), rounded up; slowest 22.6 s. Excludes the one-time 24.9 s judge load and smoke test, which no action models. end is the deadline when the loads, edit and score all take their slowest run",
+   "end": "2026-11-15T08:01:46.040Z",
+   "duration_basis": "measured: median 21.450000000000003 s per edit over 6 edits (K=4 passes of the Qwen3-VL-8B judge), exact to the millisecond; slowest 22.6 s. Excludes the one-time 24.9 s judge load and smoke test, which no action models. end is the deadline when the loads, edit and score all take their slowest run",
    "measured": {
     "runs_s": [
      20.8,

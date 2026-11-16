@@ -47,8 +47,17 @@
      "value": 1
     }
    ],
-   "duration": "PT1M28S",
-   "duration_basis": "measured: first portrait on the Mac (MPS), 18 to 40 s model load plus 35 s of compute"
+   "duration": "PT21.082S",
+   "duration_basis": "measured: warm median 21.082 s of 3 runs, to the millisecond; the first run took 21.851 s. Wall clock of tools/aux.sh action make-hair-cards on fedora, which includes process and model start-up",
+   "measured": {
+    "runs_s": [
+     21.851,
+     21.07,
+     21.082,
+     21.084
+    ],
+    "host": "node-1w7jr9qmdnujmtqxifhewsfsn.ipv6.telus.net, RTX 4090, tools/measure/time_actions.py, 2026-11-15"
+   }
   },
   "make-spring-chains": {
    "params": [],
